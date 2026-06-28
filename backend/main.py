@@ -8,6 +8,8 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from schemas import ItemCreate
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import HTTPException
+
 
 
 
@@ -58,6 +60,28 @@ def create_item(item: ItemCreate, db: Session = Depends(get_db)):
     db.refresh(new_item)
     return new_item
 
+#Itemi kustutamine ID alusel
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    deleted_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    if not deleted_item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    else:
+        db.delete(deleted_item)
+        db.commit()
+        return {"message": "Item deleted successfully"}
+
+#Itemi uuendamine ID alusel
+@app.put("/items/{item_id}")
+def update_item(item_id: int, item: ItemCreate, db: Session = Depends(get_db)):
+    existing_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    if not existing_item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    else:
+        existing_item.name = item.name
+        db.commit()
+        db.refresh(existing_item)
+        return existing_item
 
 #Kõikide itemite listimine
 @app.get("/items")
