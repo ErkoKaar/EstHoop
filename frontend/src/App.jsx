@@ -6,7 +6,9 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [inputValue, setInputValue] = useState('')
   const [items, setItems] = useState([])
+
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/items`)
@@ -131,6 +133,33 @@ function App() {
           <li key={item.id}>{item.name}</li>
         ))}
         </ul>
+
+        <form onSubmit={(e) => {
+          e.preventDefault()
+          fetch(`${import.meta.env.VITE_API_URL}/items`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: inputValue })
+          })
+          .then(res => res.json())
+          .then((newItem) => {
+            setItems([...items, newItem])
+          
+            setInputValue('')
+          })
+          .catch((error) => console.error('Error adding item:', error))
+        }}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Add new item"
+          />
+          <button type="submit" disabled={inputValue.trim() === ''}>Add Item</button>
+        </form>
+
     </section>
 
     </>
