@@ -7,6 +7,7 @@ from database import SessionLocal
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from schemas import ItemCreate
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -17,6 +18,18 @@ load_dotenv()
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 app = FastAPI()
+
+
+#CORS loogika et backend saaks vastu võtta päringuid Frontendist(Vite dev server)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",  # Vite dev server
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/health")
 def health_check():
