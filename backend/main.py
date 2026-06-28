@@ -27,6 +27,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # Vite dev server
+        "https://est-hoop.vercel.app",  # Vercel production
     ],
     allow_methods=["*"],
     allow_headers=["*"],
