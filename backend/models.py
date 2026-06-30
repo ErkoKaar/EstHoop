@@ -6,3 +6,11 @@ class Item(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+
+class Player(Base):
+    __tablename__ = "players"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    slug = Column(String, nullable=False, unique=True)
+    proballers_id = Column(Integer, nullable=True)

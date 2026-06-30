@@ -1,14 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
-from database import Base, engine
+import time
+from database import Base, engine, SessionLocal
 import models
-from database import SessionLocal
-from fastapi import Depends
-from sqlalchemy.orm import Session
 from schemas import ItemCreate
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import HTTPException
+from scraper import scrape_player
 
 
 
@@ -27,6 +26,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",  # Vite dev server
+        "http://localhost:5174",  # Vite dev server (fallback port)
         "https://est-hoop.vercel.app",  # Vercel production
     ],
     allow_methods=["*"],
@@ -88,6 +88,46 @@ def update_item(item_id: int, item: ItemCreate, db: Session = Depends(get_db)):
 @app.get("/items")
 def list_items(db: Session = Depends(get_db)):
     return db.query(models.Item).all()
+
+#Kõikide mängijate listimine
+@app.get("/players")
+def list_players(db: Session = Depends(get_db)):
+    return db.query(models.Player).order_by(models.Player.name).all()
+
+#Mängija leidmine slug'i alusel
+@app.get("/players/{slug}")
+def get_player(slug: str, db: Session = Depends(get_db)):
+    player = db.query(models.Player).filter(models.Player.slug == slug).first()
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found")
+    return player
+
+# Lihtne in-memory cache: {slug: (timestamp, data)}
+_stats_cache: dict = {}
+CACHE_TTL = 3600  # 1 tund
+
+#Mängija statistika ProBallersist
+@app.get("/players/{slug}/stats")
+def get_player_stats(slug: str, db: Session = Depends(get_db)):
+    player = db.query(models.Player).filter(models.Player.slug == slug).first()
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found")
+    if not player.proballers_id:
+        raise HTTPException(status_code=404, detail="ProBallers ID puudub")
+
+    cached = _stats_cache.get(slug)
+    if cached and time.time() - cached[0] < CACHE_TTL:
+        return cached[1]
+
+    try:
+        # ProBallers slug tuletame nimest (lihtsustatud)
+        pb_slug = player.name.lower().replace(" ", "-")
+        data = scrape_player(player.proballers_id, pb_slug)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Scraping ebaõnnestus: {e}")
+
+    _stats_cache[slug] = (time.time(), data)
+    return data
 
 
 
