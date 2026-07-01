@@ -2,8 +2,8 @@ name: Refresh national team data
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Iga tund
-  workflow_dispatch: # Võimaldab ka käsitsi käivitada GitHub UI-st
+    - cron: '0 */6 * * *'  # Iga 6 tunni tagant
+  workflow_dispatch:
 
 jobs:
   refresh:
@@ -19,24 +19,7 @@ jobs:
           cache-dependency-path: backend/requirements.txt
 
       - name: Install dependencies
-        run: |
-          pip install -r backend/requirements.txt
-          pip install playwright
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-chromium-${{ runner.os }}
-
-      - name: Install Playwright browser
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: python -m playwright install chromium --with-deps
-
-      - name: Install Playwright system deps (cached run)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: python -m playwright install-deps chromium
+        run: pip install -r backend/requirements.txt
 
       - name: Refresh national team data
         env:
