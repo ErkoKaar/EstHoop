@@ -9,8 +9,7 @@ const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 const DARK = '#08060d'
 
-const SS = (path) => `https://api.sofascore.com/api/v1${path}`
-const TEAM_ID = 25373
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 function formatDate(ts) {
   return new Date(ts * 1000).toLocaleDateString('et-EE', {
@@ -503,39 +502,18 @@ export default function KoondisPage() {
   const { signalReady } = useLoading()
 
   useEffect(() => {
-    async function load() {
-      const [nextData, lastData] = await Promise.all([
-        fetch(SS(`/team/${TEAM_ID}/events/next/0`)).then(r => r.json()).catch(() => ({ events: [] })),
-        fetch(SS(`/team/${TEAM_ID}/events/last/0`)).then(r => r.json()).catch(() => ({ events: [] })),
-      ])
-
-      const upcoming = nextData.events || []
-      const recent = [...(lastData.events || [])].reverse().slice(0, 5)
-      setUpcoming(upcoming)
-      setRecent(recent)
-
-      const qualGame = [...upcoming, ...recent].find(ev => {
-        const name = (ev.tournament?.name || '').toLowerCase()
-        return name.includes('qualifier') || name.includes('eurobasket') || name.includes('olympic')
-      })
-      if (qualGame) {
-        const tId = qualGame.tournament?.uniqueTournament?.id
-        const sId = qualGame.season?.id
-        if (tId && sId) {
-          try {
-            const standData = await fetch(SS(`/unique-tournament/${tId}/season/${sId}/standings/total`)).then(r => r.json())
-            const estGroup = (standData.standings || []).find(g =>
-              (g.rows || []).some(r => r.team?.name === 'Estonia')
-            )
-            if (estGroup) setStandings({ name: estGroup.name, rows: estGroup.rows || [] })
-          } catch {}
-        }
+    Promise.allSettled([
+      fetch(`${API}/national-team/games`).then(r => r.json()),
+      fetch(`${API}/national-team/standings`).then(r => r.json()),
+    ]).then(([gamesRes, standingsRes]) => {
+      if (gamesRes.status === 'fulfilled') {
+        setUpcoming(gamesRes.value.upcoming || [])
+        setRecent(gamesRes.value.recent || [])
       }
-
+      setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : { name: null, rows: [] })
       setLoading(false)
       signalReady()
-    }
-    load().catch(() => { setLoading(false); signalReady() })
+    })
   }, [])
 
   return (
