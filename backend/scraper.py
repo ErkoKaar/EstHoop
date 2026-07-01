@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -21,9 +22,21 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
     if len(tables) < 2:
         raise ValueError("Ei leidnud statistika tabeleid")
 
-    def parse_table(table):
+    def parse_table(table, empty_header_name=None):
         # HTML kasutab mixed case, CSS teeb need uppercase — normaliseerime
-        headers = [th.get_text(strip=True).upper() for th in table.select("thead th") if th.get_text(strip=True)]
+        raw = [th.get_text(strip=True).upper() for th in table.select("thead th")]
+        if empty_header_name is None:
+            # Vana käitumine sezoni tabelite jaoks: filtreeri tühjad välja
+            headers = [h for h in raw if h]
+        else:
+            # Mängude tabel: säilita tühjad (anna neile nimi) ja tee duplikaadid unikaalseks
+            seen = {}
+            headers = []
+            for h in raw:
+                h = h or empty_header_name
+                n = seen.get(h, 0)
+                headers.append(h if n == 0 else f'{h}_{n}')
+                seen[h] = n + 1
         rows = []
         for tr in table.select("tbody tr"):
             cells = [td.get_text(strip=True) for td in tr.find_all("td")]
@@ -32,10 +45,52 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
         return rows
 
     return {
-        "games":   parse_table(tables[0]),   # mäng-mängult
-        "seasons": parse_table(tables[1]),   # hooaja keskmised (regulaar)
+        # Tühi TH (W/L veerg) nimetatakse RESULT-iks; duplikaatpäised saavad _1 suffiksi
+        "games":    parse_table(tables[0], empty_header_name="RESULT"),
+        "seasons":  parse_table(tables[1]),
         "playoffs": parse_table(tables[2]) if len(tables) > 2 else [],
     }
+
+
+def scrape_fiba_national_team(fiba_id: int, name_slug: str) -> list[dict]:
+    """Kraabib FIBA lehelt 'National Team: Senior' hooaja keskmised."""
+    url = f"https://www.fiba.basketball/en/players/{fiba_id}-{name_slug}"
+    headers = {**HEADERS, "RSC": "1"}
+    resp = requests.get(url, headers=headers, timeout=15)
+    resp.raise_for_status()
+    text = resp.text
+
+    idx = text.find("national-senior")
+    if idx < 0:
+        return []
+
+    chunk = text[idx:]
+    blocks = re.split(r'(?=\{"ageType":"S")', chunk)
+
+    results = []
+    for block in blocks:
+        m = re.search(
+            r'"gp":(\d+),"ppg":([\d.]+),"rpg":([\d.]+),"apg":([\d.]+),"eff":([\d.]+),"team":"([^"]+)"',
+            block,
+        )
+        if not m:
+            continue
+        year_m = re.search(r'"color":"primary-400","children":(\d{4})', block)
+        event_m = re.search(r'"styleName":"paragraphXXS","children":"([^"]+)"', block)
+        results.append({
+            "year":  int(year_m.group(1)) if year_m else None,
+            "event": event_m.group(1) if event_m else None,
+            "gp":    int(m.group(1)),
+            "ppg":   float(m.group(2)),
+            "rpg":   float(m.group(3)),
+            "apg":   float(m.group(4)),
+            "eff":   float(m.group(5)),
+            "team":  m.group(6),
+        })
+        if "national-youth" in block or "player-career-stats-club" in block:
+            break
+
+    return results
 
 
 if __name__ == "__main__":
