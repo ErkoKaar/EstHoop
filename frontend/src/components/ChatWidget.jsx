@@ -45,14 +45,23 @@ function TypingDots() {
   )
 }
 
+function fmtDate(ts) {
+  return new Date(ts * 1000).toLocaleString('et-EE', {
+    timeZone: 'Europe/Tallinn', day: '2-digit', month: '2-digit',
+    year: 'numeric', hour: '2-digit', minute: '2-digit',
+  })
+}
+
 async function fetchStatsContext() {
   try {
     const players = await fetch(`${API}/players`).then(r => r.json())
-    const results = await Promise.allSettled(
-      players.map(p => fetch(`${API}/players/${p.slug}/fiba-stats`).then(r => r.ok ? r.json() : null))
-    )
-    const lines = []
-    results.forEach((r, i) => {
+    const [fibaResults, clubResults] = await Promise.all([
+      Promise.allSettled(players.map(p => fetch(`${API}/players/${p.slug}/fiba-stats`).then(r => r.ok ? r.json() : null))),
+      Promise.allSettled(players.map(p => fetch(`${API}/players/${p.slug}/stats`).then(r => r.ok ? r.json() : null))),
+    ])
+
+    const natLines = []
+    fibaResults.forEach((r, i) => {
       const p = players[i]
       const nt = r.status === 'fulfilled' && r.value ? r.value.national_team : null
       if (!nt?.length) return
@@ -61,30 +70,92 @@ async function fetchStatsContext() {
       const ppg = (nt.reduce((s, row) => s + row.ppg * row.gp, 0) / gp).toFixed(1)
       const rpg = (nt.reduce((s, row) => s + row.rpg * row.gp, 0) / gp).toFixed(1)
       const apg = (nt.reduce((s, row) => s + row.apg * row.gp, 0) / gp).toFixed(1)
-      lines.push(`- ${p.name} (${p.position || '?'}): ${ppg} ppg, ${rpg} rpg, ${apg} apg (koondis, ${gp} mängu)`)
+      natLines.push(`- ${p.name} (${p.position || '?'}): ${ppg} ppg, ${rpg} rpg, ${apg} apg (${gp} mängu)`)
     })
-    return lines.length ? lines.join('\n') : null
+
+    const clubLines = []
+    clubResults.forEach((r, i) => {
+      const p = players[i]
+      const seasons = r.status === 'fulfilled' && r.value ? r.value.seasons : null
+      if (!seasons?.length) return
+      const last = seasons[seasons.length - 1]
+      const pts = last.PTS ?? '-', reb = last.REB ?? '-', ast = last.AST ?? '-'
+      const league = last.league || last.competition || ''
+      clubLines.push(`- ${p.name}: ${pts} pts, ${reb} reb, ${ast} ast (${league})`)
+    })
+
+    const parts = []
+    if (natLines.length) parts.push('Koondise statistika (karjäär kaalutud):\n' + natLines.join('\n'))
+    if (clubLines.length) parts.push('Klubi statistika (viimane hooaeg):\n' + clubLines.join('\n'))
+    return parts.length ? parts.join('\n\n') : null
   } catch {
     return null
   }
 }
 
-async function fetchGamesContext() {
+async function fetchNationalTeamContext() {
   try {
-    const r = await fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0')
-    const data = await r.json()
-    const events = data.events || []
-    if (!events.length) return 'Eelseisvaid koondise mänge ei ole.'
-    return events.slice(0, 5).map(ev => {
-      const home = ev.homeTeam?.name || '?'
-      const away = ev.awayTeam?.name || '?'
-      const tour = ev.tournament?.name || ''
-      const ts = ev.startTimestamp
-      const date = ts
-        ? new Date(ts * 1000).toLocaleString('et-EE', { timeZone: 'Europe/Tallinn', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-        : '?'
-      return `- ${home} vs ${away} | ${date} Eesti aeg | ${tour}`
-    }).join('\n')
+    const [nextData, lastData, standingsData] = await Promise.all([
+      fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0').then(r => r.json()),
+      fetch('https://api.sofascore.com/api/v1/team/25373/events/last/0').then(r => r.json()),
+      fetch('https://api.sofascore.com/api/v1/unique-tournament/10437/season/54504/standings/total').then(r => r.json()),
+    ])
+
+    const parts = []
+
+    const upcoming = nextData.events || []
+    if (upcoming.length) {
+      parts.push('Eelseisvad mängud:\n' + upcoming.slice(0, 5).map(ev =>
+        `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
+      ).join('\n'))
+    } else {
+      parts.push('Eelseisvaid koondise mänge ei ole.')
+    }
+
+    const recent = [...(lastData.events || [])].reverse().slice(0, 5)
+    if (recent.length) {
+      parts.push('Viimased tulemused:\n' + recent.map(ev => {
+        const hs = ev.homeScore?.current ?? '?', as = ev.awayScore?.current ?? '?'
+        return `- ${ev.homeTeam?.name} ${hs}:${as} ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)}`
+      }).join('\n'))
+    }
+
+    const group = standingsData.standings?.find(g => g.name?.includes('Group H'))
+    const rows = group?.rows || []
+    if (rows.length) {
+      parts.push('Tabeliseis (Grupp H):\n' + rows.map(row =>
+        `- ${row.position}. ${row.team?.name}: ${row.wins}V-${row.losses}K (${row.matches} mängu)`
+      ).join('\n'))
+    }
+
+    return parts.join('\n\n') || null
+  } catch {
+    return null
+  }
+}
+
+async function fetchClubGamesContext() {
+  try {
+    const players = await fetch(`${API}/players`).then(r => r.json())
+    const withSS = players.filter(p => p.sofascore_id)
+    const results = await Promise.allSettled(
+      withSS.map(p =>
+        fetch(`https://api.sofascore.com/api/v1/player/${p.sofascore_id}/events/next/0`)
+          .then(r => r.json()).then(d => ({ player: p, events: d.events || [] }))
+      )
+    )
+    const lines = []
+    results.forEach(r => {
+      if (r.status !== 'fulfilled') return
+      const { player: p, events } = r.value
+      events.slice(0, 2).forEach(ev => {
+        const home = ev.homeTeam?.name || '?', away = ev.awayTeam?.name || '?'
+        const tour = ev.tournament?.name || ''
+        lines.push(`- ${p.name}: ${home} vs ${away} | ${fmtDate(ev.startTimestamp)} | ${tour}`)
+      })
+    })
+    lines.sort((a, b) => a.localeCompare(b))
+    return lines.length ? lines.join('\n') : 'Eelseisvaid klubi mänge ei leitud.'
   } catch {
     return null
   }
@@ -99,12 +170,14 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false)
   const [gamesContext, setGamesContext] = useState(null)
   const [statsContext, setStatsContext] = useState(null)
+  const [clubGamesContext, setClubGamesContext] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
 
   useEffect(() => {
-    fetchGamesContext().then(ctx => setGamesContext(ctx))
+    fetchNationalTeamContext().then(ctx => setGamesContext(ctx))
     fetchStatsContext().then(ctx => setStatsContext(ctx))
+    fetchClubGamesContext().then(ctx => setClubGamesContext(ctx))
   }, [])
 
   useEffect(() => {
@@ -131,7 +204,7 @@ export default function ChatWidget() {
       const r = await fetch(`${API}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next, games_context: gamesContext, stats_context: statsContext }),
+        body: JSON.stringify({ messages: next, games_context: gamesContext, stats_context: statsContext, club_games_context: clubGamesContext }),
       })
       if (!r.ok) throw new Error()
       const data = await r.json()
