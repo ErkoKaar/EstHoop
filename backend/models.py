@@ -1,11 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from database import Base
 
-class Item(Base):
-    __tablename__ = "items"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
 
 class Player(Base):
     __tablename__ = "players"
@@ -15,5 +10,5 @@ class Player(Base):
     slug = Column(String, nullable=False, unique=True)
     proballers_id = Column(Integer, nullable=True)
     fiba_id = Column(Integer, nullable=True)
-    position = Column(String, nullable=True)
     sofascore_id = Column(Integer, nullable=True)
+    position = Column(String, nullable=True)

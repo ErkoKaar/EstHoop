@@ -2,49 +2,28 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
-import os
 import time
 import unicodedata
 from database import Base, engine, SessionLocal
 import models
-from schemas import ItemCreate
 from scraper import scrape_player, scrape_fiba_national_team
 
-
-
-
-
+load_dotenv()
 Base.metadata.create_all(bind=engine)
 
-load_dotenv()
-
-DATABASE_URL = os.environ["DATABASE_URL"]
 app = FastAPI()
 
-
-#CORS loogika et backend saaks vastu võtta päringuid Frontendist(Vite dev server)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",  # Vite dev server
-        "http://localhost:5174",  # Vite dev server (fallback port)
-        "https://est-hoop.vercel.app",  # Vercel production
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://est-hoop.vercel.app",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-@app.get("/health")
-def health_check():
-    print(f"Database URL: {DATABASE_URL}")
-    return {"status": "ok"}
-
-
-
-#Avab sessiooni iga päringu jaoks ja sulgeb selle pärast päringut. 
-# See on vajalik, et vältida sessioonide lekkimist ja tagada,
-# et iga päring kasutab oma eraldi sessiooni.
 
 def get_db():
     db = SessionLocal()
@@ -53,49 +32,17 @@ def get_db():
     finally:
         db.close()
 
-#Uue itemi loomine
-@app.post("/items")
-def create_item(item: ItemCreate, db: Session = Depends(get_db)):
-    new_item = models.Item(name=item.name)
-    db.add(new_item)
-    db.commit()
-    db.refresh(new_item)
-    return new_item
 
-#Itemi kustutamine ID alusel
-@app.delete("/items/{item_id}")
-def delete_item(item_id: int, db: Session = Depends(get_db)):
-    deleted_item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if not deleted_item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    else:
-        db.delete(deleted_item)
-        db.commit()
-        return {"message": "Item deleted successfully"}
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
-#Itemi uuendamine ID alusel
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: ItemCreate, db: Session = Depends(get_db)):
-    existing_item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if not existing_item:
-        raise HTTPException(status_code=404, detail="Item not found")
-    else:
-        existing_item.name = item.name
-        db.commit()
-        db.refresh(existing_item)
-        return existing_item
 
-#Kõikide itemite listimine
-@app.get("/items")
-def list_items(db: Session = Depends(get_db)):
-    return db.query(models.Item).all()
-
-#Kõikide mängijate listimine
 @app.get("/players")
 def list_players(db: Session = Depends(get_db)):
     return db.query(models.Player).order_by(models.Player.name).all()
 
-#Mängija leidmine slug'i alusel
+
 @app.get("/players/{slug}")
 def get_player(slug: str, db: Session = Depends(get_db)):
     player = db.query(models.Player).filter(models.Player.slug == slug).first()
@@ -103,11 +50,10 @@ def get_player(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Player not found")
     return player
 
-# Lihtne in-memory cache: {slug: (timestamp, data)}
-_stats_cache: dict = {}
-CACHE_TTL = 3600  # 1 tund
 
-#Mängija statistika ProBallersist
+_stats_cache: dict = {}
+CACHE_TTL = 3600
+
 @app.get("/players/{slug}/stats")
 def get_player_stats(slug: str, db: Session = Depends(get_db)):
     player = db.query(models.Player).filter(models.Player.slug == slug).first()
@@ -121,7 +67,6 @@ def get_player_stats(slug: str, db: Session = Depends(get_db)):
         return cached[1]
 
     try:
-        # ProBallers slug tuletame nimest (lihtsustatud)
         pb_slug = player.name.lower().replace(" ", "-")
         data = scrape_player(player.proballers_id, pb_slug)
     except Exception as e:
@@ -132,7 +77,7 @@ def get_player_stats(slug: str, db: Session = Depends(get_db)):
 
 
 _fiba_cache: dict = {}
-FIBA_CACHE_TTL = 86400  # 24 tundi
+FIBA_CACHE_TTL = 86400
 
 @app.get("/players/{slug}/fiba-stats")
 def get_player_fiba_stats(slug: str, db: Session = Depends(get_db)):
@@ -156,7 +101,3 @@ def get_player_fiba_stats(slug: str, db: Session = Depends(get_db)):
     result = {"national_team": data}
     _fiba_cache[slug] = (time.time(), result)
     return result
-
-
-
-
