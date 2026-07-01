@@ -119,9 +119,10 @@ async function fetchNationalTeamContext() {
       }).join('\n'))
     }
 
-    const rows = standingsData || []
+    const rows = standingsData?.rows || []
+    const groupName = standingsData?.name?.replace('Group ', 'Grupp ') || 'Grupp'
     if (rows.length) {
-      parts.push('Tabeliseis (Grupp H):\n' + rows.map(row =>
+      parts.push(`Tabeliseis (${groupName}):\n` + rows.map(row =>
         `- ${row.position}. ${row.team?.name}: ${row.wins}V-${row.losses}K (${row.matches} mängu)`
       ).join('\n'))
     }

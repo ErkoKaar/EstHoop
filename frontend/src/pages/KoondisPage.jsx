@@ -74,7 +74,7 @@ const fadeUp = (delay = 0) => ({
 })
 
 // ── Hero Banner ───────────────────────────────────────────────
-function HeroBanner({ recent, loading, nextEvent }) {
+function HeroBanner({ recent, loading, nextEvent, standingsName }) {
   const form = loading ? [] : [...recent].reverse()
   const reducedMotion = useMemo(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []
@@ -82,6 +82,11 @@ function HeroBanner({ recent, loading, nextEvent }) {
   const initParticles = useCallback(async engine => {
     await loadSlim(engine)
   }, [])
+
+  const tourneyName = nextEvent?.tournament?.name || recent[0]?.tournament?.name
+  const tourneyLabel = !loading && tourneyName ? shortTournament(tourneyName) : null
+  const groupLabel = !loading && standingsName ? standingsName.replace('Group ', 'Grupp ') : null
+  const badgeText = [tourneyLabel, groupLabel].filter(Boolean).join(' · ')
 
   return (
     <div style={{
@@ -129,7 +134,7 @@ function HeroBanner({ recent, loading, nextEvent }) {
         }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }} />
           <span style={{ fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.8)', fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-            FIBA MM Kval. · Grupp H
+            {loading ? '· · ·' : (badgeText || 'Eesti Korvpallikoondis')}
           </span>
         </motion.div>
 
@@ -404,9 +409,10 @@ function ResultRow({ event }) {
 // ── Group Standings ────────────────────────────────────────────
 function GroupStandings({ standings, loading }) {
   if (loading) return <Skeleton style={{ height: 180, marginTop: 32 }} />
-  if (!standings.length) return null
+  if (!standings.rows?.length) return null
 
   const COLS = ['#', 'Meeskond', 'V', 'K', 'Pts']
+  const groupLabel = standings.name?.replace('Group ', 'Grupp ') ?? null
 
   return (
     <div style={{ marginTop: 32 }}>
@@ -414,13 +420,15 @@ function GroupStandings({ standings, loading }) {
         <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: 0 }}>
           Grupi seis
         </h2>
-        <span style={{
-          fontFamily: FONT_BODY, fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.12em',
-          textTransform: 'uppercase', background: '#f3f4f6', color: '#6b7280',
-          borderRadius: 20, padding: '3px 10px',
-        }}>
-          Grupp H
-        </span>
+        {groupLabel && (
+          <span style={{
+            fontFamily: FONT_BODY, fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.12em',
+            textTransform: 'uppercase', background: '#f3f4f6', color: '#6b7280',
+            borderRadius: 20, padding: '3px 10px',
+          }}>
+            {groupLabel}
+          </span>
+        )}
       </div>
 
       <div style={{
@@ -443,13 +451,13 @@ function GroupStandings({ standings, loading }) {
         </div>
 
         {/* Rows */}
-        {standings.map((row, i) => {
+        {standings.rows.map((row, i) => {
           const est = row.team?.name === 'Estonia'
           return (
             <div key={i} style={{
               display: 'grid', gridTemplateColumns: '36px 1fr 44px 44px 56px',
               padding: '13px 16px',
-              borderBottom: i < standings.length - 1 ? '1px solid #f9fafb' : 'none',
+              borderBottom: i < standings.rows.length - 1 ? '1px solid #f9fafb' : 'none',
               background: est ? 'rgba(0,114,206,0.05)' : 'white',
             }}>
               <span style={{ fontFamily: FONT_BODY, fontWeight: 700, color: est ? BLUE : '#9ca3af', fontSize: '0.9375rem' }}>
@@ -488,7 +496,7 @@ function GroupStandings({ standings, loading }) {
 export default function KoondisPage() {
   const [upcoming, setUpcoming] = useState([])
   const [recent, setRecent] = useState([])
-  const [standings, setStandings] = useState([])
+  const [standings, setStandings] = useState({ name: null, rows: [] })
   const [loading, setLoading] = useState(true)
   const [error] = useState(null)
   const { signalReady } = useLoading()
@@ -502,7 +510,7 @@ export default function KoondisPage() {
         setUpcoming(gamesRes.value.upcoming || [])
         setRecent(gamesRes.value.recent || [])
       }
-      setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : [])
+      setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : { name: null, rows: [] })
       setLoading(false)
       signalReady()
     })
@@ -511,7 +519,7 @@ export default function KoondisPage() {
   return (
     <div style={{ width: '100%' }}>
       {/* Hero — full width */}
-      <HeroBanner recent={recent} loading={loading} nextEvent={upcoming[0] ?? null} />
+      <HeroBanner recent={recent} loading={loading} nextEvent={upcoming[0] ?? null} standingsName={standings.name} />
 
       {/* Content */}
       <div style={{ maxWidth: 1024, width: '100%', boxSizing: 'border-box', margin: '0 auto', padding: '40px 24px 56px' }}>

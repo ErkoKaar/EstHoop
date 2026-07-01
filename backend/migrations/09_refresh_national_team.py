@@ -13,9 +13,7 @@ from playwright.sync_api import sync_playwright
 from database import SessionLocal
 import models
 
-TEAM_ID = 25373
-TOURNAMENT_ID = 10437
-SEASON_ID = 54504
+TEAM_ID = 25373  # Estonia SofaScore team ID (never changes)
 
 def upsert(db, key, data):
     row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == key).first()
@@ -27,17 +25,40 @@ def upsert(db, key, data):
 
 def fetch_all(page):
     return page.evaluate(f"""async () => {{
-        const [nextRes, lastRes, standRes] = await Promise.all([
+        const [nextRes, lastRes] = await Promise.all([
             fetch('https://api.sofascore.com/api/v1/team/{TEAM_ID}/events/next/0').then(r => r.json()),
             fetch('https://api.sofascore.com/api/v1/team/{TEAM_ID}/events/last/0').then(r => r.json()),
-            fetch('https://api.sofascore.com/api/v1/unique-tournament/{TOURNAMENT_ID}/season/{SEASON_ID}/standings/total').then(r => r.json()),
         ])
-        const groupH = (standRes.standings || []).find(g => (g.name || '').includes('Group H'))
-        return {{
-            upcoming: nextRes.events || [],
-            recent: [...(lastRes.events || [])].reverse().slice(0, 5),
-            standings: groupH ? groupH.rows : [],
+
+        const upcoming = nextRes.events || []
+        const recent = [...(lastRes.events || [])].reverse().slice(0, 5)
+
+        // Find first qualifying game (not friendly) from upcoming, then recent
+        const allEvents = [...upcoming, ...recent]
+        const qualGame = allEvents.find(ev => {{
+            const name = (ev.tournament?.name || '').toLowerCase()
+            return name.includes('qualifier') || name.includes('eurobasket') || name.includes('olympic')
+        }})
+
+        let standings = {{ name: null, rows: [] }}
+
+        if (qualGame) {{
+            const tournamentId = qualGame.tournament?.uniqueTournament?.id
+            const seasonId = qualGame.season?.id
+            if (tournamentId && seasonId) {{
+                const standRes = await fetch(
+                    `https://api.sofascore.com/api/v1/unique-tournament/${{tournamentId}}/season/${{seasonId}}/standings/total`
+                ).then(r => r.json())
+                const estGroup = (standRes.standings || []).find(g =>
+                    (g.rows || []).some(r => r.team?.name === 'Estonia')
+                )
+                if (estGroup) {{
+                    standings = {{ name: estGroup.name, rows: estGroup.rows || [] }}
+                }}
+            }}
         }}
+
+        return {{ upcoming, recent, standings }}
     }}""")
 
 db = SessionLocal()
@@ -52,9 +73,9 @@ with sync_playwright() as p:
     result = fetch_all(page)
     browser.close()
 
-print(f"  upcoming: {len(result['upcoming'])} mängu")
-print(f"  recent:   {len(result['recent'])} tulemust")
-print(f"  standings: {len(result['standings'])} rida")
+print(f"  upcoming:  {len(result['upcoming'])} mängu")
+print(f"  recent:    {len(result['recent'])} tulemust")
+print(f"  standings: {len(result['standings']['rows'])} rida ({result['standings']['name']})")
 
 upsert(db, "upcoming_games", result["upcoming"])
 upsert(db, "recent_games", result["recent"])

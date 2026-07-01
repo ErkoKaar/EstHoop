@@ -127,7 +127,7 @@ def get_national_team_games(db: Session = Depends(get_db)):
 @app.get("/national-team/standings")
 def get_national_team_standings(db: Session = Depends(get_db)):
     row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "standings").first()
-    return row.data if row else []
+    return row.data if row else {"name": None, "rows": []}
 
 
 # ── Chat ──────────────────────────────────────────────────────────────────────
