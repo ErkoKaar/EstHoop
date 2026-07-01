@@ -77,7 +77,7 @@ def get_player_stats(slug: str, db: Session = Depends(get_db)):
         return mem_cached[1]
 
     try:
-        pb_slug = player.name.lower().replace(" ", "-")
+        pb_slug = unicodedata.normalize("NFKD", player.name.lower()).encode("ascii", "ignore").decode("ascii").replace(" ", "-")
         data = scrape_player(player.proballers_id, pb_slug)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Scraping ebaõnnestus: {e}")

@@ -5,6 +5,7 @@ Safe to re-run — upserts existing rows.
 """
 import sys
 import os
+import unicodedata
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from database import SessionLocal
@@ -19,7 +20,7 @@ print(f"Scraping stats for {len(players)} players...\n")
 ok, fail = 0, 0
 for p in players:
     try:
-        pb_slug = p.name.lower().replace(" ", "-")
+        pb_slug = unicodedata.normalize("NFKD", p.name.lower()).encode("ascii", "ignore").decode("ascii").replace(" ", "-")
         data = scrape_player(p.proballers_id, pb_slug)
 
         existing = db.query(models.PlayerClubStats).filter(models.PlayerClubStats.slug == p.slug).first()
