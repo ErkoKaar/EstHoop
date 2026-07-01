@@ -1,10 +1,10 @@
-"""
-Lisa fiba_id veerg players tabelisse ja täida kõigi mängijate ID-d.
-Käivita: python migrate_fiba_id.py
-"""
+"""Lisa fiba_id veerg ja täida kõigi 22 mängija FIBA ID-d. Käivita: python migrations/05_add_fiba_id.py"""
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+import sqlalchemy as sa
 from database import engine, SessionLocal
 from models import Player
-from sqlalchemy import text
 
 FIBA_IDS = {
     "henri-drell":       227312,
@@ -33,7 +33,7 @@ FIBA_IDS = {
 
 with engine.connect() as conn:
     try:
-        conn.execute(text("ALTER TABLE players ADD COLUMN fiba_id INTEGER"))
+        conn.execute(sa.text("ALTER TABLE players ADD COLUMN fiba_id INTEGER"))
         conn.commit()
         print("Veerg fiba_id lisatud.")
     except Exception:
@@ -47,7 +47,7 @@ for slug, fiba_id in FIBA_IDS.items():
         player.fiba_id = fiba_id
         updated += 1
     else:
-        print(f"  HOIATUS: mängijat '{slug}' ei leitud andmebaasist")
+        print(f"  HOIATUS: mängijat '{slug}' ei leitud")
 db.commit()
 db.close()
 print(f"Uuendatud {updated}/{len(FIBA_IDS)} mängijat.")

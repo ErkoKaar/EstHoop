@@ -1,5 +1,6 @@
+"""Lisa 12 uut mängijat koos proballers_id-ga. Käivita: python migrations/03_add_new_players.py"""
 import sys, os
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from database import SessionLocal
 import models
@@ -19,29 +20,21 @@ NEW_PLAYERS = [
     {"name": "Siim-Sander Vene",  "slug": "siim-sander-vene",   "proballers_id": 48091},
 ]
 
-def add():
-    db = SessionLocal()
-    try:
-        added = 0
-        skipped = 0
-        for p in NEW_PLAYERS:
-            existing = db.query(models.Player).filter(models.Player.slug == p["slug"]).first()
-            if existing:
-                print(f"  ~ {p['name']} ({p['slug']}) — juba olemas, vahelejäetud")
-                skipped += 1
-                continue
-            player = models.Player(
-                name=p["name"],
-                slug=p["slug"],
-                proballers_id=p["proballers_id"],
-            )
-            db.add(player)
-            print(f"  + {p['name']} ({p['slug']}) → ProBallers #{p['proballers_id']}")
-            added += 1
-        db.commit()
-        print(f"\n{added} mängijat lisatud, {skipped} vahele jäetud.")
-    finally:
-        db.close()
-
-if __name__ == "__main__":
-    add()
+db = SessionLocal()
+try:
+    added = 0
+    skipped = 0
+    for p in NEW_PLAYERS:
+        existing = db.query(models.Player).filter(models.Player.slug == p["slug"]).first()
+        if existing:
+            print(f"  ~ {p['name']} — juba olemas")
+            skipped += 1
+            continue
+        player = models.Player(name=p["name"], slug=p["slug"], proballers_id=p["proballers_id"])
+        db.add(player)
+        print(f"  + {p['name']} ({p['slug']})")
+        added += 1
+    db.commit()
+    print(f"\n{added} lisatud, {skipped} vahele jäetud.")
+finally:
+    db.close()

@@ -1,9 +1,8 @@
+"""Lisa algsed 10 mängijat andmebaasi. Käivita: python migrations/01_seed_players.py"""
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 import unicodedata
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(__file__))
-
 from database import SessionLocal, Base, engine
 import models
 

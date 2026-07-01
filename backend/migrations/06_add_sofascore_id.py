@@ -1,12 +1,11 @@
-"""
-Lisa sofascore_id veerg players tabelisse ja täida kõigi mängijate ID-d.
-Käivita: python migrate_sofascore_id.py
-"""
+"""Lisa sofascore_id veerg ja täida kõigi 22 mängija SofaScore ID-d. Käivita: python migrations/06_add_sofascore_id.py"""
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+import sqlalchemy as sa
 from database import engine, SessionLocal
 from models import Player
-from sqlalchemy import text
 
-# sofascore_id.txt slugid → andmebaasi slugid
 SOFASCORE_IDS = {
     "kerr-kriisa":        1002106,
     "kristian-kullamae":  1191801,
@@ -34,7 +33,7 @@ SOFASCORE_IDS = {
 
 with engine.connect() as conn:
     try:
-        conn.execute(text("ALTER TABLE players ADD COLUMN sofascore_id INTEGER"))
+        conn.execute(sa.text("ALTER TABLE players ADD COLUMN sofascore_id INTEGER"))
         conn.commit()
         print("Veerg sofascore_id lisatud.")
     except Exception:
@@ -48,7 +47,7 @@ for slug, ss_id in SOFASCORE_IDS.items():
         player.sofascore_id = ss_id
         updated += 1
     else:
-        print(f"  HOIATUS: mängijat '{slug}' ei leitud andmebaasist")
+        print(f"  HOIATUS: mängijat '{slug}' ei leitud")
 db.commit()
 db.close()
 print(f"Uuendatud {updated}/{len(SOFASCORE_IDS)} mängijat.")
