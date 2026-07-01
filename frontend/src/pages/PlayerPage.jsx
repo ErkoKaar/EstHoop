@@ -389,7 +389,7 @@ export default function PlayerPage() {
   const isKoondis = tab === 'koondis'
 
   return (
-    <div className="px-6 py-8 max-w-7xl mx-auto">
+    <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0">
 
       {/* Tagasi */}
       <button
@@ -421,7 +421,7 @@ export default function PlayerPage() {
             </div>
           )}
         </div>
-        <div>
+        <div className="min-w-0">
           <h1 className="text-5xl text-[#08060d] leading-none mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
             {player.name}
           </h1>
@@ -444,7 +444,7 @@ export default function PlayerPage() {
         <>
           {/* Stat kaardid */}
           {fibaLoading ? (
-            <div className="grid grid-cols-4 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
             </div>
           ) : fibaError || !fibaStats?.length ? (
@@ -489,7 +489,7 @@ export default function PlayerPage() {
         <>
           {/* Stat kaardid */}
           {statsLoading ? (
-            <div className="grid grid-cols-4 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24" />)}
             </div>
           ) : statsError ? (
