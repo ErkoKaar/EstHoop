@@ -1,4 +1,4 @@
-name: Refresh national team data
+name: Refresh FIBA stats
 
 on:
   schedule:
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r backend/requirements.txt
 
-      - name: Refresh national team data
+      - name: Refresh FIBA stats
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: python backend/migrations/09_refresh_national_team.py
+        run: python backend/migrations/10_refresh_fiba_stats.py

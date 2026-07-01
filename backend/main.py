@@ -97,6 +97,12 @@ def get_player_fiba_stats(slug: str, db: Session = Depends(get_db)):
     if not player.fiba_id:
         raise HTTPException(status_code=404, detail="FIBA ID puudub")
 
+    # DB cache (populated daily by refresh script)
+    db_cached = db.query(models.PlayerFibaStats).filter(models.PlayerFibaStats.slug == slug).first()
+    if db_cached:
+        return {"national_team": db_cached.data}
+
+    # Fallback: live scraping with in-memory cache
     cached = _fiba_cache.get(slug)
     if cached and time.time() - cached[0] < FIBA_CACHE_TTL:
         return cached[1]
