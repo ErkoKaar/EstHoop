@@ -6,7 +6,6 @@ const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 const DARK = '#08060d'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const TICKETS_URL = 'https://www.piletitasku.ee/et/search?category=193'
 
 function formatDateLong(ts) {
@@ -238,10 +237,10 @@ export default function PiletidPage() {
   const { signalReady } = useLoading()
 
   useEffect(() => {
-    fetch(`${API}/national-team/games`)
+    fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0')
       .then(r => r.json())
       .then(data => {
-        setEvents(data.upcoming || [])
+        setEvents(data.events || [])
         setLoading(false)
         signalReady()
       })
