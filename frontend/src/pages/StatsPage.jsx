@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
+import PlayerAvatar from '../components/PlayerAvatar'
+import Skeleton from '../components/Skeleton'
+import StatsTabToggle from '../components/StatsTabToggle'
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -25,55 +30,6 @@ const NAT_TABS = [
 const MEDAL = ['#F59E0B', '#94A3B8', '#CD7F32']
 const MEDAL_LABEL = ['#78350F', '#334155', '#7C2D12']
 const MEDAL_BG = ['#FEF3C7', '#F1F5F9', '#FFF7ED']
-const EXTENSIONS = ['jpg', 'png']
-
-function PlayerAvatar({ slug, name, size = 'md' }) {
-  const [extIndex, setExtIndex] = useState(0)
-  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-  const px = { lg: 96, md: 64, sm: 40 }[size]
-
-  return (
-    <div className="rounded-full overflow-hidden shrink-0 shadow-md" style={{ width: px, height: px, minWidth: px }}>
-      {extIndex < EXTENSIONS.length ? (
-        <img
-          src={`/players/${slug}.${EXTENSIONS[extIndex]}`}
-          alt={name}
-          className="w-full h-full object-cover object-top"
-          onError={() => setExtIndex(i => i + 1)}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center" style={{ background: BLUE }}>
-          <span className="text-white font-bold select-none" style={{ fontFamily: FONT_HEADING, fontSize: { lg: '1.5rem', md: '1.1rem', sm: '0.75rem' }[size] }}>
-            {initials}
-          </span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-function Skeleton({ className }) {
-  return <div className={`animate-pulse bg-gray-200 rounded-xl ${className}`} />
-}
-
-function StatsTabToggle({ active, onChange }) {
-  return (
-    <div className="flex rounded-2xl p-1.5 gap-1.5 mb-6" style={{ background: '#e8eef5' }}>
-      {[{ key: 'koondis', label: 'Koondis' }, { key: 'klubi', label: 'Klubi' }].map(({ key, label }) => (
-        <button
-          key={key}
-          onClick={() => onChange(key)}
-          className={`flex-1 py-3 rounded-xl tracking-widest uppercase cursor-pointer transition-all duration-200
-            focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce]
-            ${active === key ? 'text-white shadow-lg' : 'text-gray-500 hover:text-[#08060d]'}`}
-          style={{ fontFamily: FONT_HEADING, fontSize: '1.25rem', minWidth: '140px', background: active === key ? BLUE : 'transparent', letterSpacing: '2px' }}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  )
-}
 
 function PodiumCard({ player, rank, statKey }) {
   const navigate = useNavigate()
@@ -150,8 +106,6 @@ export default function StatsPage() {
   const [clubLoading, setClubLoading] = useState(true)
   const [natLoading, setNatLoading] = useState(true)
   const { signalReady } = useLoading()
-
-  const API = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     async function load() {

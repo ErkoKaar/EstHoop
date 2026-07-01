@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useLoading } from '../contexts/LoadingContext'
+import PlayerAvatar from '../components/PlayerAvatar'
+import Skeleton from '../components/Skeleton'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 const DARK = '#08060d'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const SS_URL = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/next/0`
 
 function tallinDate(ts) {
@@ -39,29 +41,6 @@ function shortTournament(name) {
   return name.length > 20 ? name.slice(0, 18) + '…' : name
 }
 
-// ── Player avatar ─────────────────────────────────────────────────────────────
-function PlayerAvatar({ player }) {
-  const [imgFailed, setImgFailed] = useState(false)
-  const initials = player.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-
-  return (
-    <div className="shrink-0 w-10 h-10 rounded-full overflow-hidden shadow-sm" style={{ background: BLUE }}>
-      {!imgFailed ? (
-        <img
-          src={`/players/${player.slug}.jpg`}
-          alt={player.name}
-          className="w-full h-full object-cover object-top"
-          onError={() => setImgFailed(true)}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <span style={{ fontFamily: FONT_HEADING, fontSize: '0.95rem', color: '#fff' }}>{initials}</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
 // ── Game row ──────────────────────────────────────────────────────────────────
 function GameRow({ player, event: ev }) {
   const home = ev.homeTeam?.name || '?'
@@ -74,7 +53,7 @@ function GameRow({ player, event: ev }) {
       className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200"
     >
       {/* Player */}
-      <PlayerAvatar player={player} />
+      <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
       <div className="shrink-0 min-w-[110px]">
         <div style={{ fontFamily: FONT_HEADING, fontSize: '1.1rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1 }}>
           {player.name}
@@ -125,11 +104,6 @@ function GameRow({ player, event: ev }) {
   )
 }
 
-// ── Skeleton ──────────────────────────────────────────────────────────────────
-function RowSkeleton() {
-  return <div className="animate-pulse bg-gray-100 rounded-2xl h-16" />
-}
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function KlubiKorvpallPage() {
   const [games, setGames] = useState([])
@@ -140,7 +114,7 @@ export default function KlubiKorvpallPage() {
   const { signalReady } = useLoading()
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/players`)
+    fetch(`${API}/players`)
       .then(r => r.json())
       .then(players => {
         const withSS = players.filter(p => p.sofascore_id)
@@ -231,7 +205,7 @@ export default function KlubiKorvpallPage() {
       {/* Loading skeletons */}
       {loading && (
         <div className="flex flex-col gap-2">
-          {Array.from({ length: 5 }).map((_, i) => <RowSkeleton key={i} />)}
+          {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}
         </div>
       )}
 

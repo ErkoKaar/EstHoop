@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
@@ -118,8 +120,6 @@ export default function PlayersPage() {
   const [error, setError] = useState(null)
   const { signalReady } = useLoading()
 
-  const API = import.meta.env.VITE_API_URL
-
   useEffect(() => {
     fetch(`${API}/players`)
       .then(res => {
@@ -160,7 +160,7 @@ export default function PlayersPage() {
         setLoading(false)
         signalReady()
       })
-  }, [API])
+  }, [])
 
   if (loading) {
     return (
