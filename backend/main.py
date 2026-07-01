@@ -62,12 +62,19 @@ def get_player_stats(slug: str, db: Session = Depends(get_db)):
     player = db.query(models.Player).filter(models.Player.slug == slug).first()
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
+
+    # DB cache (populated by refresh script, works on Render)
+    db_cached = db.query(models.PlayerClubStats).filter(models.PlayerClubStats.slug == slug).first()
+    if db_cached:
+        return db_cached.data
+
+    # Fallback: live scraping (works locally, may be blocked on Render)
     if not player.proballers_id:
         raise HTTPException(status_code=404, detail="ProBallers ID puudub")
 
-    cached = _stats_cache.get(slug)
-    if cached and time.time() - cached[0] < CACHE_TTL:
-        return cached[1]
+    mem_cached = _stats_cache.get(slug)
+    if mem_cached and time.time() - mem_cached[0] < CACHE_TTL:
+        return mem_cached[1]
 
     try:
         pb_slug = player.name.lower().replace(" ", "-")

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime, JSON
+from sqlalchemy.sql import func
 from database import Base
 
 
@@ -12,3 +13,12 @@ class Player(Base):
     fiba_id = Column(Integer, nullable=True)
     sofascore_id = Column(Integer, nullable=True)
     position = Column(String, nullable=True)
+
+
+class PlayerClubStats(Base):
+    __tablename__ = "player_club_stats"
+
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String, nullable=False, unique=True)
+    data = Column(JSON, nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
