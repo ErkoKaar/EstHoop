@@ -9,10 +9,11 @@ const BLUE = '#0072ce'
 const DARK = '#08060d'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const SS_URL = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/next/0`
+const SS_NEXT = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/next/0`
+const SS_LAST = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/last/0`
+const TWO_WEEKS = 14 * 86400
 
 function tallinDate(ts) {
-  // Returns YYYY-MM-DD in Tallinn timezone for grouping
   return new Date(ts * 1000).toLocaleDateString('sv-SE', { timeZone: 'Europe/Tallinn' })
 }
 
@@ -42,16 +43,17 @@ function shortTournament(name) {
 }
 
 // ── Game row ──────────────────────────────────────────────────────────────────
-function GameRow({ player, event: ev }) {
+function GameRow({ player, event: ev, isPast }) {
   const home = ev.homeTeam?.name || '?'
   const away = ev.awayTeam?.name || '?'
   const tournament = shortTournament(ev.tournament?.name)
   const ts = ev.startTimestamp
+  const hs = ev.homeScore?.current
+  const as_ = ev.awayScore?.current
+  const hasScore = isPast && hs != null && as_ != null
 
   return (
-    <div
-      className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200"
-    >
+    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200">
       {/* Player */}
       <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
       <div className="shrink-0 min-w-[110px]">
@@ -89,8 +91,17 @@ function GameRow({ player, event: ev }) {
         )}
       </div>
 
-      {/* Time */}
-      {ts && (
+      {/* Score or time */}
+      {hasScore ? (
+        <div className="shrink-0 text-right">
+          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: '#374151', letterSpacing: '2px', lineHeight: 1 }}>
+            {hs}:{as_}
+          </div>
+          <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
+            Lõpptulemus
+          </div>
+        </div>
+      ) : ts ? (
         <div className="shrink-0 text-right">
           <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: BLUE, letterSpacing: '1px', lineHeight: 1 }}>
             {formatTime(ts)}
@@ -99,7 +110,7 @@ function GameRow({ player, event: ev }) {
             Eesti aeg
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -119,19 +130,20 @@ export default function KlubiKorvpallPage() {
       .then(players => {
         const withSS = players.filter(p => p.sofascore_id)
         setTotalCount(withSS.length)
+        const cutoff = Date.now() / 1000 - TWO_WEEKS
 
         const promises = withSS.map(player =>
-          fetch(SS_URL(player.sofascore_id))
-            .then(r => r.json())
-            .then(data => {
-              const events = data.events || []
-              setLoadedCount(c => c + 1)
-              return events.map(ev => ({ player, event: ev }))
-            })
-            .catch(() => {
-              setLoadedCount(c => c + 1)
-              return []
-            })
+          Promise.all([
+            fetch(SS_NEXT(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
+            fetch(SS_LAST(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
+          ]).then(([nextData, lastData]) => {
+            setLoadedCount(c => c + 1)
+            const upcoming = (nextData.events || []).map(ev => ({ player, event: ev, isPast: false }))
+            const past = (lastData.events || [])
+              .filter(ev => ev.startTimestamp >= cutoff)
+              .map(ev => ({ player, event: ev, isPast: true }))
+            return [...past, ...upcoming]
+          })
         )
 
         Promise.allSettled(promises).then(results => {
@@ -151,17 +163,21 @@ export default function KlubiKorvpallPage() {
 
   // Group by Tallinn date
   const grouped = []
-  const seen = {}
+  const groupMap = {}
   for (const g of games) {
     const ts = g.event.startTimestamp
     if (!ts) continue
     const key = tallinDate(ts)
-    if (!seen[key]) {
-      seen[key] = true
-      grouped.push({ dateKey: key, ts, rows: [] })
+    if (!groupMap[key]) {
+      const group = { dateKey: key, ts, rows: [] }
+      groupMap[key] = group
+      grouped.push(group)
     }
-    grouped[grouped.length - 1].rows.push(g)
+    groupMap[key].rows.push(g)
   }
+
+  // Find today's date key to insert divider
+  const todayKey = tallinDate(Date.now() / 1000)
 
   return (
     <div className="pb-12">
@@ -171,7 +187,7 @@ export default function KlubiKorvpallPage() {
           Klubikorvpall
         </h1>
         <p style={{ fontFamily: FONT_BODY, fontSize: '1.05rem', color: '#6b7280', fontWeight: 500, marginTop: 6 }}>
-          Eesti koondislaste tulevad mängud klubides üle maailma
+          Eesti koondislaste mängud klubides üle maailma
         </p>
       </div>
 
@@ -213,7 +229,7 @@ export default function KlubiKorvpallPage() {
       {!loading && !error && games.length === 0 && (
         <div className="text-center py-20 rounded-3xl" style={{ background: '#f8fafc' }}>
           <p style={{ fontFamily: FONT_HEADING, fontSize: '2rem', color: '#d1d5db', letterSpacing: '1px' }}>
-            EELSEISVAID MÄNGE EI LEITUD
+            MÄNGE EI LEITUD
           </p>
           <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
             Hooajapaus — mängud algavad septembris
@@ -222,24 +238,46 @@ export default function KlubiKorvpallPage() {
       )}
 
       {/* Grouped timeline */}
-      {!loading && grouped.map(group => (
-        <div key={group.dateKey} className="mb-6">
-          <div className="flex items-center gap-3 mb-3">
-            <span
-              className="text-xs font-bold tracking-widest uppercase"
-              style={{ fontFamily: FONT_BODY, color: '#9ca3af' }}
-            >
-              {formatDateHeader(group.ts)}
-            </span>
-            <div className="flex-1 h-px bg-gray-100" />
+      {!loading && grouped.map((group, gi) => {
+        const isPastGroup = group.dateKey < todayKey
+        const isTodayGroup = group.dateKey === todayKey
+        // Show "TÄNA" divider before today's group or before first future group after past groups
+        const prevGroup = grouped[gi - 1]
+        const showDivider = isTodayGroup || (!isPastGroup && prevGroup && prevGroup.dateKey < todayKey)
+
+        return (
+          <div key={group.dateKey}>
+            {showDivider && (
+              <div className="flex items-center gap-3 my-5">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span
+                  className="px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase"
+                  style={{ fontFamily: FONT_BODY, background: BLUE, color: '#fff' }}
+                >
+                  Täna
+                </span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+            )}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <span
+                  className="text-xs font-bold tracking-widest uppercase"
+                  style={{ fontFamily: FONT_BODY, color: isPastGroup ? '#d1d5db' : '#9ca3af' }}
+                >
+                  {formatDateHeader(group.ts)}
+                </span>
+                <div className="flex-1 h-px bg-gray-100" />
+              </div>
+              <div className="flex flex-col gap-2">
+                {group.rows.map((g, i) => (
+                  <GameRow key={`${g.player.slug}-${g.event.id ?? i}`} player={g.player} event={g.event} isPast={g.isPast} />
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            {group.rows.map((g, i) => (
-              <GameRow key={`${g.player.slug}-${g.event.id ?? i}`} player={g.player} event={g.event} />
-            ))}
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
