@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const NAV_LINKS = [
+  { label: 'Koondis', href: '/koondis' },
   { label: 'Mängijad', href: '/mangijad' },
+  { label: 'Statistika', href: '/statistika' },
 ]
 
 export default function Navbar() {
@@ -17,10 +19,15 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="text-3xl tracking-widest text-white select-none cursor-pointer"
-          style={{ fontFamily: "'Bebas Neue', cursive", letterSpacing: '2px' }}
+          className="flex items-center gap-2 select-none cursor-pointer"
         >
-          EstHoop
+          <img src="/logo/logo_white.png" alt="EstHoop logo" className="h-9 w-auto" />
+          <span
+            className="text-3xl tracking-widest text-white"
+            style={{ fontFamily: "'Bebas Neue', cursive", letterSpacing: '2px' }}
+          >
+            EstHoop
+          </span>
         </Link>
 
         {/* Desktop links */}
