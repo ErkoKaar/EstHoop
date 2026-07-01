@@ -9,9 +9,7 @@ const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 const DARK = '#08060d'
 
-const NEXT_URL = 'https://api.sofascore.com/api/v1/team/25373/events/next/0'
-const LAST_URL = 'https://api.sofascore.com/api/v1/team/25373/events/last/0'
-const STANDINGS_URL = 'https://api.sofascore.com/api/v1/unique-tournament/10437/season/54504/standings/total'
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 function formatDate(ts) {
   return new Date(ts * 1000).toLocaleDateString('et-EE', {
@@ -497,16 +495,14 @@ export default function KoondisPage() {
 
   useEffect(() => {
     Promise.allSettled([
-      fetch(NEXT_URL).then(r => r.json()),
-      fetch(LAST_URL).then(r => r.json()),
-      fetch(STANDINGS_URL).then(r => r.json()),
-    ]).then(([nextRes, lastRes, standingsRes]) => {
-      setUpcoming(nextRes.status === 'fulfilled' ? nextRes.value.events || [] : [])
-      setRecent(lastRes.status === 'fulfilled' ? [...(lastRes.value.events || [])].reverse().slice(0, 5) : [])
-      if (standingsRes.status === 'fulfilled') {
-        const groupH = standingsRes.value.standings?.find(g => g.name?.includes('Group H'))
-        setStandings(groupH?.rows || [])
+      fetch(`${API}/national-team/games`).then(r => r.json()),
+      fetch(`${API}/national-team/standings`).then(r => r.json()),
+    ]).then(([gamesRes, standingsRes]) => {
+      if (gamesRes.status === 'fulfilled') {
+        setUpcoming(gamesRes.value.upcoming || [])
+        setRecent(gamesRes.value.recent || [])
       }
+      setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : [])
       setLoading(false)
       signalReady()
     })

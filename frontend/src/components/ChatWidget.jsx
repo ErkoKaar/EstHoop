@@ -95,15 +95,14 @@ async function fetchStatsContext() {
 
 async function fetchNationalTeamContext() {
   try {
-    const [nextData, lastData, standingsData] = await Promise.all([
-      fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0').then(r => r.json()),
-      fetch('https://api.sofascore.com/api/v1/team/25373/events/last/0').then(r => r.json()),
-      fetch('https://api.sofascore.com/api/v1/unique-tournament/10437/season/54504/standings/total').then(r => r.json()),
+    const [gamesData, standingsData] = await Promise.all([
+      fetch(`${API}/national-team/games`).then(r => r.json()),
+      fetch(`${API}/national-team/standings`).then(r => r.json()),
     ])
 
     const parts = []
 
-    const upcoming = nextData.events || []
+    const upcoming = gamesData.upcoming || []
     if (upcoming.length) {
       parts.push('Eelseisvad mängud:\n' + upcoming.slice(0, 5).map(ev =>
         `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
@@ -112,7 +111,7 @@ async function fetchNationalTeamContext() {
       parts.push('Eelseisvaid koondise mänge ei ole.')
     }
 
-    const recent = [...(lastData.events || [])].reverse().slice(0, 5)
+    const recent = gamesData.recent || []
     if (recent.length) {
       parts.push('Viimased tulemused:\n' + recent.map(ev => {
         const hs = ev.homeScore?.current ?? '?', as = ev.awayScore?.current ?? '?'
@@ -120,8 +119,7 @@ async function fetchNationalTeamContext() {
       }).join('\n'))
     }
 
-    const group = standingsData.standings?.find(g => g.name?.includes('Group H'))
-    const rows = group?.rows || []
+    const rows = standingsData || []
     if (rows.length) {
       parts.push('Tabeliseis (Grupp H):\n' + rows.map(row =>
         `- ${row.position}. ${row.team?.name}: ${row.wins}V-${row.losses}K (${row.matches} mängu)`

@@ -113,6 +113,23 @@ def get_player_fiba_stats(slug: str, db: Session = Depends(get_db)):
     return result
 
 
+# ── National team cache ───────────────────────────────────────────────────────
+
+@app.get("/national-team/games")
+def get_national_team_games(db: Session = Depends(get_db)):
+    upcoming = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "upcoming_games").first()
+    recent = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "recent_games").first()
+    return {
+        "upcoming": upcoming.data if upcoming else [],
+        "recent": recent.data if recent else [],
+    }
+
+@app.get("/national-team/standings")
+def get_national_team_standings(db: Session = Depends(get_db)):
+    row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "standings").first()
+    return row.data if row else []
+
+
 # ── Chat ──────────────────────────────────────────────────────────────────────
 
 class ChatMessage(BaseModel):

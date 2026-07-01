@@ -22,3 +22,11 @@ class PlayerClubStats(Base):
     slug = Column(String, nullable=False, unique=True)
     data = Column(JSON, nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class NationalTeamCache(Base):
+    __tablename__ = "national_team_cache"
+
+    key = Column(String, primary_key=True)
+    data = Column(JSON, nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
