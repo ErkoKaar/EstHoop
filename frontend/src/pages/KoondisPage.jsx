@@ -492,28 +492,24 @@ export default function KoondisPage() {
   const [recent, setRecent] = useState([])
   const [standings, setStandings] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error] = useState(null)
   const { signalReady } = useLoading()
 
   useEffect(() => {
-    Promise.all([
+    Promise.allSettled([
       fetch(NEXT_URL).then(r => r.json()),
       fetch(LAST_URL).then(r => r.json()),
       fetch(STANDINGS_URL).then(r => r.json()),
-    ])
-      .then(([nextData, lastData, standingsData]) => {
-        setUpcoming(nextData.events || [])
-        setRecent([...(lastData.events || [])].reverse().slice(0, 5))
-        const groupH = standingsData.standings?.find(g => g.name?.includes('Group H'))
+    ]).then(([nextRes, lastRes, standingsRes]) => {
+      setUpcoming(nextRes.status === 'fulfilled' ? nextRes.value.events || [] : [])
+      setRecent(lastRes.status === 'fulfilled' ? [...(lastRes.value.events || [])].reverse().slice(0, 5) : [])
+      if (standingsRes.status === 'fulfilled') {
+        const groupH = standingsRes.value.standings?.find(g => g.name?.includes('Group H'))
         setStandings(groupH?.rows || [])
-        setLoading(false)
-        signalReady()
-      })
-      .catch(() => {
-        setError('Andmete laadimine ebaõnnestus. Proovi hiljem uuesti.')
-        setLoading(false)
-        signalReady()
-      })
+      }
+      setLoading(false)
+      signalReady()
+    })
   }, [])
 
   return (

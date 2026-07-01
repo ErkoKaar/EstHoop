@@ -246,7 +246,7 @@ export default function PiletidPage() {
         signalReady()
       })
       .catch(() => {
-        setError(true)
+        setEvents([])
         setLoading(false)
         signalReady()
       })
