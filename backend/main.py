@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import time
 import unicodedata
 import os
-import requests as req_lib
 from anthropic import Anthropic
 from database import Base, engine, SessionLocal
 import models
@@ -115,31 +114,7 @@ class ChatMessage(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
-
-_SS_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-    "Referer": "https://www.sofascore.com/",
-}
-
-def _fetch_upcoming_games() -> str:
-    try:
-        r = req_lib.get(
-            "https://api.sofascore.com/api/v1/team/25373/events/next/0",
-            headers=_SS_HEADERS, timeout=5,
-        )
-        events = r.json().get("events", [])
-        lines = []
-        for ev in events[:5]:
-            home = ev.get("homeTeam", {}).get("name", "?")
-            away = ev.get("awayTeam", {}).get("name", "?")
-            tour = ev.get("tournament", {}).get("name", "")
-            ts = ev.get("startTimestamp")
-            from datetime import datetime, timezone
-            date_str = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%d.%m.%Y %H:%M UTC") if ts else "?"
-            lines.append(f"- {home} vs {away} | {date_str} | {tour}")
-        return "\n".join(lines) if lines else "Eelseisvaid mänge ei leitud."
-    except Exception:
-        return "Mängude andmed pole hetkel kättesaadavad."
+    games_context: str | None = None
 
 def _build_system(players: list, games_text: str) -> str:
     player_list = "\n".join(
@@ -162,7 +137,7 @@ def chat(req: ChatRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY pole seadistatud")
 
     players = db.query(models.Player).order_by(models.Player.name).all()
-    games_text = _fetch_upcoming_games()
+    games_text = req.games_context or "Mängude andmed pole kättesaadavad."
     system = _build_system(players, games_text)
 
     client = Anthropic(api_key=api_key)

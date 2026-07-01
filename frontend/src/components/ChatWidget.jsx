@@ -45,6 +45,27 @@ function TypingDots() {
   )
 }
 
+async function fetchGamesContext() {
+  try {
+    const r = await fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0')
+    const data = await r.json()
+    const events = data.events || []
+    if (!events.length) return 'Eelseisvaid koondise mänge ei ole.'
+    return events.slice(0, 5).map(ev => {
+      const home = ev.homeTeam?.name || '?'
+      const away = ev.awayTeam?.name || '?'
+      const tour = ev.tournament?.name || ''
+      const ts = ev.startTimestamp
+      const date = ts
+        ? new Date(ts * 1000).toLocaleString('et-EE', { timeZone: 'Europe/Tallinn', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '?'
+      return `- ${home} vs ${away} | ${date} Eesti aeg | ${tour}`
+    }).join('\n')
+  } catch {
+    return null
+  }
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
@@ -52,8 +73,13 @@ export default function ChatWidget() {
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [gamesContext, setGamesContext] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
+
+  useEffect(() => {
+    fetchGamesContext().then(ctx => setGamesContext(ctx))
+  }, [])
 
   useEffect(() => {
     if (open) {
@@ -79,7 +105,7 @@ export default function ChatWidget() {
       const r = await fetch(`${API}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next }),
+        body: JSON.stringify({ messages: next, games_context: gamesContext }),
       })
       if (!r.ok) throw new Error()
       const data = await r.json()
