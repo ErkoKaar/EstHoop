@@ -45,6 +45,30 @@ function TypingDots() {
   )
 }
 
+async function fetchStatsContext() {
+  try {
+    const players = await fetch(`${API}/players`).then(r => r.json())
+    const results = await Promise.allSettled(
+      players.map(p => fetch(`${API}/players/${p.slug}/fiba-stats`).then(r => r.ok ? r.json() : null))
+    )
+    const lines = []
+    results.forEach((r, i) => {
+      const p = players[i]
+      const nt = r.status === 'fulfilled' && r.value ? r.value.national_team : null
+      if (!nt?.length) return
+      const gp = nt.reduce((s, row) => s + row.gp, 0)
+      if (!gp) return
+      const ppg = (nt.reduce((s, row) => s + row.ppg * row.gp, 0) / gp).toFixed(1)
+      const rpg = (nt.reduce((s, row) => s + row.rpg * row.gp, 0) / gp).toFixed(1)
+      const apg = (nt.reduce((s, row) => s + row.apg * row.gp, 0) / gp).toFixed(1)
+      lines.push(`- ${p.name} (${p.position || '?'}): ${ppg} ppg, ${rpg} rpg, ${apg} apg (koondis, ${gp} mängu)`)
+    })
+    return lines.length ? lines.join('\n') : null
+  } catch {
+    return null
+  }
+}
+
 async function fetchGamesContext() {
   try {
     const r = await fetch('https://api.sofascore.com/api/v1/team/25373/events/next/0')
@@ -74,11 +98,13 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [gamesContext, setGamesContext] = useState(null)
+  const [statsContext, setStatsContext] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
 
   useEffect(() => {
     fetchGamesContext().then(ctx => setGamesContext(ctx))
+    fetchStatsContext().then(ctx => setStatsContext(ctx))
   }, [])
 
   useEffect(() => {
@@ -105,7 +131,7 @@ export default function ChatWidget() {
       const r = await fetch(`${API}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next, games_context: gamesContext }),
+        body: JSON.stringify({ messages: next, games_context: gamesContext, stats_context: statsContext }),
       })
       if (!r.ok) throw new Error()
       const data = await r.json()

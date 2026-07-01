@@ -115,20 +115,22 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     games_context: str | None = None
+    stats_context: str | None = None
 
-def _build_system(players: list, games_text: str) -> str:
+def _build_system(players: list, games_text: str, stats_text: str | None) -> str:
     player_list = "\n".join(
         f"- {p.name} ({p.position or '?'})" for p in players
     )
+    stats_section = f"\n\n## Mängijate koondise statistika (karjäär kaalutud)\n{stats_text}" if stats_text else ""
     return f"""Oled EstHoop AI abiline — Eesti korvpalli fännidele mõeldud vestlusrobot veebilehel esthoop.ee.
 
 ## Eesti koondise mängijad
-{player_list}
+{player_list}{stats_section}
 
 ## Eelseisvad koondise mängud
 {games_text}
 
-Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem. Kui küsitakse täpset statistikat, suuna mängija profiililehele. Ära väljamõtle andmeid mis sul puuduvad."""
+Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem. Ära väljamõtle andmeid mis sul puuduvad."""
 
 @app.post("/chat")
 def chat(req: ChatRequest, db: Session = Depends(get_db)):
@@ -138,7 +140,7 @@ def chat(req: ChatRequest, db: Session = Depends(get_db)):
 
     players = db.query(models.Player).order_by(models.Player.name).all()
     games_text = req.games_context or "Mängude andmed pole kättesaadavad."
-    system = _build_system(players, games_text)
+    system = _build_system(players, games_text, req.stats_context)
 
     client = Anthropic(api_key=api_key)
     response = client.messages.create(
