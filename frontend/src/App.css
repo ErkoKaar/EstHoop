@@ -1,3 +1,19 @@
+@keyframes logo-heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%       { transform: scale(1.18); }
+  28%       { transform: scale(1); }
+  42%       { transform: scale(1.10); }
+  70%       { transform: scale(1); }
+}
+
+.logo-heartbeat {
+  animation: logo-heartbeat 1.1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-heartbeat { animation: none; }
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
