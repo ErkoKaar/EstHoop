@@ -7,6 +7,8 @@ import PlayersPage from './pages/PlayersPage'
 import PlayerPage from './pages/PlayerPage'
 import StatsPage from './pages/StatsPage'
 import KoondisPage from './pages/KoondisPage'
+import PiletidPage from './pages/PiletidPage'
+import KlubiKorvpallPage from './pages/KlubiKorvpallPage'
 import './App.css'
 
 function RouteChangeWatcher() {
@@ -31,6 +33,8 @@ export default function App() {
           <Route path="/mangijad/:slug" element={<PlayerPage />} />
           <Route path="/statistika" element={<StatsPage />} />
           <Route path="/koondis" element={<KoondisPage />} />
+          <Route path="/piletid" element={<PiletidPage />} />
+          <Route path="/klubikorvpall" element={<KlubiKorvpallPage />} />
         </Routes>
       </LoadingProvider>
     </BrowserRouter>

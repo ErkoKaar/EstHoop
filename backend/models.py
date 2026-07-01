@@ -16,3 +16,4 @@ class Player(Base):
     proballers_id = Column(Integer, nullable=True)
     fiba_id = Column(Integer, nullable=True)
     position = Column(String, nullable=True)
+    sofascore_id = Column(Integer, nullable=True)

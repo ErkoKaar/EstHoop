@@ -5,6 +5,8 @@ const NAV_LINKS = [
   { label: 'Koondis', href: '/koondis' },
   { label: 'Mängijad', href: '/mangijad' },
   { label: 'Statistika', href: '/statistika' },
+  { label: 'Piletid', href: '/piletid' },
+  { label: 'Klubikorvpall', href: '/klubikorvpall' },
 ]
 
 export default function Navbar() {
