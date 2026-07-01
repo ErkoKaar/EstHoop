@@ -9,6 +9,7 @@ import StatsPage from './pages/StatsPage'
 import KoondisPage from './pages/KoondisPage'
 import PiletidPage from './pages/PiletidPage'
 import KlubiKorvpallPage from './pages/KlubiKorvpallPage'
+import ChatWidget from './components/ChatWidget'
 import './App.css'
 
 function RouteChangeWatcher() {
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/piletid" element={<PiletidPage />} />
           <Route path="/klubikorvpall" element={<KlubiKorvpallPage />} />
         </Routes>
+        <ChatWidget />
       </LoadingProvider>
     </BrowserRouter>
   )
