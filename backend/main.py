@@ -167,7 +167,9 @@ def _build_system(players: list, games_text: str, stats_text: str | None, club_g
 ## Koondise mängud ja seis
 {games_text}{club_games_section}
 
-Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem. Ära väljamõtle andmeid mis sul puuduvad."""
+Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem.
+
+Vasta AINULT ülal antud info põhjal (mängijad, mängud, statistika). Kui küsimus ei puuduta Eesti korvpallikoondist ega selle mängijaid, või kui vastuse jaoks vajalik info ülal puudub, ütle seda viisakalt ja ära väljamõtle andmeid."""
 
 @app.post("/chat")
 def chat(req: ChatRequest, db: Session = Depends(get_db)):

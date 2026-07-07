@@ -163,7 +163,7 @@ async function fetchClubGamesContext() {
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Tere! Olen EstHoop AI abiline. Küsi koondise mängude, mängijate või tulemuste kohta.' }
+    { role: 'assistant', content: 'Tere! Olen EstHoop AI abiline. Oskan vastata ainult sellel lehel oleva info kohta — koondise mängude, mängijate ja tulemuste kohta.' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
