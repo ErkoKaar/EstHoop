@@ -74,19 +74,32 @@ async function fetchStatsContext() {
     })
 
     const clubLines = []
+    const recentGameLines = []
     clubResults.forEach((r, i) => {
       const p = players[i]
-      const seasons = r.status === 'fulfilled' && r.value ? r.value.seasons : null
-      if (!seasons?.length) return
-      const last = seasons[seasons.length - 1]
-      const pts = last.PTS ?? '-', reb = last.REB ?? '-', ast = last.AST ?? '-'
-      const league = last.league || last.competition || ''
-      clubLines.push(`- ${p.name}: ${pts} pts, ${reb} reb, ${ast} ast (${league})`)
+      const value = r.status === 'fulfilled' ? r.value : null
+
+      const seasons = value?.seasons
+      if (seasons?.length) {
+        const seasonText = seasons.slice(-5).map(s =>
+          `${s.SEASON || '?'} ${s.TEAM || ''} (${s.LEAGUE || ''}): ${s.PTS ?? '-'} pts, ${s.REB ?? '-'} reb, ${s.AST ?? '-'} ast`
+        ).join('; ')
+        clubLines.push(`- ${p.name}: ${seasonText}`)
+      }
+
+      const clubGames = value?.clubGames
+      if (clubGames?.length) {
+        const gameText = clubGames.slice(0, 3).map(g =>
+          `${g.DATE || '?'} vs ${g.OPPONENT || '?'} (${g.RESULT || '?'}): ${g.PTS ?? '-'} pts, ${g.REB ?? '-'} reb, ${g.AST ?? '-'} ast`
+        ).join('; ')
+        recentGameLines.push(`- ${p.name}: ${gameText}`)
+      }
     })
 
     const parts = []
     if (natLines.length) parts.push('Koondise statistika (karjäär kaalutud):\n' + natLines.join('\n'))
-    if (clubLines.length) parts.push('Klubi statistika (viimane hooaeg):\n' + clubLines.join('\n'))
+    if (clubLines.length) parts.push('Klubi statistika (viimased hooajad):\n' + clubLines.join('\n'))
+    if (recentGameLines.length) parts.push('Viimased klubimängud:\n' + recentGameLines.join('\n'))
     return parts.length ? parts.join('\n\n') : null
   } catch {
     return null
@@ -95,16 +108,17 @@ async function fetchStatsContext() {
 
 async function fetchNationalTeamContext() {
   try {
-    const [gamesData, standingsData] = await Promise.all([
+    const [gamesData, standingsData, boxScores] = await Promise.all([
       fetch(`${API}/national-team/games`).then(r => r.json()),
       fetch(`${API}/national-team/standings`).then(r => r.json()),
+      fetch(`${API}/national-team/game-stats`).then(r => r.json()),
     ])
 
     const parts = []
 
     const upcoming = gamesData.upcoming || []
     if (upcoming.length) {
-      parts.push('Eelseisvad mängud:\n' + upcoming.slice(0, 5).map(ev =>
+      parts.push('Eelseisvad mängud:\n' + upcoming.slice(0, 10).map(ev =>
         `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
       ).join('\n'))
     } else {
@@ -124,6 +138,14 @@ async function fetchNationalTeamContext() {
     if (rows.length) {
       parts.push(`Tabeliseis (${groupName}):\n` + rows.map(row =>
         `- ${row.position}. ${row.team?.name}: ${row.wins}V-${row.losses}K (${row.matches} mängu)`
+      ).join('\n'))
+    }
+
+    if (boxScores?.length) {
+      const top = (list) => (list || []).slice(0, 5).map(p => `${p.name} ${p.pts}p/${p.reb}r/${p.ast}a`).join(', ')
+      const recentBoxes = [...boxScores].sort((a, b) => (b.date ?? 0) - (a.date ?? 0)).slice(0, 2)
+      parts.push("Viimaste mängude box score'id (top 5 mängijat meeskonna kohta):\n" + recentBoxes.map(bs =>
+        `${bs.homeTeam} ${bs.homeScore}:${bs.awayScore} ${bs.awayTeam} (${fmtDate(bs.date)})\n  ${bs.homeTeam}: ${top(bs.homePlayers)}\n  ${bs.awayTeam}: ${top(bs.awayPlayers)}`
       ).join('\n'))
     }
 
@@ -153,6 +175,8 @@ export default function ChatWidget() {
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 100)
+      fetchNationalTeamContext().then(ctx => setGamesContext(ctx))
+      fetchStatsContext().then(ctx => setStatsContext(ctx))
     }
   }, [open])
 
