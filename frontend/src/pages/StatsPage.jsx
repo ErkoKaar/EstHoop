@@ -4,12 +4,15 @@ import { useLoading } from '../contexts/LoadingContext'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
+import Panel from '../components/Panel'
+import FlagDivider from '../components/FlagDivider'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
+const DARK = '#08060d'
 
 const CLUB_TABS = [
   { key: 'PTS', label: 'Punktid' },
@@ -27,35 +30,28 @@ const NAT_TABS = [
   { key: 'eff', label: 'Efektiivsus' },
 ]
 
-const MEDAL = ['#F59E0B', '#94A3B8', '#CD7F32']
-const MEDAL_LABEL = ['#78350F', '#334155', '#7C2D12']
-const MEDAL_BG = ['#FEF3C7', '#F1F5F9', '#FFF7ED']
-
 function PodiumCard({ player, rank, statKey }) {
   const navigate = useNavigate()
-  const medalColor = MEDAL[rank - 1]
-  const labelColor = MEDAL_LABEL[rank - 1]
-  const bgColor = MEDAL_BG[rank - 1]
   const isFirst = rank === 1
 
   return (
     <button
       onClick={() => navigate(`/mangijad/${player.slug}`)}
-      className="flex flex-col items-center gap-3 p-5 rounded-2xl border-2 cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] w-full"
-      style={{ background: bgColor, borderColor: medalColor }}
+      className="flex flex-col items-center gap-3 p-5 rounded-2xl border cursor-pointer transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] w-full"
+      style={{ background: isFirst ? 'rgba(0,114,206,0.05)' : 'white', borderColor: isFirst ? BLUE : '#f3f4f6' }}
     >
-      <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: medalColor, fontFamily: FONT_BODY }}>
+      <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: isFirst ? BLUE : '#9ca3af', fontFamily: FONT_BODY }}>
         {rank}
       </div>
       <PlayerAvatar slug={player.slug} name={player.name} size={isFirst ? 'lg' : 'md'} />
       <div className="text-center">
-        <p className="font-semibold leading-tight mb-1" style={{ fontFamily: FONT_BODY, color: labelColor, fontSize: isFirst ? '1rem' : '0.875rem' }}>
+        <p className="font-semibold leading-tight mb-1" style={{ fontFamily: FONT_BODY, color: DARK, fontSize: isFirst ? '1rem' : '0.875rem' }}>
           {player.name}
         </p>
-        <p className="leading-none" style={{ fontFamily: FONT_HEADING, color: medalColor, fontSize: isFirst ? '2.5rem' : '2rem' }}>
+        <p className="leading-none" style={{ fontFamily: FONT_HEADING, color: isFirst ? BLUE : '#6b7280', fontSize: isFirst ? '2.5rem' : '2rem' }}>
           {player.statValue ?? '—'}
         </p>
-        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: labelColor, fontFamily: FONT_BODY, opacity: 0.7 }}>
+        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#9ca3af', fontFamily: FONT_BODY }}>
           {statKey}
         </p>
       </div>
@@ -181,10 +177,15 @@ export default function StatsPage() {
   const podiumOrder = loading ? [] : [top3[1], top3[0], top3[2]]
 
   return (
-    <div className="px-6 py-8 max-w-5xl mx-auto">
-      <h1 className="text-5xl text-[#08060d] mb-6" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
-        Statistika
-      </h1>
+    <div className="w-full px-6 py-8 max-w-5xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-5xl text-[#08060d]" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+          Statistika
+        </h1>
+        <p style={{ fontFamily: FONT_BODY, fontSize: '1.05rem', color: '#6b7280', fontWeight: 500, marginTop: 6 }}>
+          Eesti koondislaste ja klubimängijate pingeread
+        </p>
+      </div>
 
       {/* Koondis / Klubi toggle */}
       <StatsTabToggle active={view} onChange={v => { setView(v); }} />
@@ -229,18 +230,20 @@ export default function StatsPage() {
         </div>
       )}
 
-      <div className="border-t border-gray-100 mb-4" />
+      <FlagDivider />
 
       {loading ? (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 7 }).map((_, i) => <Skeleton key={i} className="h-14" />)}
         </div>
       ) : (
-        <div className="flex flex-col">
+        <Panel>
           {rest.map((player, i) => (
-            <RankRow key={player.slug} player={player} rank={i + 4} statKey={activeStat.toUpperCase()} />
+            <div key={player.slug} style={{ borderBottom: i < rest.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+              <RankRow player={player} rank={i + 4} statKey={activeStat.toUpperCase()} />
+            </div>
           ))}
-        </div>
+        </Panel>
       )}
     </div>
   )
