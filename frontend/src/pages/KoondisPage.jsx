@@ -3,6 +3,8 @@ import { useLoading } from '../contexts/LoadingContext'
 import { motion } from 'framer-motion'
 import { Particles, ParticlesProvider } from '@tsparticles/react'
 import { loadSlim } from '@tsparticles/slim'
+import Panel from '../components/Panel'
+import FlagDivider from '../components/FlagDivider'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -150,7 +152,7 @@ function HeroBanner({ recent, loading, nextEvent, standingsName }) {
         <motion.div {...(reducedMotion ? {} : fadeUp(0.26))}
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
           <span style={{
-            fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.35)',
+            fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.6)',
             fontSize: '0.65rem', letterSpacing: '0.18em', textTransform: 'uppercase', marginRight: 4,
           }}>
             Viimane 5
@@ -222,9 +224,9 @@ function HeroCountdown({ event }) {
   const venue = home ? 'kodu' : 'võõrsil'
   const units = [
     { v: time.d, l: 'päeva' },
-    { v: time.h, l: 'tundi' },
-    { v: time.m, l: 'min' },
-    { v: time.s, l: 'sek' },
+    { v: event.timeTBD ? null : time.h, l: 'tundi' },
+    { v: event.timeTBD ? null : time.m, l: 'min' },
+    { v: event.timeTBD ? null : time.s, l: 'sek' },
   ]
 
   return (
@@ -237,7 +239,7 @@ function HeroCountdown({ event }) {
 
       {/* label */}
       <div style={{
-        fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.4)',
+        fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.6)',
         fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 8,
       }}>
         Järgmine mäng
@@ -245,20 +247,24 @@ function HeroCountdown({ event }) {
 
       {/* matchup */}
       <div style={{
-        fontFamily: FONT_HEADING, color: 'rgba(255,255,255,0.7)',
+        fontFamily: FONT_HEADING, color: 'rgba(255,255,255,0.85)',
         fontSize: 'clamp(0.85rem, 2vw, 1.05rem)', letterSpacing: '0.12em',
         textTransform: 'uppercase', marginBottom: 20,
       }}>
         Eesti&nbsp;
-        <span style={{ color: 'rgba(255,255,255,0.25)', margin: '0 6px' }}>vs</span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', margin: '0 6px' }}>vs</span>
         &nbsp;{opponent}
-        <span style={{ color: 'rgba(255,255,255,0.25)', margin: '0 10px' }}>·</span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', margin: '0 10px' }}>·</span>
         {formatDate(ts)}
-        <span style={{ color: 'rgba(255,255,255,0.25)', margin: '0 8px' }}>·</span>
-        {formatTime(ts)}
+        {!event.timeTBD && (
+          <>
+            <span style={{ color: 'rgba(255,255,255,0.4)', margin: '0 8px' }}>·</span>
+            {formatTime(ts)}
+          </>
+        )}
         <span style={{
           fontFamily: FONT_BODY, fontSize: '0.65rem', letterSpacing: '0.15em',
-          color: 'rgba(255,255,255,0.3)', marginLeft: 8, textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.55)', marginLeft: 8, textTransform: 'uppercase',
         }}>
           {venue}
         </span>
@@ -284,11 +290,11 @@ function HeroCountdown({ event }) {
                   letterSpacing: 2,
                   textShadow: `0 0 20px rgba(0,114,206,0.6)`,
                 }}>
-                  {String(v).padStart(2, '0')}
+                  {v == null ? '--' : String(v).padStart(2, '0')}
                 </span>
               </div>
               <div style={{
-                fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.3)',
+                fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.55)',
                 fontSize: '0.6rem', letterSpacing: '0.18em',
                 textTransform: 'uppercase', marginTop: 7,
               }}>
@@ -308,101 +314,215 @@ function HeroCountdown({ event }) {
   )
 }
 
-// ── Upcoming Card ─────────────────────────────────────────────
-function UpcomingCard({ event }) {
+// ── Upcoming Row ────────────────────────────────────────────────
+function UpcomingRow({ event }) {
   const home = isHome(event)
   const opponent = home ? event.awayTeam?.name : event.homeTeam?.name
+  const d = new Date(event.startTimestamp * 1000)
+  const day = d.toLocaleDateString('et-EE', { day: '2-digit' })
+  const month = d.toLocaleDateString('et-EE', { month: 'short' }).replace('.', '').toUpperCase()
 
   return (
-    <div style={{
-      background: 'white', border: '1px solid #f3f4f6',
-      borderRadius: 16, overflow: 'hidden',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-    }}>
-      <div style={{ height: 3, background: BLUE }} />
-      <div style={{ padding: '16px 20px' }}>
-        <p style={{
-          fontFamily: FONT_BODY, fontSize: '0.65rem', fontWeight: 700,
-          letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 14,
+    <div style={{ display: 'flex', alignItems: 'stretch' }}>
+      <div style={{
+        width: 56, flexShrink: 0, background: BLUE, color: 'white',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', lineHeight: 1, letterSpacing: 0.5 }}>{day}</span>
+        <span style={{ fontFamily: FONT_BODY, fontSize: '0.58rem', letterSpacing: '0.1em', fontWeight: 700, marginTop: 2 }}>{month}</span>
+      </div>
+      <div style={{ flex: 1, minWidth: 0, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div style={{ minWidth: 0, textAlign: 'left' }}>
+          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.3rem', color: DARK, letterSpacing: 0.5 }}>
+            vs {opponent}
+          </div>
+          <div style={{ fontFamily: FONT_BODY, fontSize: '0.7rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            {shortTournament(event.tournament?.name)} · {home ? 'Kodu' : 'Võõrsil'}
+          </div>
+        </div>
+        <span style={{
+          fontFamily: FONT_BODY, fontWeight: 700, fontSize: event.timeTBD ? '0.7rem' : '0.9rem',
+          color: event.timeTBD ? '#9ca3af' : '#4b5563',
+          textTransform: event.timeTBD ? 'uppercase' : 'none', letterSpacing: event.timeTBD ? '0.06em' : 0,
+          flexShrink: 0,
         }}>
-          {shortTournament(event.tournament?.name)}
-        </p>
-
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.875rem', color: BLUE, letterSpacing: 1 }}>Eesti</div>
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.65rem', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              {home ? 'Kodu' : 'Võõrsil'}
-            </div>
-          </div>
-          <span style={{ fontFamily: FONT_HEADING, fontSize: '1.25rem', color: '#d1d5db', flexShrink: 0 }}>VS</span>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.875rem', color: DARK, letterSpacing: 1 }}>{opponent}</div>
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.65rem', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              {home ? 'Võõrsil' : 'Kodu'}
-            </div>
-          </div>
-        </div>
-
-        <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-            <line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          <span style={{ fontFamily: FONT_BODY, fontSize: '0.875rem', fontWeight: 600, color: '#4b5563' }}>
-            {formatDate(event.startTimestamp)}
-          </span>
-          <span style={{ color: '#e5e7eb' }}>·</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-          </svg>
-          <span style={{ fontFamily: FONT_BODY, fontSize: '0.875rem', fontWeight: 600, color: '#4b5563' }}>
-            {formatTime(event.startTimestamp)}
-          </span>
-        </div>
+          {event.timeTBD ? 'Aeg selgub' : formatTime(event.startTimestamp)}
+        </span>
       </div>
     </div>
   )
 }
 
-// ── Result Row with score bar ──────────────────────────────────
-function ResultRow({ event }) {
-  const result = getResult(event)
+// ── Result Row (expands to box score when stats are available) ─
+function ResultRow({ event, stats, isOpen, onToggle }) {
   const home = isHome(event)
   const opponent = home ? event.awayTeam?.name : event.homeTeam?.name
+  const estScore = home ? event.homeScore?.current : event.awayScore?.current
+  const oppScore = home ? event.awayScore?.current : event.homeScore?.current
+  const won = estScore > oppScore
 
-  const rc = result === 'W' ? '#16a34a' : result === 'L' ? '#dc2626' : '#6b7280'
-  const rb = result === 'W' ? '#dcfce7' : result === 'L' ? '#fee2e2' : '#f3f4f6'
+  const rc = won ? '#16a34a' : '#dc2626'
+  const clickable = !!stats
 
   return (
-    <div
-      style={{ padding: '12px 12px', borderRadius: 12, transition: 'background 0.15s', cursor: 'default' }}
-      onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
-      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-    >
-      {/* Top: badge + opponent + meta */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+    <div>
+      <div
+        onClick={clickable ? onToggle : undefined}
+        style={{ display: 'flex', alignItems: 'stretch', cursor: clickable ? 'pointer' : 'default', userSelect: 'none' }}
+      >
         <div style={{
-          width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
-          background: rb, color: rc,
-          fontFamily: FONT_BODY, fontWeight: 700, fontSize: '0.7rem',
+          width: 56, flexShrink: 0, background: rc, color: 'white',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          {result ?? '?'}
+          <span style={{ fontFamily: FONT_HEADING, fontSize: '1.6rem', letterSpacing: 0.5 }}>{won ? 'V' : 'K'}</span>
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: FONT_BODY, fontWeight: 700, fontSize: '0.9375rem', color: DARK }}>
-            vs {opponent}
+        <div
+          style={{ flex: 1, minWidth: 0, padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, transition: 'background 0.15s' }}
+          onMouseEnter={e => { if (clickable) e.currentTarget.style.background = '#f9fafb' }}
+          onMouseLeave={e => { if (clickable) e.currentTarget.style.background = 'transparent' }}
+        >
+          <div style={{ minWidth: 0, textAlign: 'left' }}>
+            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.3rem', color: DARK, letterSpacing: 0.5 }}>
+              vs {opponent}
+            </div>
+            <div style={{ fontFamily: FONT_BODY, fontSize: '0.7rem', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {shortTournament(event.tournament?.name)} · {formatDate(event.startTimestamp)}
+              {!home && ' · võõrsil'}
+            </div>
           </div>
-          <div style={{ fontFamily: FONT_BODY, fontSize: '0.7rem', color: '#9ca3af' }}>
-            {shortTournament(event.tournament?.name)} · {formatDate(event.startTimestamp)}
-            {!home && ' · võõrsil'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+            <span style={{ fontFamily: FONT_HEADING, fontSize: '1.6rem', color: rc, letterSpacing: 1 }}>
+              {estScore}–{oppScore}
+            </span>
+            <div style={{ width: 14, flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
+              {clickable && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5"
+                  style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
+      {clickable && isOpen && (
+        <div style={{ overflowX: 'auto' }}>
+          {stats.quarters?.length > 0 && (
+            <div style={{ padding: '14px 16px', background: DARK, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 8, paddingLeft: 76 }}>
+                {stats.quarters.map((q, qi) => (
+                  <div key={qi} style={{ width: 34, textAlign: 'center', fontFamily: FONT_BODY, fontSize: '0.6rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                    {q.label}
+                  </div>
+                ))}
+              </div>
+              {[
+                { label: home ? 'Eesti' : opponent, key: 'home' },
+                { label: home ? opponent : 'Eesti', key: 'away' },
+              ].map(row => (
+                <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 68, flexShrink: 0, fontFamily: FONT_BODY, fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)', fontWeight: 700 }}>
+                    {row.label}
+                  </span>
+                  {stats.quarters.map((q, qi) => (
+                    <div key={qi} style={{
+                      width: 34, textAlign: 'center', padding: '4px 0', borderRadius: 5,
+                      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+                    }}>
+                      <span style={{ fontFamily: FONT_HEADING, fontSize: '1rem', color: 'white', letterSpacing: 0.5 }}>{q[row.key]}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+          <PlayerStatsTable teamLabel={home ? 'Eesti' : opponent} players={home ? stats.homePlayers : stats.awayPlayers} accent={home ? BLUE : '#d1d5db'} />
+          <PlayerStatsTable teamLabel={home ? opponent : 'Eesti'} players={home ? stats.awayPlayers : stats.homePlayers} accent={home ? '#d1d5db' : BLUE} />
+        </div>
+      )}
     </div>
+  )
+}
+
+// ── Player stats table (used per team in box score) ────────────
+function PlayerStatsTable({ teamLabel, players, accent }) {
+  if (!players?.length) return null
+  return (
+    <div>
+      <div style={{ padding: '14px 16px 8px' }}>
+        <span style={{
+          fontFamily: FONT_BODY, fontWeight: 700, fontSize: '0.7rem', color: DARK,
+          textTransform: 'uppercase', letterSpacing: '0.12em',
+          borderBottom: `2px solid ${accent}`, paddingBottom: 4,
+        }}>
+          {teamLabel}
+        </span>
+      </div>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', fontFamily: FONT_BODY }}>
+        <thead>
+          <tr style={{ background: '#f9fafb' }}>
+            {['Mängija', 'MIN', 'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG%', '+/-'].map(h => (
+              <th key={h} style={{ padding: '6px 10px', textAlign: h === 'Mängija' ? 'left' : 'center', color: '#9ca3af', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((p, pi) => (
+            <tr key={pi} style={{ borderTop: '1px solid #f9fafb' }}
+              onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+              <td style={{ padding: '8px 10px', color: DARK, fontWeight: 600, whiteSpace: 'nowrap' }}>{p.name}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.min}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: p.pts >= 10 ? 700 : 400, color: p.pts >= 10 ? DARK : '#6b7280' }}>{p.pts}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.reb}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.ast}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.stl}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.blk}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.fg}</td>
+              <td style={{ padding: '8px 10px', textAlign: 'center', color: parseInt(p.pm) > 0 ? '#16a34a' : parseInt(p.pm) < 0 ? '#dc2626' : '#6b7280', fontWeight: 600 }}>{p.pm}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+// ── Recent Results list (rows expand inline into box score) ────
+function RecentResultsSection({ recent, gameStats, loading }) {
+  const [openId, setOpenId] = useState(null)
+  const statsById = useMemo(
+    () => Object.fromEntries(gameStats.map(g => [g.id, g])),
+    [gameStats]
+  )
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {[...Array(5)].map((_, i) => <Skeleton key={i} style={{ height: 64 }} />)}
+      </div>
+    )
+  }
+  if (!recent.length) {
+    return <p style={{ fontFamily: FONT_BODY, color: '#9ca3af', fontWeight: 600 }}>Tulemused puuduvad.</p>
+  }
+
+  return (
+    <Panel>
+      {recent.map((ev, i) => (
+        <div key={ev.id} style={{ borderBottom: i < recent.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+          <ResultRow
+            event={ev}
+            stats={statsById[ev.id]}
+            isOpen={openId === ev.id}
+            onToggle={() => setOpenId(openId === ev.id ? null : ev.id)}
+          />
+        </div>
+      ))}
+    </Panel>
   )
 }
 
@@ -415,7 +535,7 @@ function GroupStandings({ standings, loading }) {
   const groupLabel = standings.name?.replace('Group ', 'Grupp ') ?? null
 
   return (
-    <div style={{ marginTop: 32 }}>
+    <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: 0 }}>
           Grupi seis
@@ -431,10 +551,7 @@ function GroupStandings({ standings, loading }) {
         )}
       </div>
 
-      <div style={{
-        background: 'white', borderRadius: 16, border: '1px solid #f3f4f6',
-        overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
-      }}>
+      <Panel>
         {/* Header */}
         <div style={{
           display: 'grid', gridTemplateColumns: '36px 1fr 44px 44px 56px',
@@ -457,7 +574,7 @@ function GroupStandings({ standings, loading }) {
             <div key={i} style={{
               display: 'grid', gridTemplateColumns: '36px 1fr 44px 44px 56px',
               padding: '13px 16px',
-              borderBottom: i < standings.rows.length - 1 ? '1px solid #f9fafb' : 'none',
+              borderBottom: i < standings.rows.length - 1 ? '1px solid #f3f4f6' : 'none',
               background: est ? 'rgba(0,114,206,0.05)' : 'white',
             }}>
               <span style={{ fontFamily: FONT_BODY, fontWeight: 700, color: est ? BLUE : '#9ca3af', fontSize: '0.9375rem' }}>
@@ -487,7 +604,7 @@ function GroupStandings({ standings, loading }) {
             </div>
           )
         })}
-      </div>
+      </Panel>
     </div>
   )
 }
@@ -497,6 +614,7 @@ export default function KoondisPage() {
   const [upcoming, setUpcoming] = useState([])
   const [recent, setRecent] = useState([])
   const [standings, setStandings] = useState({ name: null, rows: [] })
+  const [gameStats, setGameStats] = useState([])
   const [loading, setLoading] = useState(true)
   const [error] = useState(null)
   const { signalReady } = useLoading()
@@ -505,12 +623,16 @@ export default function KoondisPage() {
     Promise.allSettled([
       fetch(`${API}/national-team/games`).then(r => r.json()),
       fetch(`${API}/national-team/standings`).then(r => r.json()),
-    ]).then(([gamesRes, standingsRes]) => {
+      fetch(`${API}/national-team/game-stats`).then(r => r.json()),
+    ]).then(([gamesRes, standingsRes, statsRes]) => {
       if (gamesRes.status === 'fulfilled') {
         setUpcoming(gamesRes.value.upcoming || [])
         setRecent(gamesRes.value.recent || [])
       }
       setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : { name: null, rows: [] })
+      if (statsRes.status === 'fulfilled' && Array.isArray(statsRes.value)) {
+        setGameStats(statsRes.value)
+      }
       setLoading(false)
       signalReady()
     })
@@ -530,57 +652,41 @@ export default function KoondisPage() {
           </p>
         )}
 
-        {/* 2-column grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 36, alignItems: 'start' }}>
+        {/* Eelseisvad mängud */}
+        <section>
+          <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: '0 0 18px' }}>
+            Eelseisvad mängud
+          </h2>
+          {loading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <Skeleton style={{ height: 64 }} />
+              <Skeleton style={{ height: 64 }} />
+            </div>
+          ) : upcoming.length === 0 ? (
+            <p style={{ fontFamily: FONT_BODY, color: '#9ca3af', fontWeight: 600 }}>Hetkel ühtegi planeeritud mängu.</p>
+          ) : (
+            <Panel>
+              {upcoming.map((ev, i) => (
+                <div key={ev.id} style={{ borderBottom: i < upcoming.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                  <UpcomingRow event={ev} />
+                </div>
+              ))}
+            </Panel>
+          )}
+        </section>
 
-          {/* Eelseisvad mängud */}
-          <section>
-            <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: '0 0 18px', paddingLeft: 12, borderLeft: `3px solid ${BLUE}` }}>
-              Eelseisvad mängud
-            </h2>
-            {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <Skeleton style={{ height: 128 }} />
-                <Skeleton style={{ height: 128 }} />
-              </div>
-            ) : upcoming.length === 0 ? (
-              <p style={{ fontFamily: FONT_BODY, color: '#9ca3af', fontWeight: 600 }}>Hetkel ühtegi planeeritud mängu.</p>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {upcoming.map(ev => <UpcomingCard key={ev.id} event={ev} />)}
-              </div>
-            )}
-          </section>
+        <FlagDivider />
 
-          {/* Viimased tulemused */}
-          <section>
-            <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: '0 0 10px', paddingLeft: 12, borderLeft: `3px solid ${BLUE}` }}>
-              Viimased tulemused
-            </h2>
-            {loading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {[...Array(5)].map((_, i) => <Skeleton key={i} style={{ height: 74 }} />)}
-              </div>
-            ) : recent.length === 0 ? (
-              <p style={{ fontFamily: FONT_BODY, color: '#9ca3af', fontWeight: 600 }}>Tulemused puuduvad.</p>
-            ) : (
-              <div style={{
-                background: 'white', border: '1px solid #f3f4f6',
-                borderRadius: 16, overflow: 'hidden',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-              }}>
-                {recent.map((ev, i) => (
-                  <div key={ev.id} style={{ borderBottom: i < recent.length - 1 ? '1px solid #f9fafb' : 'none' }}>
-                    <ResultRow event={ev} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        </div>
+        {/* Viimased tulemused (klõpsatavad read avavad mängu statistika) */}
+        <section>
+          <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: '0 0 18px' }}>
+            Viimased tulemused
+          </h2>
+          <RecentResultsSection recent={recent} gameStats={gameStats} loading={loading} />
+        </section>
 
-        {/* Divider + Group standings */}
-        <div style={{ borderTop: '1px solid #f3f4f6', marginTop: 28 }} />
+        <FlagDivider />
+
         <GroupStandings standings={standings} loading={loading} />
       </div>
     </div>

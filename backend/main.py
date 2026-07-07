@@ -135,6 +135,11 @@ def get_national_team_standings(db: Session = Depends(get_db)):
     row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "standings").first()
     return row.data if row else {"name": None, "rows": []}
 
+@app.get("/national-team/game-stats")
+def get_national_team_game_stats(db: Session = Depends(get_db)):
+    row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "game_box_scores").first()
+    return row.data if row else []
+
 
 # ── Chat ──────────────────────────────────────────────────────────────────────
 

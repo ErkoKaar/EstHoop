@@ -116,7 +116,7 @@ function HeroGame({ ev }) {
         {/* Date + venue */}
         {ev.startTimestamp && (
           <p style={{ fontFamily: FONT_BODY, color: 'rgba(255,255,255,0.55)', fontSize: '1.05rem', fontWeight: 500, marginBottom: 32, textTransform: 'capitalize' }}>
-            {formatDateLong(ev.startTimestamp)} · {formatTime(ev.startTimestamp)}
+            {formatDateLong(ev.startTimestamp)} · {ev.timeTBD ? 'Aeg selgub' : formatTime(ev.startTimestamp)}
             {venue && ` · ${venue}`}
           </p>
         )}
@@ -188,7 +188,7 @@ function MatchRow({ ev }) {
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             {ts && (
               <span className="text-xs font-semibold" style={{ fontFamily: FONT_BODY, color: '#6b7280' }}>
-                {formatDateShort(ts)} · {formatTime(ts)}
+                {formatDateShort(ts)} · {ev.timeTBD ? 'Aeg selgub' : formatTime(ts)}
               </span>
             )}
             {tournament && (
