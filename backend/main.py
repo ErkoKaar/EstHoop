@@ -9,7 +9,7 @@ import os
 from anthropic import Anthropic
 from database import Base, engine, SessionLocal
 import models
-from scraper import scrape_player, scrape_fiba_national_team
+from scraper import scrape_player, scrape_fiba_national_team, split_games_by_type
 
 load_dotenv()
 Base.metadata.create_all(bind=engine)
@@ -82,6 +82,8 @@ def get_player_stats(slug: str, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Scraping ebaõnnestus: {e}")
 
+    data["clubGames"], data["nationalGames"] = split_games_by_type(data.pop("games", []))
+
     _stats_cache[slug] = (time.time(), data)
     return data
 
@@ -151,21 +153,19 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     games_context: str | None = None
     stats_context: str | None = None
-    club_games_context: str | None = None
 
-def _build_system(players: list, games_text: str, stats_text: str | None, club_games_text: str | None) -> str:
+def _build_system(players: list, games_text: str, stats_text: str | None) -> str:
     player_list = "\n".join(
         f"- {p.name} ({p.position or '?'})" for p in players
     )
     stats_section = f"\n\n## Mängijate statistika\n{stats_text}" if stats_text else ""
-    club_games_section = f"\n\n## Mängijate eelseisvad klubi mängud\n{club_games_text}" if club_games_text else ""
     return f"""Oled EstHoop AI abiline — Eesti korvpalli fännidele mõeldud vestlusrobot veebilehel esthoop.ee.
 
 ## Eesti koondise mängijad
 {player_list}{stats_section}
 
 ## Koondise mängud ja seis
-{games_text}{club_games_section}
+{games_text}
 
 Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem.
 
@@ -179,7 +179,7 @@ def chat(req: ChatRequest, db: Session = Depends(get_db)):
 
     players = db.query(models.Player).order_by(models.Player.name).all()
     games_text = req.games_context or "Mängude andmed pole kättesaadavad."
-    system = _build_system(players, games_text, req.stats_context, req.club_games_context)
+    system = _build_system(players, games_text, req.stats_context)
 
     client = Anthropic(api_key=api_key)
     response = client.messages.create(

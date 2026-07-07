@@ -9,9 +9,6 @@ const BLUE = '#0072ce'
 const DARK = '#08060d'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const SS_NEXT = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/next/0`
-const SS_LAST = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/last/0`
-const SS_PLAYER_STATS = (eventId, playerId) => `https://api.sofascore.com/api/v1/event/${eventId}/player/${playerId}/statistics`
 const TWO_WEEKS = 14 * 86400
 
 function tallinDate(ts) {
@@ -30,14 +27,6 @@ function formatTime(ts) {
     hour: '2-digit', minute: '2-digit',
     timeZone: 'Europe/Tallinn',
   })
-}
-
-function isNationalTeamGame(ev) {
-  return ev.homeTeam?.name === 'Estonia' || ev.awayTeam?.name === 'Estonia'
-}
-
-function isProballersNationalTeamGame(g) {
-  return g.LEAGUE === 'WC-QR'
 }
 
 function parseProballersDate(str) {
@@ -158,66 +147,43 @@ export default function KlubiKorvpallPage() {
     fetch(`${API}/players`)
       .then(r => r.json())
       .then(players => {
-        const active = players.filter(p => p.sofascore_id || p.proballers_id)
+        const active = players.filter(p => p.proballers_id)
         setTotalCount(active.length)
         const cutoff = Date.now() / 1000 - TWO_WEEKS
 
         const promises = active.map(async player => {
           const rows = []
 
-          if (player.sofascore_id) {
-            const [nextData, lastData] = await Promise.all([
-              fetch(SS_NEXT(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
-              fetch(SS_LAST(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
-            ])
-            const upcoming = (nextData.events || [])
-              .filter(ev => !isNationalTeamGame(ev))
-              .map(ev => ({ player, event: ev, isPast: false }))
-            const pastEvents = (lastData.events || [])
-              .filter(ev => ev.startTimestamp >= cutoff && !isNationalTeamGame(ev))
-            const past = await Promise.all(pastEvents.map(async ev => {
-              const stats = await fetch(SS_PLAYER_STATS(ev.id, player.sofascore_id))
-                .then(r => r.ok ? r.json() : null)
-                .then(data => data?.statistics || data)
-                .catch(() => null)
-              return { player, event: ev, isPast: true, stats }
-            }))
-            rows.push(...past, ...upcoming)
-          }
-
-          if (player.proballers_id) {
-            const pbData = await fetch(`${API}/players/${player.slug}/stats`)
-              .then(r => r.ok ? r.json() : null)
-              .catch(() => null)
-            const clubName = pbData?.seasons?.at(-1)?.TEAM || null
-            for (const g of pbData?.games || []) {
-              if (isProballersNationalTeamGame(g)) continue
-              const startTimestamp = parseProballersDate(g.DATE)
-              if (!startTimestamp || startTimestamp < cutoff) continue
-              const opponentField = (g.OPPONENT || '').trim()
-              const isHome = opponentField.startsWith('vs')
-              const opponentCode = opponentField.replace(/^(@|vs)\s*/, '') || '?'
-              const [s1, s2] = (g.SCORE || '').split('-').map(n => parseInt(n, 10))
-              if (!Number.isFinite(s1) || !Number.isFinite(s2)) continue
-              rows.push({
-                player,
-                isPast: true,
-                stats: {
-                  points: parseInt(g.PTS, 10) || 0,
-                  rebounds: parseInt(g.REB, 10) || 0,
-                  assists: parseInt(g.AST, 10) || 0,
-                },
-                event: {
-                  id: `pb-${player.slug}-${g.DATE}-${opponentField}`,
-                  startTimestamp,
-                  homeTeam: { name: isHome ? (clubName || 'Kodu') : opponentCode },
-                  awayTeam: { name: isHome ? opponentCode : (clubName || 'Võõrsil') },
-                  tournament: { name: g.LEAGUE },
-                  homeScore: { current: s1 },
-                  awayScore: { current: s2 },
-                },
-              })
-            }
+          const pbData = await fetch(`${API}/players/${player.slug}/stats`)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+          const clubName = pbData?.seasons?.at(-1)?.TEAM || null
+          for (const g of pbData?.clubGames || []) {
+            const startTimestamp = parseProballersDate(g.DATE)
+            if (!startTimestamp || startTimestamp < cutoff) continue
+            const opponentField = (g.OPPONENT || '').trim()
+            const isHome = opponentField.startsWith('vs')
+            const opponentCode = opponentField.replace(/^(@|vs)\s*/, '') || '?'
+            const [s1, s2] = (g.SCORE || '').split('-').map(n => parseInt(n, 10))
+            if (!Number.isFinite(s1) || !Number.isFinite(s2)) continue
+            rows.push({
+              player,
+              isPast: true,
+              stats: {
+                points: parseInt(g.PTS, 10) || 0,
+                rebounds: parseInt(g.REB, 10) || 0,
+                assists: parseInt(g.AST, 10) || 0,
+              },
+              event: {
+                id: `pb-${player.slug}-${g.DATE}-${opponentField}`,
+                startTimestamp,
+                homeTeam: { name: isHome ? (clubName || 'Kodu') : opponentCode },
+                awayTeam: { name: isHome ? opponentCode : (clubName || 'Võõrsil') },
+                tournament: { name: g.LEAGUE },
+                homeScore: { current: s1 },
+                awayScore: { current: s2 },
+              },
+            })
           }
 
           setLoadedCount(c => c + 1)
@@ -310,7 +276,7 @@ export default function KlubiKorvpallPage() {
             MÄNGE EI LEITUD
           </p>
           <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
-            Hooajapaus — mängud algavad septembris
+            Viimase kahe nädala jooksul mänge ei toimunud
           </p>
         </div>
       )}

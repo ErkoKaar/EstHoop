@@ -411,8 +411,8 @@ export default function PlayerPage() {
   const lastSeason = getLastSeason(stats?.seasons)
   const natAvg = computeNatAvg(fibaStats)
   const isKoondis = tab === 'koondis'
-  const nationalGames = stats?.games?.filter(g => g.LEAGUE === 'WC-QR') || []
-  const clubGames = stats?.games?.filter(g => g.LEAGUE !== 'WC-QR') || []
+  const nationalGames = stats?.nationalGames || []
+  const clubGames = stats?.clubGames || []
   const age = computeAge(stats?.birthDate)
   const heightCm = stats?.heightCm
 

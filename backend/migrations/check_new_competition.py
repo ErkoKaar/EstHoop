@@ -1,6 +1,6 @@
 """
 Checks FIBA's Estonia team page for a new competition/event that the site's
-national team scraper doesn't know about yet (see migrations/09_refresh_national_team.py).
+national team scraper doesn't know about yet (see 09_refresh_national_team.py).
 Sends a Telegram notification when a new competition appears. Safe to re-run.
 """
 import os
@@ -8,7 +8,7 @@ import sys
 
 import requests
 
-sys.path.insert(0, os.path.dirname(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from database import SessionLocal
 import models

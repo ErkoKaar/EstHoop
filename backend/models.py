@@ -11,7 +11,6 @@ class Player(Base):
     slug = Column(String, nullable=False, unique=True)
     proballers_id = Column(Integer, nullable=True)
     fiba_id = Column(Integer, nullable=True)
-    sofascore_id = Column(Integer, nullable=True)
     position = Column(String, nullable=True)
 
 

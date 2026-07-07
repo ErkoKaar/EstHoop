@@ -12,6 +12,16 @@ HEADERS = {
     )
 }
 
+NATIONAL_TEAM_LEAGUE = "WC-QR"
+
+
+def split_games_by_type(games: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Jagab ProBallersi mängude nimekirja klubi- ja koondisemängudeks LEAGUE koodi järgi."""
+    club = [g for g in games if g.get("LEAGUE") != NATIONAL_TEAM_LEAGUE]
+    national = [g for g in games if g.get("LEAGUE") == NATIONAL_TEAM_LEAGUE]
+    return club, national
+
+
 def scrape_player(proballers_id: int, slug: str) -> dict:
     url = f"https://www.proballers.com/basketball/player/{proballers_id}/{slug}"
     resp = requests.get(url, headers=HEADERS, timeout=10)

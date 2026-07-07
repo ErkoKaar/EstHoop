@@ -133,33 +133,6 @@ async function fetchNationalTeamContext() {
   }
 }
 
-async function fetchClubGamesContext() {
-  try {
-    const players = await fetch(`${API}/players`).then(r => r.json())
-    const withSS = players.filter(p => p.sofascore_id)
-    const results = await Promise.allSettled(
-      withSS.map(p =>
-        fetch(`https://api.sofascore.com/api/v1/player/${p.sofascore_id}/events/next/0`)
-          .then(r => r.json()).then(d => ({ player: p, events: d.events || [] }))
-      )
-    )
-    const lines = []
-    results.forEach(r => {
-      if (r.status !== 'fulfilled') return
-      const { player: p, events } = r.value
-      events.slice(0, 2).forEach(ev => {
-        const home = ev.homeTeam?.name || '?', away = ev.awayTeam?.name || '?'
-        const tour = ev.tournament?.name || ''
-        lines.push(`- ${p.name}: ${home} vs ${away} | ${fmtDate(ev.startTimestamp)} | ${tour}`)
-      })
-    })
-    lines.sort((a, b) => a.localeCompare(b))
-    return lines.length ? lines.join('\n') : 'Eelseisvaid klubi mänge ei leitud.'
-  } catch {
-    return null
-  }
-}
-
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
@@ -169,14 +142,12 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false)
   const [gamesContext, setGamesContext] = useState(null)
   const [statsContext, setStatsContext] = useState(null)
-  const [clubGamesContext, setClubGamesContext] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
 
   useEffect(() => {
     fetchNationalTeamContext().then(ctx => setGamesContext(ctx))
     fetchStatsContext().then(ctx => setStatsContext(ctx))
-    fetchClubGamesContext().then(ctx => setClubGamesContext(ctx))
   }, [])
 
   useEffect(() => {
@@ -203,7 +174,7 @@ export default function ChatWidget() {
       const r = await fetch(`${API}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next, games_context: gamesContext, stats_context: statsContext, club_games_context: clubGamesContext }),
+        body: JSON.stringify({ messages: next, games_context: gamesContext, stats_context: statsContext }),
       })
       if (!r.ok) throw new Error()
       const data = await r.json()
