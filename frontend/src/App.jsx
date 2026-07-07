@@ -29,7 +29,7 @@ export default function App() {
         <Navbar />
         <PageLoader />
         <Routes>
-          <Route path="/" element={<Navigate to="/mangijad" replace />} />
+          <Route path="/" element={<Navigate to="/koondis" replace />} />
           <Route path="/mangijad" element={<PlayersPage />} />
           <Route path="/mangijad/:slug" element={<PlayerPage />} />
           <Route path="/statistika" element={<StatsPage />} />

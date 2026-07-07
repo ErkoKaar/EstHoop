@@ -56,7 +56,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-250 ease-in-out ${open ? 'max-h-48' : 'max-h-0'}`}
+        className={`md:hidden overflow-hidden transition-all duration-250 ease-in-out ${open ? 'max-h-96' : 'max-h-0'}`}
       >
         <ul className="flex flex-col list-none m-0 px-6 pb-4 gap-1">
           {NAV_LINKS.map(({ label, href }) => (

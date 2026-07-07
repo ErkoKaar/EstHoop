@@ -224,7 +224,7 @@ export default function KlubiKorvpallPage() {
   const todayKey = tallinDate(Date.now() / 1000)
 
   return (
-    <div className="pb-12">
+    <div className="pt-8 pb-12">
       {/* Header */}
       <div className="mb-8">
         <h1 style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', color: DARK, letterSpacing: '2px', lineHeight: 1 }}>
