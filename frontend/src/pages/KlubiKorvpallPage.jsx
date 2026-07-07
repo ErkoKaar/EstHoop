@@ -11,6 +11,7 @@ const DARK = '#08060d'
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const SS_NEXT = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/next/0`
 const SS_LAST = (id) => `https://api.sofascore.com/api/v1/player/${id}/events/last/0`
+const SS_PLAYER_STATS = (eventId, playerId) => `https://api.sofascore.com/api/v1/event/${eventId}/player/${playerId}/statistics`
 const TWO_WEEKS = 14 * 86400
 
 function tallinDate(ts) {
@@ -31,6 +32,20 @@ function formatTime(ts) {
   })
 }
 
+function isNationalTeamGame(ev) {
+  return ev.homeTeam?.name === 'Estonia' || ev.awayTeam?.name === 'Estonia'
+}
+
+function isProballersNationalTeamGame(g) {
+  return g.LEAGUE === 'WC-QR'
+}
+
+function parseProballersDate(str) {
+  if (!str) return null
+  const t = new Date(str).getTime()
+  return Number.isFinite(t) ? Math.floor(t / 1000) : null
+}
+
 function shortTournament(name) {
   if (!name) return ''
   if (name.includes('Champions League')) return 'BCL'
@@ -43,7 +58,7 @@ function shortTournament(name) {
 }
 
 // ── Game row ──────────────────────────────────────────────────────────────────
-function GameRow({ player, event: ev, isPast }) {
+function GameRow({ player, event: ev, isPast, stats }) {
   const home = ev.homeTeam?.name || '?'
   const away = ev.awayTeam?.name || '?'
   const tournament = shortTournament(ev.tournament?.name)
@@ -52,38 +67,51 @@ function GameRow({ player, event: ev, isPast }) {
   const as_ = ev.awayScore?.current
   const hasScore = isPast && hs != null && as_ != null
 
+  const teamNameStyle = {
+    fontFamily: FONT_HEADING, fontSize: '1.15rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1,
+    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+  }
+
   return (
-    <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200">
+    <div
+      className="grid items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200"
+      style={{ gridTemplateColumns: '190px 1px minmax(0, 1fr) 104px 84px', minWidth: 640 }}
+    >
       {/* Player */}
-      <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
-      <div className="shrink-0 min-w-[110px]">
-        <div style={{ fontFamily: FONT_HEADING, fontSize: '1.1rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1 }}>
-          {player.name}
-        </div>
-        {player.position && (
-          <div style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.1em' }}>
-            {player.position}
+      <div className="flex items-center gap-3 min-w-0">
+        <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
+        <div className="min-w-0">
+          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.1rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1 }}>
+            {player.name}
           </div>
-        )}
+          {player.position && (
+            <div style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.1em' }}>
+              {player.position}
+            </div>
+          )}
+          {stats && (
+            <div style={{ fontFamily: FONT_BODY, fontSize: '0.85rem', color: DARK, fontWeight: 700, marginTop: 3, whiteSpace: 'nowrap' }}>
+              {stats.points ?? 0} PTS · {stats.rebounds ?? 0} REB · {stats.assists ?? 0} AST
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Divider */}
-      <div className="shrink-0 w-px h-8 bg-gray-100" />
+      <div className="h-8 bg-gray-100" />
 
       {/* Match */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2 flex-wrap">
-          <span style={{ fontFamily: FONT_HEADING, fontSize: '1.2rem', color: DARK, letterSpacing: '1px', lineHeight: 1.1 }}>
-            {home}
-          </span>
-          <span style={{ fontFamily: FONT_BODY, fontSize: '0.75rem', color: '#9ca3af', fontWeight: 600 }}>vs</span>
-          <span style={{ fontFamily: FONT_HEADING, fontSize: '1.2rem', color: DARK, letterSpacing: '1px', lineHeight: 1.1 }}>
-            {away}
-          </span>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
+        <span style={{ ...teamNameStyle, textAlign: 'right' }}>{home}</span>
+        <span style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: '#9ca3af', fontWeight: 600 }}>vs</span>
+        <span style={{ ...teamNameStyle, textAlign: 'left' }}>{away}</span>
+      </div>
+
+      {/* Tournament badge */}
+      <div className="flex justify-center">
         {tournament && (
           <span
-            className="inline-block mt-0.5 px-2 py-0.5 rounded-full text-xs font-semibold"
+            className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold text-center"
             style={{ fontFamily: FONT_BODY, background: '#f3f4f6', color: '#6b7280' }}
           >
             {tournament}
@@ -92,25 +120,27 @@ function GameRow({ player, event: ev, isPast }) {
       </div>
 
       {/* Score or time */}
-      {hasScore ? (
-        <div className="shrink-0 text-right">
-          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: '#374151', letterSpacing: '2px', lineHeight: 1 }}>
-            {hs}:{as_}
-          </div>
-          <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
-            Lõpptulemus
-          </div>
-        </div>
-      ) : ts ? (
-        <div className="shrink-0 text-right">
-          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: BLUE, letterSpacing: '1px', lineHeight: 1 }}>
-            {formatTime(ts)}
-          </div>
-          <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
-            Eesti aeg
-          </div>
-        </div>
-      ) : null}
+      <div className="text-right">
+        {hasScore ? (
+          <>
+            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: '#374151', letterSpacing: '2px', lineHeight: 1 }}>
+              {hs}:{as_}
+            </div>
+            <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
+              Lõpp
+            </div>
+          </>
+        ) : ts ? (
+          <>
+            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: BLUE, letterSpacing: '1px', lineHeight: 1 }}>
+              {formatTime(ts)}
+            </div>
+            <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
+              Eesti aeg
+            </div>
+          </>
+        ) : null}
+      </div>
     </div>
   )
 }
@@ -128,23 +158,71 @@ export default function KlubiKorvpallPage() {
     fetch(`${API}/players`)
       .then(r => r.json())
       .then(players => {
-        const withSS = players.filter(p => p.sofascore_id)
-        setTotalCount(withSS.length)
+        const active = players.filter(p => p.sofascore_id || p.proballers_id)
+        setTotalCount(active.length)
         const cutoff = Date.now() / 1000 - TWO_WEEKS
 
-        const promises = withSS.map(player =>
-          Promise.all([
-            fetch(SS_NEXT(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
-            fetch(SS_LAST(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
-          ]).then(([nextData, lastData]) => {
-            setLoadedCount(c => c + 1)
-            const upcoming = (nextData.events || []).map(ev => ({ player, event: ev, isPast: false }))
-            const past = (lastData.events || [])
-              .filter(ev => ev.startTimestamp >= cutoff)
-              .map(ev => ({ player, event: ev, isPast: true }))
-            return [...past, ...upcoming]
-          })
-        )
+        const promises = active.map(async player => {
+          const rows = []
+
+          if (player.sofascore_id) {
+            const [nextData, lastData] = await Promise.all([
+              fetch(SS_NEXT(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
+              fetch(SS_LAST(player.sofascore_id)).then(r => r.json()).catch(() => ({ events: [] })),
+            ])
+            const upcoming = (nextData.events || [])
+              .filter(ev => !isNationalTeamGame(ev))
+              .map(ev => ({ player, event: ev, isPast: false }))
+            const pastEvents = (lastData.events || [])
+              .filter(ev => ev.startTimestamp >= cutoff && !isNationalTeamGame(ev))
+            const past = await Promise.all(pastEvents.map(async ev => {
+              const stats = await fetch(SS_PLAYER_STATS(ev.id, player.sofascore_id))
+                .then(r => r.ok ? r.json() : null)
+                .then(data => data?.statistics || data)
+                .catch(() => null)
+              return { player, event: ev, isPast: true, stats }
+            }))
+            rows.push(...past, ...upcoming)
+          }
+
+          if (player.proballers_id) {
+            const pbData = await fetch(`${API}/players/${player.slug}/stats`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+            const clubName = pbData?.seasons?.at(-1)?.TEAM || null
+            for (const g of pbData?.games || []) {
+              if (isProballersNationalTeamGame(g)) continue
+              const startTimestamp = parseProballersDate(g.DATE)
+              if (!startTimestamp || startTimestamp < cutoff) continue
+              const opponentField = (g.OPPONENT || '').trim()
+              const isHome = opponentField.startsWith('vs')
+              const opponentCode = opponentField.replace(/^(@|vs)\s*/, '') || '?'
+              const [s1, s2] = (g.SCORE || '').split('-').map(n => parseInt(n, 10))
+              if (!Number.isFinite(s1) || !Number.isFinite(s2)) continue
+              rows.push({
+                player,
+                isPast: true,
+                stats: {
+                  points: parseInt(g.PTS, 10) || 0,
+                  rebounds: parseInt(g.REB, 10) || 0,
+                  assists: parseInt(g.AST, 10) || 0,
+                },
+                event: {
+                  id: `pb-${player.slug}-${g.DATE}-${opponentField}`,
+                  startTimestamp,
+                  homeTeam: { name: isHome ? (clubName || 'Kodu') : opponentCode },
+                  awayTeam: { name: isHome ? opponentCode : (clubName || 'Võõrsil') },
+                  tournament: { name: g.LEAGUE },
+                  homeScore: { current: s1 },
+                  awayScore: { current: s2 },
+                },
+              })
+            }
+          }
+
+          setLoadedCount(c => c + 1)
+          return rows
+        })
 
         Promise.allSettled(promises).then(results => {
           const all = results.flatMap(r => r.status === 'fulfilled' ? r.value : [])
@@ -269,9 +347,9 @@ export default function KlubiKorvpallPage() {
                 </span>
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 overflow-x-auto">
                 {group.rows.map((g, i) => (
-                  <GameRow key={`${g.player.slug}-${g.event.id ?? i}`} player={g.player} event={g.event} isPast={g.isPast} />
+                  <GameRow key={`${g.player.slug}-${g.event.id ?? i}`} player={g.player} event={g.event} isPast={g.isPast} stats={g.stats} />
                 ))}
               </div>
             </div>
