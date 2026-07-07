@@ -19,6 +19,18 @@ function getLastSeason(seasons) {
   return seasons[seasons.length - 1]
 }
 
+function computeAge(birthDateIso) {
+  if (!birthDateIso) return null
+  const birth = new Date(birthDateIso)
+  const now = new Date()
+  let age = now.getFullYear() - birth.getFullYear()
+  const hadBirthdayThisYear =
+    now.getMonth() > birth.getMonth() ||
+    (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate())
+  if (!hadBirthdayThisYear) age--
+  return age
+}
+
 function computeNatAvg(data) {
   if (!data?.length) return null
   const gp = data.reduce((s, r) => s + r.gp, 0)
@@ -135,7 +147,7 @@ function ProfileChart({ season }) {
 // ── Klubi: hooaegade tabel ────────────────────────────────
 function SeasonsTable({ seasons }) {
   const lastSeason = getLastSeason(seasons)
-  const cols = ['SEASON', 'TEAM', 'LEAGUE', 'GP', 'MIN', 'PTS', 'REB', 'AST', 'FG%', '3%', 'EFF']
+  const cols = ['SEASON', 'TEAM', 'LEAGUE', 'GP', 'MIN', 'PTS', 'FG%', '3%', '1%', 'REB', 'OR', 'DR', 'AST', 'STL', 'BLK', 'TO', 'FO', 'EFF']
 
   return (
     <div>
@@ -178,8 +190,20 @@ const GAME_COLS = [
   { key: 'SCORE', label: 'Skoor' },
   { key: 'MIN', label: 'MIN' },
   { key: 'PTS', label: 'PTS' },
+  { key: '2M-2A', label: '2P' },
+  { key: '3M-3A', label: '3P' },
+  { key: '1M-1A', label: 'FT' },
+  { key: 'FG%', label: 'FG%' },
+  { key: '1%', label: 'FT%' },
   { key: 'REB', label: 'REB' },
+  { key: 'OR', label: 'OR' },
+  { key: 'DR', label: 'DR' },
   { key: 'AST', label: 'AST' },
+  { key: 'STL', label: 'STL' },
+  { key: 'BLK', label: 'BLK' },
+  { key: 'TO', label: 'TO' },
+  { key: 'FO', label: 'FO' },
+  { key: 'EFF', label: 'EFF' },
   { key: '+/-', label: '+/-' },
 ]
 
@@ -387,6 +411,10 @@ export default function PlayerPage() {
   const lastSeason = getLastSeason(stats?.seasons)
   const natAvg = computeNatAvg(fibaStats)
   const isKoondis = tab === 'koondis'
+  const nationalGames = stats?.games?.filter(g => g.LEAGUE === 'WC-QR') || []
+  const clubGames = stats?.games?.filter(g => g.LEAGUE !== 'WC-QR') || []
+  const age = computeAge(stats?.birthDate)
+  const heightCm = stats?.heightCm
 
   return (
     <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0">
@@ -404,8 +432,8 @@ export default function PlayerPage() {
       </button>
 
       {/* ① Hero */}
-      <div className="flex items-center gap-6 mb-8">
-        <div className="w-28 h-28 rounded-full overflow-hidden shadow-md shrink-0">
+      <div className="flex items-center gap-7 mb-8">
+        <div className="w-36 h-36 rounded-full overflow-hidden shadow-md shrink-0">
           {extIndex < 2 ? (
             <img
               src={`/players/${player.slug}.${['jpg', 'png'][extIndex]}`}
@@ -415,7 +443,7 @@ export default function PlayerPage() {
             />
           ) : (
             <div className="w-full h-full bg-[#0072ce] flex items-center justify-center">
-              <span className="text-white font-bold text-3xl select-none" style={{ fontFamily: FONT_HEADING }}>
+              <span className="text-white font-bold text-4xl select-none" style={{ fontFamily: FONT_HEADING }}>
                 {initials}
               </span>
             </div>
@@ -426,12 +454,15 @@ export default function PlayerPage() {
             {player.name}
           </h1>
           <p className="text-gray-500 font-semibold text-base" style={{ fontFamily: FONT_BODY }}>
-            {isKoondis
-              ? `Eesti Koondis${natAvg ? ` · ${natAvg.gp} mängu` : ''}`
-              : lastSeason
-                ? `${lastSeason.TEAM} · ${lastSeason.LEAGUE} · ${lastSeason.SEASON}`
-                : '—'
-            }
+            {[
+              isKoondis
+                ? `Eesti Koondis${natAvg ? ` · ${natAvg.gp} mängu` : ''}`
+                : lastSeason
+                  ? `${lastSeason.TEAM} · ${lastSeason.LEAGUE} · ${lastSeason.SEASON}`
+                  : '—',
+              age && `${age} a.`,
+              heightCm && `${heightCm} cm`,
+            ].filter(Boolean).join(' · ')}
           </p>
         </div>
       </div>
@@ -480,6 +511,13 @@ export default function PlayerPage() {
             <div className="mb-8">
               <NationalTeamTable data={fibaStats} />
             </div>
+          )}
+
+          {statsLoading && <Skeleton className="h-48 mb-8" />}
+
+          {/* Viimased mängud (koondis) */}
+          {!statsLoading && !statsError && nationalGames.length > 0 && (
+            <GamesTable games={nationalGames} />
           )}
         </>
       )}
@@ -530,8 +568,8 @@ export default function PlayerPage() {
           {statsLoading && <Skeleton className="h-48 mb-8" />}
 
           {/* Viimased mängud */}
-          {!statsLoading && !statsError && stats?.games?.length > 0 && (
-            <GamesTable games={stats.games} />
+          {!statsLoading && !statsError && clubGames.length > 0 && (
+            <GamesTable games={clubGames} />
           )}
         </>
       )}

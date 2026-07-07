@@ -1,4 +1,6 @@
 import re
+from datetime import datetime, timezone
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -43,11 +45,34 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
                 rows.append(dict(zip(headers, cells)))
         return rows
 
+    # Sünniaeg ja pikkus profiili bio-plokkidest (title/info paarid)
+    bio = {}
+    for block in soup.select(".identity__stats__profil"):
+        for div in block.select("div"):
+            title = div.select_one(".title")
+            info = div.select_one(".info")
+            if title and info:
+                bio[title.get_text(strip=True)] = info.get_text(strip=True)
+
+    birth_date = None
+    if bio.get("Date of birth"):
+        try:
+            birth_date = datetime.strptime(bio["Date of birth"], "%b %d, %Y").date().isoformat()
+        except ValueError:
+            birth_date = None
+
+    height_cm = None
+    height_match = re.search(r"(\d)m(\d{2})", bio.get("Height", ""))
+    if height_match:
+        height_cm = int(height_match.group(1)) * 100 + int(height_match.group(2))
+
     return {
         # Tühi TH (W/L veerg) nimetatakse RESULT-iks; duplikaatpäised saavad _1 suffiksi
-        "games":    parse_table(tables[0], empty_header_name="RESULT"),
-        "seasons":  parse_table(tables[1]),
-        "playoffs": parse_table(tables[2]) if len(tables) > 2 else [],
+        "games":     parse_table(tables[0], empty_header_name="RESULT"),
+        "seasons":   parse_table(tables[1]),
+        "playoffs":  parse_table(tables[2]) if len(tables) > 2 else [],
+        "birthDate": birth_date,
+        "heightCm":  height_cm,
     }
 
 
