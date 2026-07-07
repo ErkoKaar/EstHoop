@@ -1,54 +1,54 @@
 # EstHoop
 
-Eesti korvpalli fännileht ([esthoop.ee](https://esthoop.ee)) — Eesti koondislaste ja
-klubimängijate profiilid ja statistika, koondise mängud/tabeliseis, piletite leht ning AI
-vestlusrobot.
+Estonian basketball fan site ([esthoop.ee](https://esthoop.ee)) — profiles and stats for
+Estonian national team and club players, national team games/standings, a tickets page, and
+an AI chatbot.
 
-## Ekraanipildid
+## Screenshots
 
-| Mängijad | Mängija |
+| Players | Player |
 |---|---|
-| ![Mängijad view](frontend/public/Views/Mängijad_View.png) | ![Mängija view](frontend/public/Views/Mängija_View.png) |
+| ![Players view](frontend/public/Views/Mängijad_View.png) | ![Player view](frontend/public/Views/Mängija_View.png) |
 
-| Koondis | Statistika |
+| National team | Stats |
 |---|---|
-| ![Koondis view](frontend/public/Views/Koondis_View.png) | ![Statistika view](frontend/public/Views/Statistika_View.png) |
+| ![National team view](frontend/public/Views/Koondis_View.png) | ![Stats view](frontend/public/Views/Statistika_View.png) |
 
-| Piletid |
+| Tickets |
 |---|
-| ![Piletid view](frontend/public/Views/Piletid_View.png) |
+| ![Tickets view](frontend/public/Views/Piletid_View.png) |
 
-## Funktsioonid
+## Features
 
-- **Mängijad** — profiilid, klubi- ja koondisestatistika (hooajad, mängud, graafikud)
-- **Statistika** — Koondis/Klubi pingeread, filtreeritavad statistikanäitajate kaupa
-- **Koondis** — eelseisvad mängud, viimased tulemused koos mänguskooridega, grupi tabeliseis
-- **Klubikorvpall** — Eesti koondislaste klubimängud üle maailma (ProBallers)
-- **Piletid** — koondise kodumängude info, link Piletitaskusse
-- **Vestlusrobot** — Anthropic Claude põhine, vastab ainult saidi enda andmete põhjal
+- **Players** — profiles, club and national team stats (seasons, games, charts)
+- **Stats** — National team/Club leaderboards, filterable by stat category
+- **National team** — upcoming games, recent results with box scores, group standings
+- **Club basketball** — club games played by Estonian national team players worldwide (ProBallers)
+- **Tickets** — national team home game info, link to Piletitasku
+- **Chatbot** — Anthropic Claude based, answers only from the site's own data
 
-## Tehnoloogiad
+## Tech stack
 
-**Frontend** — React 19, Vite, React Router v7, Tailwind CSS v4, Recharts (graafikud),
-Framer Motion + tsParticles (Koondis hero animatsioon).
+**Frontend** — React 19, Vite, React Router v7, Tailwind CSS v4, Recharts (charts),
+Framer Motion + tsParticles (national team hero animation).
 
 **Backend** — FastAPI + SQLAlchemy (Python), PostgreSQL, BeautifulSoup (ProBallers/FIBA
-scraping), Anthropic API (vestlusrobot, `claude-haiku-4-5`).
+scraping), Anthropic API (chatbot, `claude-haiku-4-5`).
 
-**Hosting** — Frontend: [Vercel](https://vercel.com) (projekt `est-hoop`). Backend:
-[Render](https://render.com) (`esthoop-backend`). Andmed värskendatakse ajastatud GitHub
-Actions töövoogudega.
+**Hosting** — Frontend: [Vercel](https://vercel.com) (project `est-hoop`). Backend:
+[Render](https://render.com) (`esthoop-backend`). Data is refreshed by scheduled GitHub
+Actions workflows.
 
-## Projekti struktuur
+## Project structure
 
 ```
 backend/
-  main.py                 FastAPI rakendus, kõik API endpoint'id
-  database.py             SQLAlchemy engine/sessioon (DATABASE_URL kaudu)
-  models.py               ORM mudelid (Player, PlayerClubStats, PlayerFibaStats, NationalTeamCache)
-  scraper.py               ProBallers + FIBA scraping-funktsioonid
-  migrations/              Ühekordsed skriptid (01-13) + päevased refresh-jobid (08, 09, 10)
-                           + check_new_competition.py (FIBA uue turniiri jälgimine)
+  main.py                 FastAPI app, all API endpoints
+  database.py             SQLAlchemy engine/session (via DATABASE_URL)
+  models.py               ORM models (Player, PlayerClubStats, PlayerFibaStats, NationalTeamCache)
+  scraper.py               ProBallers + FIBA scraping functions
+  migrations/              One-off scripts (01-13) + daily refresh jobs (08, 09, 10)
+                           + check_new_competition.py (watches for new FIBA competitions)
   requirements.txt, vercel.json
 
 frontend/
@@ -57,74 +57,73 @@ frontend/
     components/             Navbar, PlayerAvatar, Panel, FlagDivider, StatsTabToggle, ChatWidget, Skeleton, PageLoader
     contexts/                LoadingContext
   public/
-    players/                Mängijate profiilipildid ({slug}.jpg/png)
-    Views/                   README ekraanipildid
+    players/                Player headshots ({slug}.jpg/png)
+    Views/                   README screenshots
 
-.github/workflows/         Ajastatud (cron) andmete värskendamise töövood
+.github/workflows/         Scheduled (cron) data refresh workflows
 ```
 
-## Käivitamine
+## Getting started
 
 ```bash
 # Backend
 cd backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-# loo .env fail (vt allpool)
+# create a .env file (see below)
 uvicorn main:app --reload   # http://localhost:8000
 
 # Frontend
 cd frontend
 npm install
-# loo .env fail (vt allpool)
+# create a .env file (see below)
 npm run dev                  # http://localhost:5173
 ```
 
-### Keskkonnamuutujad
+### Environment variables
 
 **`backend/.env`**
 
-| Muutuja | Kirjeldus |
+| Variable | Description |
 |---|---|
-| `DATABASE_URL` | Postgres ühendusstring |
-| `ANTHROPIC_API_KEY` | Vestlusroboti jaoks (Anthropic API) |
-| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | Valikuline — ainult `migrations/check_new_competition.py` teavituste jaoks |
+| `DATABASE_URL` | Postgres connection string |
+| `ANTHROPIC_API_KEY` | For the chatbot (Anthropic API) |
+| `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | Optional — only for `migrations/check_new_competition.py` notifications |
 
 **`frontend/.env`**
 
-| Muutuja | Kirjeldus |
+| Variable | Description |
 |---|---|
-| `VITE_API_URL` | Backend'i URL (nt `http://localhost:8000` lokaalselt) |
+| `VITE_API_URL` | Backend URL (e.g. `http://localhost:8000` locally) |
 
-## Andmebaas ja andmevoog
+## Database & data flow
 
-Live scraping toimub ainult ajastatud GitHub Actions töövoogudega (`.github/workflows/`),
-mis täidavad Postgres cache-tabeleid — API endpoint'id loevad esmalt sealt, live scraping
-on ainult kohapealne varulahendus (ProBallers/FIBA blokeerivad sageli Render'i IP-sid).
+Live scraping only happens via scheduled GitHub Actions workflows (`.github/workflows/`),
+which populate Postgres cache tables — API endpoints read from those first; live scraping
+is only a local fallback (ProBallers/FIBA frequently block Render's IPs).
 
-| Andmed | Allikas | Cache-tabel | Ajastus |
+| Data | Source | Cache table | Schedule |
 |---|---|---|---|
-| Mängijate identiteet | Käsitsi kureeritud (proballers_id, fiba_id) | `Player` | Ühekordne migratsioon |
-| Klubistatistika | proballers.com | `PlayerClubStats` | Iga päev 02:00 UTC |
-| Koondisestatistika (mängija) | fiba.basketball (mängija leht) | `PlayerFibaStats` | Iga päev 21:00 UTC |
-| Koondise mängud/tabel/mänguskoorid | fiba.basketball + digital-api.fiba.basketball | `NationalTeamCache` | Iga päev 21:00 UTC |
+| Player identity | Manually curated (proballers_id, fiba_id) | `Player` | One-off migration |
+| Club stats | proballers.com | `PlayerClubStats` | Daily at 02:00 UTC |
+| National team stats (player) | fiba.basketball (player page) | `PlayerFibaStats` | Daily at 21:00 UTC |
+| National team games/standings/box scores | fiba.basketball + digital-api.fiba.basketball | `NationalTeamCache` | Daily at 21:00 UTC |
 
-## Skriptid
+## Scripts
 
-**`backend/migrations/`** — numbrilised ühekordsed skriptid (01-13: mängijate
-seemnestamine, ID-de lisamine, roster-muudatused) ning kolm neist (08, 09, 10) +
-`check_new_competition.py` töötavad ka päevaste refresh-jobidena GitHub Actions kaudu.
+**`backend/migrations/`** — numbered one-off scripts (01-13: seeding players, adding IDs,
+roster changes), three of which (08, 09, 10) plus `check_new_competition.py` also run as
+daily refresh jobs via GitHub Actions.
 
-| Käsk | Mida teeb |
+| Command | What it does |
 |---|---|
-| `npm run dev` | Käivita Vite dev-server |
-| `npm run build` | Ehita production build |
-| `npm run lint` | Käivita ESLint |
-| `npm run preview` | Eelvaata production build'i lokaalselt |
+| `npm run dev` | Start the Vite dev server |
+| `npm run build` | Build for production |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |
 
-## Deploy
+## Deployment
 
-Frontend deploybib automaatselt Vercel'isse (`est-hoop` projekt) `main` branchi
-push'imisel. Backend jookseb Render'is (`esthoop-backend`) — deploy toimub samuti
-git-integratsiooni kaudu. `/health` endpoint on UptimeRobot'iga jälgitav (aktsepteerib nii
-GET- kui HEAD-päringuid).
+Frontend auto-deploys to Vercel (`est-hoop` project) on push to `main`. Backend runs on
+Render (`esthoop-backend`) — also deployed via git integration. The `/health` endpoint is
+monitored by UptimeRobot (accepts both GET and HEAD requests).
