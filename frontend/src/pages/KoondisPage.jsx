@@ -679,9 +679,21 @@ export default function KoondisPage() {
 
         {/* Viimased tulemused (klõpsatavad read avavad mängu statistika) */}
         <section>
-          <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: '0 0 18px' }}>
-            Viimased tulemused
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, margin: '0 0 18px' }}>
+            <h2 style={{ fontFamily: FONT_HEADING, fontSize: '1.75rem', color: DARK, letterSpacing: 1, margin: 0 }}>
+              Viimased tulemused
+            </h2>
+            <a
+              href="https://www.fiba.basketball/en/events/fiba-basketball-world-cup-2027-european-qualifiers/teams/estonia#games"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ fontFamily: FONT_BODY, fontSize: '0.875rem', fontWeight: 600, color: BLUE, textDecoration: 'none' }}
+              onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline' }}
+              onMouseLeave={e => { e.currentTarget.style.textDecoration = 'none' }}
+            >
+              Vaata kõiki tulemusi →
+            </a>
+          </div>
           <RecentResultsSection recent={recent} gameStats={gameStats} loading={loading} />
         </section>
 
