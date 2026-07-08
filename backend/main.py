@@ -21,7 +21,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://localhost:5174",
+        "http://localhost:3000",
         "https://est-hoop.vercel.app",
+        "https://dashboard-six-beta-14.vercel.app",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
