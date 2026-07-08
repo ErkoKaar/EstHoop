@@ -128,8 +128,6 @@ export default function PlayersPage() {
       })
       .then(async allPlayers => {
         setPlayers(allPlayers)
-        setLoading(false)
-        signalReady()
 
         const results = await Promise.allSettled(
           allPlayers.map(p =>
@@ -154,6 +152,8 @@ export default function PlayersPage() {
         })
         setStatsMap(map)
         setStatsLoading(false)
+        setLoading(false)
+        signalReady()
       })
       .catch(err => {
         setError(err.message)
