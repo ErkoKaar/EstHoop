@@ -52,6 +52,12 @@ function fmtDate(ts) {
   })
 }
 
+function fmtDateOnly(ts) {
+  return new Date(ts * 1000).toLocaleDateString('et-EE', {
+    timeZone: 'Europe/Tallinn', day: '2-digit', month: '2-digit', year: 'numeric',
+  })
+}
+
 function computeAge(birthDateIso) {
   if (!birthDateIso) return null
   const birth = new Date(birthDateIso)
@@ -146,7 +152,7 @@ async function fetchNationalTeamContext() {
     const upcoming = gamesData.upcoming || []
     if (upcoming.length) {
       parts.push('Eelseisvad mängud:\n' + upcoming.map(ev =>
-        `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
+        `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${ev.timeTBD ? fmtDateOnly(ev.startTimestamp) + ' (kellaaeg pole veel teada)' : fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
       ).join('\n'))
     } else {
       parts.push('Eelseisvaid koondise mänge ei ole.')

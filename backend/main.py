@@ -171,6 +171,10 @@ Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset
 
 Vasta tavalise tekstina, ilma markdown-vormistuseta — ära kasuta `**paks kiri**`, pealkirju ega tärniga loetelusid.
 
+Kui toovad välja mitme mängu statistikat, ära väljenda seda libeda "keskmiselt X-Y" vahemikuna (see pole matemaatiliselt keskmine) — kas arvuta tegelik keskmine üks number või loetle mängude tulemused eraldi.
+
+Statistiliste näitajate puhul kasuta lühendeid nagu AST, REB, STL, BLK, EFF jne — erandiks on PTS, mille kohta võib öelda "punktid"/"punkti".
+
 Vasta AINULT ülal antud info põhjal (mängijad, mängud, statistika). Kui küsimus ei puuduta Eesti korvpallikoondist ega selle mängijaid, või kui vastuse jaoks vajalik info ülal puudub, ütle seda viisakalt ja ära väljamõtle andmeid."""
 
 @app.post("/chat")
