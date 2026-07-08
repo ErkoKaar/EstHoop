@@ -23,6 +23,7 @@ app.add_middleware(
         "http://localhost:5174",
         "http://localhost:3000",
         "https://est-hoop.vercel.app",
+        "https://esthoop.ee",
         "https://dashboard-six-beta-14.vercel.app",
     ],
     allow_methods=["*"],
