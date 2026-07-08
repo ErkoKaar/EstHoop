@@ -9,6 +9,12 @@ const NAV_LINKS = [
   { label: 'Klubikorvpall', href: '/klubikorvpall' },
 ]
 
+const SOCIAL_LINKS = [
+  { label: 'Eesti Korvpalliliit', href: 'https://www.basket.ee', icon: '/SocialMedia/basket_cropped.png', iconClass: 'w-9 h-9' },
+  { label: 'Instagram', href: 'https://www.instagram.com/basketee/?hl=en', icon: '/SocialMedia/Instagram.png', iconClass: 'w-9 h-9' },
+  { label: 'Facebook', href: 'https://www.facebook.com/Basket.ee', icon: '/SocialMedia/Facebook.png', iconClass: 'w-9 h-9' },
+]
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
@@ -32,14 +38,18 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
-          {NAV_LINKS.map(({ label, href }) => (
-            <li key={href}>
-              <NavLink href={href} label={label} />
-            </li>
-          ))}
-        </ul>
+        {/* Desktop links + social badges */}
+        <div className="hidden md:flex items-center gap-6">
+          <ul className="flex items-center gap-8 list-none m-0 p-0">
+            {NAV_LINKS.map(({ label, href }) => (
+              <li key={href}>
+                <NavLink href={href} label={label} />
+              </li>
+            ))}
+          </ul>
+          <span className="h-6 w-px bg-white/25" aria-hidden="true" />
+          <SocialLinks />
+        </div>
 
         {/* Hamburger — mobile only */}
         <button
@@ -71,8 +81,31 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+        <div className="flex justify-center gap-4 pb-5">
+          <SocialLinks />
+        </div>
       </div>
     </nav>
+  )
+}
+
+function SocialLinks() {
+  return (
+    <div className="flex items-center gap-3">
+      {SOCIAL_LINKS.map(({ label, href, icon, iconClass }) => (
+        <a
+          key={href}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={label}
+          title={label}
+          className="flex items-center justify-center w-9 h-9 rounded-full transition-transform duration-200 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+        >
+          <img src={icon} alt="" className={`${iconClass} object-contain`} />
+        </a>
+      ))}
+    </div>
   )
 }
 
