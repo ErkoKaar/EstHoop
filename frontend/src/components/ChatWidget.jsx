@@ -52,6 +52,18 @@ function fmtDate(ts) {
   })
 }
 
+function computeAge(birthDateIso) {
+  if (!birthDateIso) return null
+  const birth = new Date(birthDateIso)
+  const now = new Date()
+  let age = now.getFullYear() - birth.getFullYear()
+  const hadBirthdayThisYear =
+    now.getMonth() > birth.getMonth() ||
+    (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate())
+  if (!hadBirthdayThisYear) age--
+  return age
+}
+
 async function fetchStatsContext() {
   try {
     const players = await fetch(`${API}/players`).then(r => r.json())
@@ -65,23 +77,28 @@ async function fetchStatsContext() {
       const p = players[i]
       const nt = r.status === 'fulfilled' && r.value ? r.value.national_team : null
       if (!nt?.length) return
-      const gp = nt.reduce((s, row) => s + row.gp, 0)
-      if (!gp) return
-      const ppg = (nt.reduce((s, row) => s + row.ppg * row.gp, 0) / gp).toFixed(1)
-      const rpg = (nt.reduce((s, row) => s + row.rpg * row.gp, 0) / gp).toFixed(1)
-      const apg = (nt.reduce((s, row) => s + row.apg * row.gp, 0) / gp).toFixed(1)
-      natLines.push(`- ${p.name} (${p.position || '?'}): ${ppg} ppg, ${rpg} rpg, ${apg} apg (${gp} mängu)`)
+      const compText = nt.map(row =>
+        `${row.year} ${row.event}: ${row.ppg} ppg, ${row.rpg} rpg, ${row.apg} apg, ${row.eff} eff (${row.gp} mängu)`
+      ).join('; ')
+      natLines.push(`- ${p.name} (${p.position || '?'}): ${compText}`)
     })
 
+    const bioLines = []
     const clubLines = []
-    const recentGameLines = []
+    const recentClubGameLines = []
+    const recentNatGameLines = []
     clubResults.forEach((r, i) => {
       const p = players[i]
       const value = r.status === 'fulfilled' ? r.value : null
 
+      const age = computeAge(value?.birthDate)
+      const height = value?.heightCm
+      const bioText = [age && `${age} a.`, height && `${height} cm`].filter(Boolean).join(', ')
+      if (bioText) bioLines.push(`- ${p.name}: ${bioText}`)
+
       const seasons = value?.seasons
       if (seasons?.length) {
-        const seasonText = seasons.slice(-5).map(s =>
+        const seasonText = seasons.map(s =>
           `${s.SEASON || '?'} ${s.TEAM || ''} (${s.LEAGUE || ''}): ${s.PTS ?? '-'} pts, ${s.REB ?? '-'} reb, ${s.AST ?? '-'} ast`
         ).join('; ')
         clubLines.push(`- ${p.name}: ${seasonText}`)
@@ -89,17 +106,27 @@ async function fetchStatsContext() {
 
       const clubGames = value?.clubGames
       if (clubGames?.length) {
-        const gameText = clubGames.slice(0, 3).map(g =>
+        const gameText = clubGames.map(g =>
           `${g.DATE || '?'} vs ${g.OPPONENT || '?'} (${g.RESULT || '?'}): ${g.PTS ?? '-'} pts, ${g.REB ?? '-'} reb, ${g.AST ?? '-'} ast`
         ).join('; ')
-        recentGameLines.push(`- ${p.name}: ${gameText}`)
+        recentClubGameLines.push(`- ${p.name}: ${gameText}`)
+      }
+
+      const nationalGames = value?.nationalGames
+      if (nationalGames?.length) {
+        const gameText = nationalGames.map(g =>
+          `${g.DATE || '?'} vs ${g.OPPONENT || '?'} (${g.RESULT || '?'}): ${g.PTS ?? '-'} pts, ${g.REB ?? '-'} reb, ${g.AST ?? '-'} ast`
+        ).join('; ')
+        recentNatGameLines.push(`- ${p.name}: ${gameText}`)
       }
     })
 
     const parts = []
-    if (natLines.length) parts.push('Koondise statistika (karjäär kaalutud):\n' + natLines.join('\n'))
-    if (clubLines.length) parts.push('Klubi statistika (viimased hooajad):\n' + clubLines.join('\n'))
-    if (recentGameLines.length) parts.push('Viimased klubimängud:\n' + recentGameLines.join('\n'))
+    if (bioLines.length) parts.push('Mängijate vanus ja pikkus:\n' + bioLines.join('\n'))
+    if (natLines.length) parts.push('Koondise statistika võistluste kaupa:\n' + natLines.join('\n'))
+    if (clubLines.length) parts.push('Klubi statistika hooaegade kaupa:\n' + clubLines.join('\n'))
+    if (recentClubGameLines.length) parts.push('Viimased klubimängud:\n' + recentClubGameLines.join('\n'))
+    if (recentNatGameLines.length) parts.push('Viimased koondise mängud (mängija statistika):\n' + recentNatGameLines.join('\n'))
     return parts.length ? parts.join('\n\n') : null
   } catch {
     return null
@@ -118,7 +145,7 @@ async function fetchNationalTeamContext() {
 
     const upcoming = gamesData.upcoming || []
     if (upcoming.length) {
-      parts.push('Eelseisvad mängud:\n' + upcoming.slice(0, 10).map(ev =>
+      parts.push('Eelseisvad mängud:\n' + upcoming.map(ev =>
         `- ${ev.homeTeam?.name} vs ${ev.awayTeam?.name} | ${fmtDate(ev.startTimestamp)} | ${ev.tournament?.name || ''}`
       ).join('\n'))
     } else {
@@ -142,10 +169,12 @@ async function fetchNationalTeamContext() {
     }
 
     if (boxScores?.length) {
-      const top = (list) => (list || []).slice(0, 5).map(p => `${p.name} ${p.pts}p/${p.reb}r/${p.ast}a`).join(', ')
-      const recentBoxes = [...boxScores].sort((a, b) => (b.date ?? 0) - (a.date ?? 0)).slice(0, 2)
-      parts.push("Viimaste mängude box score'id (top 5 mängijat meeskonna kohta):\n" + recentBoxes.map(bs =>
-        `${bs.homeTeam} ${bs.homeScore}:${bs.awayScore} ${bs.awayTeam} (${fmtDate(bs.date)})\n  ${bs.homeTeam}: ${top(bs.homePlayers)}\n  ${bs.awayTeam}: ${top(bs.awayPlayers)}`
+      const allStats = (list) => (list || []).map(p =>
+        `${p.name} ${p.min} min, ${p.pts}p/${p.reb}r/${p.ast}a, ${p.stl}stl/${p.blk}blk, FG ${p.fg}, +/-${p.pm}`
+      ).join('; ')
+      const sortedBoxes = [...boxScores].sort((a, b) => (b.date ?? 0) - (a.date ?? 0))
+      parts.push("Mängude box score'id:\n" + sortedBoxes.map(bs =>
+        `${bs.homeTeam} ${bs.homeScore}:${bs.awayScore} ${bs.awayTeam} (${fmtDate(bs.date)})\n  ${bs.homeTeam}: ${allStats(bs.homePlayers)}\n  ${bs.awayTeam}: ${allStats(bs.awayPlayers)}`
       ).join('\n'))
     }
 

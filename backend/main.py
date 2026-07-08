@@ -169,6 +169,8 @@ def _build_system(players: list, games_text: str, stats_text: str | None) -> str
 
 Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem.
 
+Vasta tavalise tekstina, ilma markdown-vormistuseta — ära kasuta `**paks kiri**`, pealkirju ega tärniga loetelusid.
+
 Vasta AINULT ülal antud info põhjal (mängijad, mängud, statistika). Kui küsimus ei puuduta Eesti korvpallikoondist ega selle mängijaid, või kui vastuse jaoks vajalik info ülal puudub, ütle seda viisakalt ja ära väljamõtle andmeid."""
 
 @app.post("/chat")
