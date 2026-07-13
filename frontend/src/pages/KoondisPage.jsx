@@ -24,6 +24,11 @@ function formatTime(ts) {
   })
 }
 function isHome(ev) { return ev.homeTeam?.name === 'Estonia' }
+// timeTBD mängul on kellaaeg platshoidja (00:00 UTC) — loe möödunuks alles päeva lõpus
+function isPastGame(ev, now) {
+  const ms = ev.startTimestamp * 1000
+  return ev.timeTBD ? ms + 86400000 < now : ms < now
+}
 function getResult(ev) {
   const h = isHome(ev)
   const est = h ? ev.homeScore?.current : ev.awayScore?.current
@@ -76,8 +81,9 @@ const fadeUp = (delay = 0) => ({
 })
 
 // ── Hero Banner ───────────────────────────────────────────────
-function HeroBanner({ recent, loading, nextEvent, standingsName }) {
-  const form = loading ? [] : [...recent].reverse()
+function HeroBanner({ recent, loading, upcoming, standingsName }) {
+  const nextEvent = upcoming[0] ?? null
+  const form = loading ? [] : recent.slice(0, 5).reverse()
   const reducedMotion = useMemo(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []
   )
@@ -180,9 +186,9 @@ function HeroBanner({ recent, loading, nextEvent, standingsName }) {
       </div>
 
       {/* Countdown inside hero */}
-      {!loading && nextEvent && (
+      {!loading && upcoming.length > 0 && (
         <motion.div {...(reducedMotion ? {} : fadeUp(0.4))}>
-          <HeroCountdown event={nextEvent} />
+          <HeroCountdown events={upcoming} />
         </motion.div>
       )}
 
@@ -197,28 +203,35 @@ function HeroBanner({ recent, loading, nextEvent, standingsName }) {
 }
 
 // ── Hero Countdown (inside hero banner) ───────────────────────
-function HeroCountdown({ event }) {
-  const [time, setTime] = useState(null)
-  const ts = event.startTimestamp
+function HeroCountdown({ events }) {
+  const [target, setTarget] = useState(null)
 
   useEffect(() => {
     const tick = () => {
-      const diff = ts * 1000 - Date.now()
-      if (diff <= 0) { setTime(null); return }
-      setTime({
-        d: Math.floor(diff / 86400000),
-        h: Math.floor((diff % 86400000) / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
+      // esimene tulevikus algav mäng — kui eesmine mäng algab, liigub taimer järgmisele
+      const now = Date.now()
+      const event = events.find(ev => ev.startTimestamp * 1000 > now)
+      if (!event) { setTarget(null); return }
+      const diff = event.startTimestamp * 1000 - now
+      setTarget({
+        event,
+        time: {
+          d: Math.floor(diff / 86400000),
+          h: Math.floor((diff % 86400000) / 3600000),
+          m: Math.floor((diff % 3600000) / 60000),
+          s: Math.floor((diff % 60000) / 1000),
+        },
       })
     }
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [ts])
+  }, [events])
 
-  if (!time) return null
+  if (!target) return null
 
+  const { event, time } = target
+  const ts = event.startTimestamp
   const home = isHome(event)
   const opponent = home ? event.awayTeam?.name : event.homeTeam?.name
   const venue = home ? 'kodu' : 'võõrsil'
@@ -437,8 +450,8 @@ function ResultRow({ event, stats, isOpen, onToggle }) {
               ))}
             </div>
           )}
-          <PlayerStatsTable teamLabel={home ? 'Eesti' : opponent} players={home ? stats.homePlayers : stats.awayPlayers} accent={home ? BLUE : '#d1d5db'} />
-          <PlayerStatsTable teamLabel={home ? opponent : 'Eesti'} players={home ? stats.awayPlayers : stats.homePlayers} accent={home ? '#d1d5db' : BLUE} />
+          <PlayerStatsTable teamLabel={home ? 'Eesti' : opponent} players={stats.homePlayers} accent={home ? BLUE : '#d1d5db'} />
+          <PlayerStatsTable teamLabel={home ? opponent : 'Eesti'} players={stats.awayPlayers} accent={home ? '#d1d5db' : BLUE} />
         </div>
       )}
     </div>
@@ -626,7 +639,9 @@ export default function KoondisPage() {
       fetch(`${API}/national-team/game-stats`).then(r => r.json()),
     ]).then(([gamesRes, standingsRes, statsRes]) => {
       if (gamesRes.status === 'fulfilled') {
-        setUpcoming(gamesRes.value.upcoming || [])
+        // DB cache uueneb kord päevas — juba mängitud, aga veel "eelseisvad" mängud välja
+        const now = Date.now()
+        setUpcoming((gamesRes.value.upcoming || []).filter(ev => !isPastGame(ev, now)))
         setRecent(gamesRes.value.recent || [])
       }
       setStandings(standingsRes.status === 'fulfilled' ? standingsRes.value : { name: null, rows: [] })
@@ -641,7 +656,7 @@ export default function KoondisPage() {
   return (
     <div style={{ width: '100%' }}>
       {/* Hero — full width */}
-      <HeroBanner recent={recent} loading={loading} nextEvent={upcoming[0] ?? null} standingsName={standings.name} />
+      <HeroBanner recent={recent} loading={loading} upcoming={upcoming} standingsName={standings.name} />
 
       {/* Content */}
       <div style={{ maxWidth: 1024, width: '100%', boxSizing: 'border-box', margin: '0 auto', padding: '40px 24px 56px' }}>

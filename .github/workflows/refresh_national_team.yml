@@ -3,6 +3,7 @@ name: Refresh national team data
 on:
   schedule:
     - cron: '0 21 * * *'  # Kell 23:00 Eesti aja järgi (UTC+2)
+    - cron: '0 4 * * *'   # Kell 06:00 Eesti aja järgi (UTC+2) — püüab kinni hilisõhtused mängud
   workflow_dispatch:
 
 jobs:

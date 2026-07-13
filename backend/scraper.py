@@ -128,12 +128,25 @@ def scrape_fiba_national_team(fiba_id: int, name_slug: str) -> list[dict]:
 
 
 def scrape_fiba_standings(competition_slug: str, team_slug: str) -> dict:
-    """Kraabib FIBA meeskonna lehelt kvalifikatsioonigrupi tabeli."""
+    """Kraabib FIBA lehtedelt koondise käimasoleva ringi grupi tabeli.
+
+    Meeskonna lehe (/teams/{slug}) payload sisaldab ainult esimese ringi grupi
+    tabelit — pärast ringivahetust (nt 2nd Round) jääb see näitama vana, lõpetatud
+    gruppi. Käimasoleva grupi nimi loetakse meeskonna lehe currentRoundGroup
+    väljast ja tabel ise turniiri /standings lehelt; kui currentRoundGroup
+    puudub, kasutatakse varulahendusena meeskonna lehe enda grupi tabelit.
+    """
     url = f"https://www.fiba.basketball/en/events/{competition_slug}/teams/{team_slug}"
     headers = {**HEADERS, "RSC": "1"}
     resp = requests.get(url, headers=headers, timeout=15)
     resp.raise_for_status()
     text = resp.text
+
+    current_m = re.search(r'"currentRoundGroup":"([^"]+)"', text)
+    if current_m:
+        result = _scrape_fiba_group_standings(competition_slug, current_m.group(1), headers)
+        if result["rows"]:
+            return result
 
     name_m = re.search(r'"group":\{"groupName":"([^"]+)"', text)
     if not name_m:
@@ -156,6 +169,47 @@ def scrape_fiba_standings(competition_slug: str, team_slug: str) -> dict:
     rows.sort(key=lambda r: r["position"])
 
     return {"name": f"Group {name_m.group(1)}", "rows": rows}
+
+
+def _scrape_fiba_group_standings(competition_slug: str, group_name: str, headers: dict) -> dict:
+    """Kraabib turniiri /standings lehelt ühe grupi tabeli.
+
+    Erinevalt meeskonna lehest on siin teamsStats real "team" ainult teamId,
+    nimed tuleb lahendada lehe teamId→officialName kaardi kaudu.
+    """
+    url = f"https://www.fiba.basketball/en/events/{competition_slug}/standings"
+    resp = requests.get(url, headers=headers, timeout=15)
+    resp.raise_for_status()
+    text = resp.text
+
+    team_names = dict(re.findall(
+        r'"teamId":(\d+),"organisationId":\d+,"code":"[A-Z]+","officialName":"([^"]+)"',
+        text,
+    ))
+
+    block_m = re.search(
+        r'"groupName":"' + re.escape(group_name) + r'",.*?"teamsStats":\[(.*?)\],"tiedTeamsResults"',
+        text,
+    )
+    if not block_m:
+        return {"name": None, "rows": []}
+
+    rows = []
+    for m in re.finditer(
+        r'"rank":(\d+),"team":(\d+),"gamesPlayed":\d+,"gamesLost":(\d+),"gamesWon":(\d+),"points":(\d+)',
+        block_m.group(1),
+    ):
+        team_id = m.group(2)
+        rows.append({
+            "position": int(m.group(1)),
+            "team":     {"name": team_names.get(team_id, team_id)},
+            "wins":     int(m.group(4)),
+            "losses":   int(m.group(3)),
+            "points":   int(m.group(5)),
+        })
+    rows.sort(key=lambda r: r["position"])
+
+    return {"name": f"Group {group_name}", "rows": rows}
 
 
 def scrape_fiba_schedule(competition_slug: str, team_id: int, tournament_name: str) -> tuple[list, list]:
