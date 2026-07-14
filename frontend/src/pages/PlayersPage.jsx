@@ -32,36 +32,43 @@ function PlayerCard({ player }) {
   return (
     <button
       onClick={() => navigate(`/mangijad/${player.slug}`)}
-      className="group flex flex-col items-center gap-2 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] rounded-xl p-3 transition-all duration-200 hover:bg-gray-50"
+      className="group flex flex-col items-center gap-2 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] rounded-xl p-3 transition-all duration-200"
     >
-      <div className="relative w-full aspect-square rounded-full overflow-hidden shadow-md group-hover:shadow-lg transition-shadow duration-200">
-        {!showPlaceholder ? (
-          <img
-            src={`/players/${player.slug}.${EXTENSIONS[extIndex]}`}
-            alt={player.name}
-            className="w-full h-full object-cover object-top"
-            onError={() => setExtIndex(i => i + 1)}
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center" style={{ background: BLUE }}>
+      <div className="relative w-full aspect-square">
+        {/* Spotlight-valgus */}
+        <div
+          className="absolute inset-[-14px] rounded-full opacity-0 scale-90 blur-md transition-[opacity,transform] duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 motion-reduce:transition-opacity motion-reduce:scale-100"
+          style={{ background: 'radial-gradient(circle, transparent 58%, rgba(77,184,255,0.6) 80%, rgba(0,114,206,0) 100%)' }}
+        />
+        <div className="relative w-full h-full rounded-full overflow-hidden shadow-md transition-transform duration-300 ease-out group-hover:shadow-lg group-hover:scale-[1.05] motion-reduce:group-hover:scale-100">
+          {!showPlaceholder ? (
+            <img
+              src={`/players/${player.slug}.${EXTENSIONS[extIndex]}`}
+              alt={player.name}
+              className="w-full h-full object-cover object-top"
+              onError={() => setExtIndex(i => i + 1)}
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center" style={{ background: BLUE }}>
+              <span
+                className="text-white font-bold select-none"
+                style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
+              >
+                {initials}
+              </span>
+            </div>
+          )}
+          {/* Positsioon badge */}
+          {player.position && (
             <span
-              className="text-white font-bold select-none"
-              style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
+              className="absolute bottom-1 right-1 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full"
+              style={{ background: BLUE, fontFamily: FONT_BODY, lineHeight: 1.4 }}
             >
-              {initials}
+              {player.position}
             </span>
-          </div>
-        )}
-        {/* Positsioon badge */}
-        {player.position && (
-          <span
-            className="absolute bottom-1 right-1 text-[10px] font-bold text-white px-1.5 py-0.5 rounded-full"
-            style={{ background: BLUE, fontFamily: FONT_BODY, lineHeight: 1.4 }}
-          >
-            {player.position}
-          </span>
-        )}
+          )}
+        </div>
       </div>
 
       <span
