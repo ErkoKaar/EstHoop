@@ -59,8 +59,12 @@ function PodiumCard({ player, rank, statKey }) {
   )
 }
 
-function RankRow({ player, rank, statKey }) {
+function RankRow({ player, rank, statKey, maxValue }) {
   const navigate = useNavigate()
+  // riba pikkus = mängija näitaja osakaal liidri omast; ilma näitajata riba ei kuvata
+  const pct = player.statValue != null && maxValue > 0
+    ? Math.max(0, Math.min(100, (player.statValue / maxValue) * 100))
+    : null
   return (
     <button
       onClick={() => navigate(`/mangijad/${player.slug}`)}
@@ -70,10 +74,18 @@ function RankRow({ player, rank, statKey }) {
         {rank}
       </span>
       <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
-      <span className="flex-1 font-semibold text-[#08060d] text-base" style={{ fontFamily: FONT_BODY }}>
+      <span className="max-w-[45%] truncate font-semibold text-[#08060d] text-base" style={{ fontFamily: FONT_BODY }}>
         {player.name}
       </span>
-      <div className="text-right shrink-0">
+      <span className="invisible sm:visible flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden" aria-hidden="true">
+        {pct != null && (
+          <span
+            className="block h-full rounded-full"
+            style={{ width: `${pct}%`, background: BLUE, transition: 'width 0.45s cubic-bezier(0.22, 1, 0.36, 1)' }}
+          />
+        )}
+      </span>
+      <div className="text-right shrink-0 w-16">
         <span className="text-2xl leading-none" style={{ fontFamily: FONT_HEADING, color: BLUE }}>
           {player.statValue ?? '—'}
         </span>
@@ -240,7 +252,7 @@ export default function StatsPage() {
         <Panel>
           {rest.map((player, i) => (
             <div key={player.slug} style={{ borderBottom: i < rest.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-              <RankRow player={player} rank={i + 4} statKey={activeStat.toUpperCase()} />
+              <RankRow player={player} rank={i + 4} statKey={activeStat.toUpperCase()} maxValue={ranked[0]?.statValue ?? 0} />
             </div>
           ))}
         </Panel>
