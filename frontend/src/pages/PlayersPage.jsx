@@ -16,6 +16,13 @@ const GROUPS = [
   { key: 'center',  label: 'Keskmängijad', sub: 'C',        positions: ['C'] },
 ]
 
+const COACHES = [
+  { slug: 'heiko-rannula',   name: 'Heiko Rannula',   role: 'Peatreener' },
+  { slug: 'indrek-reinbok',  name: 'Indrek Reinbok',  role: 'Abitreener' },
+  { slug: 'brett-nomm',      name: 'Brett Nõmm',      role: 'Treener' },
+  { slug: 'kristjan-kangur', name: 'Kristjan Kangur', role: 'Treener' },
+]
+
 function PlayerCard({ player }) {
   const navigate = useNavigate()
   const [extIndex, setExtIndex] = useState(0)
@@ -79,6 +86,62 @@ function PlayerCard({ player }) {
       </span>
 
     </button>
+  )
+}
+
+function CoachCard({ coach }) {
+  const [hasError, setHasError] = useState(false)
+
+  const initials = coach.name
+    .split(' ')
+    .map(w => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
+  return (
+    <div className="group flex flex-col items-center gap-2 rounded-xl p-3">
+      <div className="relative w-full aspect-square">
+        {/* Spotlight-valgus */}
+        <div
+          className="absolute inset-[-14px] rounded-full opacity-0 scale-90 blur-md transition-[opacity,transform] duration-500 ease-out group-hover:opacity-100 group-hover:scale-100 motion-reduce:transition-opacity motion-reduce:scale-100"
+          style={{ background: 'radial-gradient(circle, transparent 58%, rgba(77,184,255,0.6) 80%, rgba(0,114,206,0) 100%)' }}
+        />
+        <div className="relative w-full h-full rounded-full overflow-hidden shadow-md transition-transform duration-300 ease-out group-hover:shadow-lg group-hover:scale-[1.05] motion-reduce:group-hover:scale-100">
+          {!hasError ? (
+            <img
+              src={`/coaches/${coach.slug}.png`}
+              alt={coach.name}
+              className="w-full h-full object-cover object-top"
+              onError={() => setHasError(true)}
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center" style={{ background: BLUE }}>
+              <span
+                className="text-white font-bold select-none"
+                style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
+              >
+                {initials}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <span
+        className="text-[#08060d] font-semibold text-sm text-center leading-tight"
+        style={{ fontFamily: FONT_BODY }}
+      >
+        {coach.name}
+      </span>
+      <span
+        className="text-xs font-semibold text-gray-400 uppercase tracking-wide"
+        style={{ fontFamily: FONT_BODY }}
+      >
+        {coach.role}
+      </span>
+    </div>
   )
 }
 
@@ -216,6 +279,22 @@ export default function PlayersPage() {
           />
         )
       })}
+
+      <section className="mb-10">
+        <div className="flex items-baseline gap-3 mb-5">
+          <h2
+            className="text-3xl text-[#08060d]"
+            style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}
+          >
+            Treenerid
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px' }}>
+          {COACHES.map(coach => (
+            <CoachCard key={coach.slug} coach={coach} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
