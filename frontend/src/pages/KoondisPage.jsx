@@ -791,6 +791,7 @@ export default function KoondisPage() {
       <Seo
         title="Eesti korvpallikoondis: mängud, tulemused ja seis"
         path="/koondis"
+        breadcrumbs={[{ name: 'Koondis' }]}
         description={
           'Eesti korvpallikoondise järgmised mängud, viimased tulemused ja alagrupi seis ' +
           'MM-valiksarjas. Iga mängu juurest leiad koondislaste statistika.'

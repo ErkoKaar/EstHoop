@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo, { SITE_URL } from '../components/Seo'
-import { getPreloadedPlayer } from '../preload'
+import { getPreloadedPlayer, getPreloadedPlayerStats } from '../preload'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
 import {
@@ -435,19 +435,20 @@ export default function PlayerPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const { signalReady } = useLoading()
-  // Eelrenderdusel on mängija nimi ja positsioon HTML-i süstitud nimekirjas olemas,
-  // seega tiitel ja H1 jõuavad märgistusse ilma API-päringuta. Statistika laeb ikka
-  // klient, sest see tuleb eraldi endpointidest.
+  // Eelrenderdusel on nii mängija kui tema statistika HTML-i süstitud, seega
+  // pealkiri, hooaegade tabel ja numbrid jõuavad märgistusse ilma API-päringuta.
+  // Klient laeb need effectis üle, et andmed oleksid värsked.
   const preloaded = getPreloadedPlayer(slug)
+  const preloadedStats = getPreloadedPlayerStats(slug)
   const [player, setPlayer] = useState(preloaded)
-  const [stats, setStats] = useState(null)
-  const [fibaStats, setFibaStats] = useState(null)
+  const [stats, setStats] = useState(preloadedStats?.stats ?? null)
+  const [fibaStats, setFibaStats] = useState(preloadedStats?.fibaStats ?? null)
   const [tab, setTab] = useState('koondis')
   const [extIndex, setExtIndex] = useState(0)
   const [playerLoading, setPlayerLoading] = useState(!preloaded)
-  const [statsLoading, setStatsLoading] = useState(true)
+  const [statsLoading, setStatsLoading] = useState(!preloadedStats)
   const [statsError, setStatsError] = useState(false)
-  const [fibaLoading, setFibaLoading] = useState(true)
+  const [fibaLoading, setFibaLoading] = useState(!preloadedStats)
   const [fibaError, setFibaError] = useState(false)
 
   useEffect(() => {
@@ -496,6 +497,10 @@ export default function PlayerPage() {
         image={`${SITE_URL}/og/players/${player.slug}.jpg`}
         ogType="profile"
         jsonLd={playerJsonLd(player, { heightCm, lastSeason })}
+        breadcrumbs={[
+          { name: 'Mängijad', path: '/mangijad' },
+          { name: player.name },
+        ]}
       />
 
       {/* Tagasi */}

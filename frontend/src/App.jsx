@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { LoadingProvider, useLoading } from './contexts/LoadingContext'
 import Navbar from './components/Navbar'
@@ -19,9 +19,22 @@ import './App.css'
 function RouteChangeWatcher() {
   const location = useLocation()
   const { startLoading } = useLoading()
+  const firstRender = useRef(true)
+
   useEffect(() => {
     startLoading()
+
+    // Esimest renderit ei puutu: seal paneb brauser kerimiskoha ise paika.
+    // Kõigil järgnevatel marsruudivahetustel algab leht ülevalt, ka tagasi
+    // ja edasi nupu puhul.
+    if (firstRender.current) {
+      firstRender.current = false
+      return
+    }
+
+    window.scrollTo(0, 0)
   }, [location.pathname])
+
   return null
 }
 

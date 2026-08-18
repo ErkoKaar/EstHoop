@@ -269,6 +269,7 @@ export default function PlayersPage() {
       <Seo
         title="Eesti korvpallikoondise mängijad"
         path="/mangijad"
+        breadcrumbs={[{ name: 'Mängijad' }]}
         description={
           'Kõigi Eesti korvpallikoondise mängijate profiilid: positsioon, vanus, pikkus ' +
           'ning statistika koondises ja klubis. Lisaks koondise treenerid.'

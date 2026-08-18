@@ -229,6 +229,7 @@ export default function KlubiKorvpallPage() {
       <Seo
         title="Eesti korvpallurid klubides"
         path="/klubikorvpall"
+        breadcrumbs={[{ name: 'Klubikorvpall' }]}
         description={
           'Eesti koondislaste mängud klubides üle maailma. Tulemused ja statistika ' +
           'päevade kaupa, kes kus ja kui hästi mängis.'

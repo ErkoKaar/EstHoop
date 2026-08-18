@@ -12,6 +12,7 @@ export default function TingimusedPage() {
         title="Kasutajatingimused"
         description="EstHoopi kasutamise tingimused: mis leht on, kui täpne on statistika, kellele kuuluvad andmed ja mille eest me ei vastuta."
         path="/tingimused"
+        breadcrumbs={[{ name: 'Kasutajatingimused' }]}
       />
 
       <LegalLayout

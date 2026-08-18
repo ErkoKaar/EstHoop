@@ -235,32 +235,41 @@ function PrimaryCard({ to, label, text, Icon: CardIcon, reveal, delay }) {
   )
 }
 
+// Mobiilis identne PrimaryCard'iga: oma raam, sama ikoonimõõt, sama kirjasuurus
+// ja nool. Lauaarvutis kaob raam ja lahter sulandub ühte ribasse eraldusjoontega.
+//
+// Kirjasuurus, värv ja reavahe on siin klassides, mitte inline-stiilis, sest
+// inline-stiil võidaks md:-klasse ja murdepunkt ei töötaks.
 function SecondaryRow({ to, label, text, Icon: RowIcon }) {
-  // Eraldusjooned tulevad konteineri divide-utilitidest, et need pöörduks
-  // mobiili horisontaalsest lauaarvuti vertikaalseks ilma JS-ita
   return (
     <Link
       to={to}
-      className="group flex items-center gap-3.5 px-6 py-5 transition-colors duration-150
-                 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2
+      className="group flex flex-col rounded-xl border border-gray-200 bg-white p-7 shadow-sm
+                 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#0072ce]
+                 hover:shadow-md focus-visible:outline focus-visible:outline-2
                  focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]
-                 md:flex-1 md:flex-col md:items-start md:gap-1.5 md:py-6"
+                 md:flex-1 md:rounded-none md:border-0 md:p-6 md:shadow-none
+                 md:hover:translate-y-0 md:hover:bg-gray-50 md:hover:shadow-none"
     >
-      <span className="flex items-center gap-2.5 shrink-0">
-        <RowIcon className="h-5 w-5 shrink-0" style={{ color: BLUE }} />
-        <span
-          style={{ fontFamily: FONT_HEADING, fontSize: '1.25rem', color: DARK, letterSpacing: 1, lineHeight: 1 }}
-          className="transition-colors duration-200 group-hover:text-[#0072ce]"
+      <div className="mb-2 flex items-center gap-3 md:mb-1.5 md:gap-2.5">
+        <RowIcon className="h-7 w-7 shrink-0 md:h-5 md:w-5" style={{ color: BLUE }} />
+        <h3
+          style={{ fontFamily: FONT_HEADING, color: DARK, letterSpacing: 1 }}
+          className="text-[1.85rem] leading-none transition-colors duration-200
+                     group-hover:text-[#0072ce] md:text-[1.25rem]"
         >
           {label}
-        </span>
-      </span>
-      <span
-        style={{ fontFamily: FONT_BODY, color: '#9ca3af', fontWeight: 500, fontSize: '0.92rem', lineHeight: 1.4 }}
-        className="min-w-0"
+        </h3>
+        {/* Nool ainult mobiilis, ühendatud ribal see lahtreid ainult segaks */}
+        <span className="ml-auto md:hidden" style={{ color: BLUE }}><Arrow /></span>
+      </div>
+      <p
+        style={{ fontFamily: FONT_BODY, fontWeight: 500 }}
+        className="text-[1.02rem] leading-[1.55] text-[#6b7280]
+                   md:text-[0.92rem] md:leading-[1.4] md:text-[#9ca3af]"
       >
         {text}
-      </span>
+      </p>
     </Link>
   )
 }
@@ -432,16 +441,21 @@ export default function HomePage() {
           Kust alustada
         </motion.h2>
 
-        <div className="mb-4 grid gap-4 md:grid-cols-2">
+        {/* auto-rows-fr võrdsustab ka mobiilis, kus kaardid on üksteise all
+            eri ridades. Ilma selleta on kumbki täpselt oma teksti kõrgune. */}
+        <div className="mb-4 grid auto-rows-fr gap-4 md:grid-cols-2">
           {PRIMARY.map((c, i) => (
             <PrimaryCard key={c.to} {...c} reveal={reveal} delay={0.08 + i * 0.08} />
           ))}
         </div>
 
+        {/* Mobiilis eraldi kaardid nagu ülal, seepärast konteineril raami pole.
+            Lauaarvutis tuleb raam tagasi ja lahtrid sulanduvad üheks ribaks. */}
         <motion.div
           {...reveal(0.24)}
-          className="divide-y divide-gray-200 overflow-hidden rounded-xl border border-gray-200
-                     bg-white shadow-sm md:flex md:divide-x md:divide-y-0"
+          className="grid auto-rows-fr gap-4 md:flex md:gap-0 md:divide-x md:divide-gray-200
+                     md:overflow-hidden md:rounded-xl md:border md:border-gray-200
+                     md:bg-white md:shadow-sm"
         >
           {SECONDARY.map(s => <SecondaryRow key={s.to} {...s} />)}
         </motion.div>

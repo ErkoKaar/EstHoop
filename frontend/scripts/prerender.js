@@ -48,26 +48,78 @@ function splitHeadTags(html) {
   return { head, body }
 }
 
-async function fetchPlayers() {
+async function getJson(path) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
   try {
-    const res = await fetch(`${API}/players`, { signal: controller.signal })
+    const res = await fetch(`${API}${path}`, { signal: controller.signal })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const players = await res.json()
-    if (!Array.isArray(players)) throw new Error('ootamatu vastuse kuju (pole massiiv)')
-    return players.filter(p => typeof p?.slug === 'string' && p.slug.trim())
+    return await res.json()
   } finally {
     clearTimeout(timer)
   }
 }
 
-// Sama nimekiri, mida render() Node'is kasutas, peab jõudma ka brauserisse enne
+async function fetchPlayers() {
+  const players = await getJson('/players')
+  if (!Array.isArray(players)) throw new Error('ootamatu vastuse kuju (pole massiiv)')
+  return players.filter(p => typeof p?.slug === 'string' && p.slug.trim())
+}
+
+// Piiratud paralleelsus: Render tasuta plaan ei taha 44 samaaegset päringut,
+// aga ükshaaval oleks build asjatult aeglane.
+async function mapLimit(items, limit, fn) {
+  const results = new Array(items.length)
+  let next = 0
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, async () => {
+      while (next < items.length) {
+        const i = next++
+        try {
+          results[i] = await fn(items[i])
+        } catch {
+          results[i] = null
+        }
+      }
+    })
+  )
+  return results
+}
+
+// Statistika on see, mille pärast inimene mängija lehele tuleb. Ilma selleta
+// oleks HTML-is ainult nimi ja Google ei näeks ühtegi numbrit.
+async function fetchPlayerStats(players) {
+  const rows = await mapLimit(players, 6, async p => {
+    const [stats, fiba] = await Promise.all([
+      getJson(`/players/${p.slug}/stats`).catch(() => null),
+      getJson(`/players/${p.slug}/fiba-stats`).catch(() => null),
+    ])
+    return { slug: p.slug, stats, fibaStats: fiba?.national_team ?? null }
+  })
+  const byslug = {}
+  for (const row of rows) {
+    if (row?.stats || row?.fibaStats) byslug[row.slug] = row
+  }
+  return byslug
+}
+
+// Iga leht saab ainult need andmed, mida ta ise vajab. Kogu statistika igale
+// lehele paisutaks HTML-i mitmesaja kilobaidini ilma igasuguse kasuta.
+function preloadFor(route, players, statsBySlug) {
+  const match = route.match(/^\/mangijad\/([^/]+)$/)
+  if (match) {
+    return { players, playerStats: statsBySlug[match[1]] ?? null }
+  }
+  if (route === '/mangijad') return { players }
+  return null
+}
+
+// Sama väärtus, mida render() Node'is kasutas, peab jõudma ka brauserisse enne
 // rakenduse käivitumist, muidu renderdaks klient esimesel korral tühja lehe ja
 // hydration läheks rikki. </script> lekke vastu on kaitse odav.
-function preloadScript(players) {
-  if (!players?.length) return ''
-  const json = JSON.stringify(players).replace(/</g, '\\u003c')
+function preloadScript(data) {
+  if (!data) return ''
+  const json = JSON.stringify(data).replace(/</g, '\\u003c')
   return `<script>globalThis.${PRELOAD_KEY}=${json}</script>`
 }
 
@@ -103,13 +155,20 @@ async function main() {
     )
   }
 
-  const preload = preloadScript(players)
+  let statsBySlug = {}
+  if (players?.length) {
+    statsBySlug = await fetchPlayerStats(players)
+    console.log(`[prerender] statistika saadud ${Object.keys(statsBySlug).length}/${players.length} mängijale`)
+  }
+
   let ok = 0
   const failed = []
 
   for (const route of routes) {
     try {
-      const { head, body } = splitHeadTags(render(route, players))
+      const data = preloadFor(route, players, statsBySlug)
+      const preload = preloadScript(data)
+      const { head, body } = splitHeadTags(render(route, data))
       const html = template
         .replace('</head>', `${head.map(t => `    ${t}`).join('\n')}\n${preload ? `    ${preload}\n` : ''}  </head>`)
         .replace(rootTag[0], `<div id="root">${body}</div>`)

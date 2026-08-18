@@ -4,6 +4,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { NAV_LINKS } from '../navigation'
 import SocialLinks from './SocialLinks'
 
+const SHRINK_AT = 72
+const GROW_AT = 24
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -12,7 +15,15 @@ export default function Navbar() {
   const reducedMotion = useReducedMotion()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
+    // Hüsterees: väiksemaks läheb riba 72 piksli juures, tagasi suureks alles 24
+    // juures. Ühe lävendiga võnkus riba lühikese lehe lõpus edasi-tagasi, sest
+    // riba on voos ja kokkutõmbumine lühendab dokumenti ~20 piksli võrra. See
+    // lükkas kerimiskoha lävendist tagasi allapoole, riba kasvas, dokument
+    // pikenes ja ring algas otsast. 48 piksli surnud tsoon on sellest suurem.
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(prev => (prev ? y > GROW_AT : y > SHRINK_AT))
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)

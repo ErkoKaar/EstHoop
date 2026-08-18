@@ -23,6 +23,26 @@ function serializeJsonLd(data) {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
+// Breadcrumb annab otsitulemuses paljast URL-ist parema teeriba, näiteks
+// "esthoop.ee › Mängijad › Sander Raieste". Avalehte ei lisata eraldi lülina,
+// sest Google kuvab selle domeeninimena niikuinii.
+function breadcrumbJsonLd(trail, currentUrl) {
+  if (!trail?.length) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Avaleht', item: `${SITE_URL}/` },
+      ...trail.map((step, i) => ({
+        '@type': 'ListItem',
+        position: i + 2,
+        name: step.name,
+        item: step.path ? SITE_URL + step.path : currentUrl,
+      })),
+    ],
+  }
+}
+
 export default function Seo({
   title,
   description = DEFAULT_DESCRIPTION,
@@ -31,10 +51,17 @@ export default function Seo({
   ogType = 'website',
   noindex = false,
   jsonLd = null,
+  breadcrumbs = null,
 }) {
   const location = useLocation()
   const url = canonicalUrl(path ?? location.pathname)
   const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE
+
+  const crumbs = breadcrumbJsonLd(breadcrumbs, url)
+  const structured = [
+    ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : []),
+    ...(crumbs ? [crumbs] : []),
+  ]
 
   return (
     <>
@@ -56,10 +83,10 @@ export default function Seo({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
 
-      {jsonLd && (
+      {structured.length > 0 && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(structured) }}
         />
       )}
     </>

@@ -11,6 +11,7 @@ export default function PrivaatsusPage() {
         title="Privaatsuspoliitika"
         description="Kuidas EstHoop isikuandmeid töötleb: milliseid andmeid kogume, mis alusel, kellega jagame ja millised on sinu õigused."
         path="/privaatsus"
+        breadcrumbs={[{ name: 'Privaatsuspoliitika' }]}
       />
 
       <LegalLayout

@@ -194,6 +194,7 @@ export default function StatsPage() {
       <Seo
         title="Eesti korvpalli statistika ja pingeread"
         path="/statistika"
+        breadcrumbs={[{ name: 'Statistika' }]}
         description={
           'Eesti koondislaste ja klubimängijate statistika: punktid, lauapallid ja ' +
           'resultatiivsed söödud mängu kohta. Pingeread nii koondise kui klubinumbrite peal.'

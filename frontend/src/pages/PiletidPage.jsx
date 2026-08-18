@@ -321,6 +321,7 @@ export default function PiletidPage() {
       <Seo
         title="Eesti korvpallikoondise piletid"
         path="/piletid"
+        breadcrumbs={[{ name: 'Piletid' }]}
         description={
           'Eesti korvpallikoondise kodumängude piletid ja mängupäevade info. Vaata, millal ' +
           'ja kus järgmine kodumäng toimub ning kust piletid osta.'
