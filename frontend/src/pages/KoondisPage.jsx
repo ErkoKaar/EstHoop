@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLoading } from '../contexts/LoadingContext'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import TeamFlag from '../components/TeamFlag'
+import Seo, { SITE_URL } from '../components/Seo'
+import useIsMobile from '../hooks/useIsMobile'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -64,17 +66,6 @@ function shortTournament(name) {
   if (name.includes('Friendly')) return 'Sõprusmäng'
   if (name.includes('Olympic')) return 'Olümpia Kval.'
   return name.length > 30 ? name.slice(0, 28) + '…' : name
-}
-
-function useIsMobile(bp = 900) {
-  const [mobile, setMobile] = useState(() => window.matchMedia(`(max-width: ${bp - 1}px)`).matches)
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
-    const onChange = e => setMobile(e.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [bp])
-  return mobile
 }
 
 // ── Skeleton (tume variant) ───────────────────────────────────
@@ -731,6 +722,33 @@ function GroupStandings({ standings, loading, isMobile }) {
   )
 }
 
+// ── SEO ────────────────────────────────────────────────────────
+// Toimumiskoht tuletatakse koduvõistkonna riigist — täpset areeni API ei anna,
+// aga FIBA valiksarjas peab kodumängu alati koduvõistkonna riik.
+function gamesJsonLd(upcoming) {
+  return upcoming.slice(0, 6).map(ev => ({
+    '@context': 'https://schema.org',
+    '@type': 'SportsEvent',
+    name: `${ev.homeTeam?.name === 'Estonia' ? 'Eesti' : ev.homeTeam?.name} – ${ev.awayTeam?.name === 'Estonia' ? 'Eesti' : ev.awayTeam?.name}`,
+    startDate: new Date(ev.startTimestamp * 1000).toISOString(),
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    url: `${SITE_URL}/koondis`,
+    location: {
+      '@type': 'Place',
+      name: ev.homeTeam?.name === 'Estonia' ? 'Eesti' : ev.homeTeam?.name,
+      address: { '@type': 'PostalAddress', addressCountry: ev.homeTeam?.name },
+    },
+    competitor: [
+      { '@type': 'SportsTeam', name: ev.homeTeam?.name },
+      { '@type': 'SportsTeam', name: ev.awayTeam?.name },
+    ],
+    superEvent: ev.tournament?.name
+      ? { '@type': 'SportsEvent', name: ev.tournament.name }
+      : undefined,
+  }))
+}
+
 // ── Main component ─────────────────────────────────────────────
 export default function KoondisPage() {
   const [upcoming, setUpcoming] = useState([])
@@ -741,9 +759,8 @@ export default function KoondisPage() {
   const [error] = useState(null)
   const { signalReady } = useLoading()
   const isMobile = useIsMobile()
-  const reducedMotion = useMemo(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []
-  )
+  // framer-motion oma hook on eelrenderdusel ohutu, window'i puutumist pole
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     Promise.allSettled([
@@ -769,14 +786,35 @@ export default function KoondisPage() {
   return (
     <div style={{
       width: '100vw', marginLeft: 'calc(50% - 50vw)',
-      background: 'white', minHeight: '100vh',
+      background: 'white', minHeight: '100vh', textAlign: 'center',
     }}>
+      <Seo
+        title="Eesti korvpallikoondis: mängud, tulemused ja seis"
+        path="/koondis"
+        description={
+          'Eesti korvpallikoondise järgmised mängud, viimased tulemused ja alagrupi seis ' +
+          'MM-valiksarjas. Iga mängu juurest leiad koondislaste statistika.'
+        }
+        image={`${SITE_URL}/hero.jpg`}
+        jsonLd={upcoming.length ? gamesJsonLd(upcoming) : null}
+      />
+
       <MatchupHero
         upcoming={upcoming} recent={recent} standings={standings}
         loading={loading} reducedMotion={reducedMotion} isMobile={isMobile}
       />
 
       <div style={{ maxWidth: 1120, width: '100%', boxSizing: 'border-box', margin: '0 auto', padding: '48px 24px 72px' }}>
+
+        <div style={{ margin: '0 0 36px' }}>
+          <h1 style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', color: DARK, letterSpacing: 2, lineHeight: 1, margin: 0 }}>
+            Eesti korvpallikoondis
+          </h1>
+          {/* TOIMETADA: kontrolli, et sari on endiselt MM 2027 Euroopa valiksari */}
+          <p style={{ fontFamily: FONT_BODY, fontSize: '1.05rem', color: GRAY, fontWeight: 500, marginTop: 6 }}>
+            Mängud, tulemused ja alagrupi seis MM 2027 Euroopa valiksarjas
+          </p>
+        </div>
 
         {error && (
           <p style={{ fontFamily: FONT_BODY, color: LOSS, textAlign: 'center', padding: '40px 0' }}>

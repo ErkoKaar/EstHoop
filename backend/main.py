@@ -1,12 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from dotenv import load_dotenv
 import time
 import unicodedata
-import os
-from anthropic import Anthropic
 from database import Base, engine, SessionLocal
 import models
 from scraper import scrape_player, scrape_fiba_national_team, split_games_by_type
@@ -144,57 +141,3 @@ def get_national_team_standings(db: Session = Depends(get_db)):
 def get_national_team_game_stats(db: Session = Depends(get_db)):
     row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "game_box_scores").first()
     return row.data if row else []
-
-
-# ── Chat ──────────────────────────────────────────────────────────────────────
-
-class ChatMessage(BaseModel):
-    role: str
-    content: str
-
-class ChatRequest(BaseModel):
-    messages: list[ChatMessage]
-    games_context: str | None = None
-    stats_context: str | None = None
-
-def _build_system(players: list, games_text: str, stats_text: str | None) -> str:
-    player_list = "\n".join(
-        f"- {p.name} ({p.position or '?'})" for p in players
-    )
-    stats_section = f"\n\n## Mängijate statistika\n{stats_text}" if stats_text else ""
-    return f"""Oled EstHoop AI abiline — Eesti korvpalli fännidele mõeldud vestlusrobot veebilehel esthoop.ee.
-
-## Eesti koondise mängijad
-{player_list}{stats_section}
-
-## Koondise mängud ja seis
-{games_text}
-
-Vasta alati eesti keeles. Ole lühike ja konkreetne — maksimaalselt 3-4 lauset kui pole vaja rohkem.
-
-Vasta tavalise tekstina, ilma markdown-vormistuseta — ära kasuta `**paks kiri**`, pealkirju ega tärniga loetelusid.
-
-Kui toovad välja mitme mängu statistikat, ära väljenda seda libeda "keskmiselt X-Y" vahemikuna (see pole matemaatiliselt keskmine) — kas arvuta tegelik keskmine üks number või loetle mängude tulemused eraldi.
-
-Statistiliste näitajate puhul kasuta lühendeid nagu AST, REB, STL, BLK, EFF jne — erandiks on PTS, mille kohta võib öelda "punktid"/"punkti".
-
-Vasta AINULT ülal antud info põhjal (mängijad, mängud, statistika). Kui küsimus ei puuduta Eesti korvpallikoondist ega selle mängijaid, või kui vastuse jaoks vajalik info ülal puudub, ütle seda viisakalt ja ära väljamõtle andmeid."""
-
-@app.post("/chat")
-def chat(req: ChatRequest, db: Session = Depends(get_db)):
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY pole seadistatud")
-
-    players = db.query(models.Player).order_by(models.Player.name).all()
-    games_text = req.games_context or "Mängude andmed pole kättesaadavad."
-    system = _build_system(players, games_text, req.stats_context)
-
-    client = Anthropic(api_key=api_key)
-    response = client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=512,
-        system=system,
-        messages=[{"role": m.role, "content": m.content} for m in req.messages],
-    )
-    return {"response": response.content[0].text}

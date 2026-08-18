@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
+import Seo, { SITE_URL } from '../components/Seo'
+import { getPreloadedPlayer } from '../preload'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
 import {
@@ -10,9 +12,53 @@ import {
 } from 'recharts'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+// Fotod on WebP-s. jpg ja png jäävad varuks, kui mõni pilt hiljem muus vormingus lisatakse.
+const PHOTO_EXTENSIONS = ['webp', 'jpg', 'png']
 const BLUE = '#0072ce'
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
+
+const POSITION_LABELS = {
+  PG: 'mängujuht',
+  SG: 'viskav tagamängija',
+  SF: 'kerge ääremängija',
+  PF: 'võimas ääremängija',
+  C: 'keskmängija',
+}
+
+// Positsioon pole kõigil mängijatel täidetud — kirjeldus peab ka ilma töötama
+function playerDescription(player, lastSeason, natAvg) {
+  const role = POSITION_LABELS[player.position]
+  const parts = [
+    `${player.name} on Eesti korvpallikoondise${role ? ` ${role}` : ' mängija'}.`,
+  ]
+  if (lastSeason?.TEAM) {
+    parts.push(`Klubi: ${lastSeason.TEAM}${lastSeason.LEAGUE ? ` (${lastSeason.LEAGUE})` : ''}.`)
+  }
+  if (natAvg?.gp) {
+    parts.push(`${natAvg.gp} mängu koondises.`)
+  }
+  parts.push('Vaata statistikat koondises ja klubis, hooaegade kaupa.')
+  return parts.join(' ')
+}
+
+function playerJsonLd(player, { heightCm, lastSeason }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: player.name,
+    url: `${SITE_URL}/mangijad/${player.slug}`,
+    jobTitle: 'Korvpallur',
+    nationality: { '@type': 'Country', name: 'Eesti' },
+    memberOf: [
+      { '@type': 'SportsTeam', name: 'Eesti korvpallikoondis', url: `${SITE_URL}/koondis` },
+      lastSeason?.TEAM ? { '@type': 'SportsTeam', name: lastSeason.TEAM } : undefined,
+    ].filter(Boolean),
+    height: heightCm
+      ? { '@type': 'QuantitativeValue', value: heightCm, unitCode: 'CMT' }
+      : undefined,
+  }
+}
 
 function getLastSeason(seasons) {
   if (!seasons?.length) return null
@@ -42,6 +88,21 @@ function computeNatAvg(data) {
     eff: (data.reduce((s, r) => s + r.eff * r.gp, 0) / gp).toFixed(1),
     gp,
   }
+}
+
+// ── Hero infolahter ───────────────────────────────────────
+function FactItem({ label, value }) {
+  if (!value) return null
+  return (
+    <div className="flex flex-col">
+      <span className="text-gray-400 text-xs font-semibold tracking-widest uppercase" style={{ fontFamily: FONT_BODY }}>
+        {label}
+      </span>
+      <span className="text-[#08060d] text-xl font-bold" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+        {value}
+      </span>
+    </div>
+  )
 }
 
 // ── Stat highlight kaart ──────────────────────────────────
@@ -374,12 +435,16 @@ export default function PlayerPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const { signalReady } = useLoading()
-  const [player, setPlayer] = useState(null)
+  // Eelrenderdusel on mängija nimi ja positsioon HTML-i süstitud nimekirjas olemas,
+  // seega tiitel ja H1 jõuavad märgistusse ilma API-päringuta. Statistika laeb ikka
+  // klient, sest see tuleb eraldi endpointidest.
+  const preloaded = getPreloadedPlayer(slug)
+  const [player, setPlayer] = useState(preloaded)
   const [stats, setStats] = useState(null)
   const [fibaStats, setFibaStats] = useState(null)
   const [tab, setTab] = useState('koondis')
   const [extIndex, setExtIndex] = useState(0)
-  const [playerLoading, setPlayerLoading] = useState(true)
+  const [playerLoading, setPlayerLoading] = useState(!preloaded)
   const [statsLoading, setStatsLoading] = useState(true)
   const [statsError, setStatsError] = useState(false)
   const [fibaLoading, setFibaLoading] = useState(true)
@@ -415,9 +480,23 @@ export default function PlayerPage() {
   const clubGames = stats?.clubGames || []
   const age = computeAge(stats?.birthDate)
   const heightCm = stats?.heightCm
+  const isVaaks = player.slug === 'stefan-vaaks'
 
   return (
-    <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0">
+    <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0 text-center">
+      {/*
+        Jagamiskaardid on eraldi JPEG-id, mille teeb scripts/generate-og-images.py.
+        Facebook ja LinkedIn ei toeta WebP-d og:image'ina, ja ruudukujuline foto
+        lõigataks kaardil ribaks. Käivita skript uuesti, kui fotod muutuvad.
+      */}
+      <Seo
+        title={`${player.name} statistika ja profiil`}
+        path={`/mangijad/${player.slug}`}
+        description={playerDescription(player, lastSeason, natAvg)}
+        image={`${SITE_URL}/og/players/${player.slug}.jpg`}
+        ogType="profile"
+        jsonLd={playerJsonLd(player, { heightCm, lastSeason })}
+      />
 
       {/* Tagasi */}
       <button
@@ -432,39 +511,51 @@ export default function PlayerPage() {
       </button>
 
       {/* ① Hero */}
-      <div className="flex items-center gap-7 mb-8">
-        <div className="w-36 h-36 rounded-full overflow-hidden shadow-md shrink-0">
-          {extIndex < 2 ? (
-            <img
-              src={`/players/${player.slug}.${['jpg', 'png'][extIndex]}`}
-              alt={player.name}
-              className="w-full h-full object-cover object-top"
-              onError={() => setExtIndex(i => i + 1)}
-            />
-          ) : (
-            <div className="w-full h-full bg-[#0072ce] flex items-center justify-center">
-              <span className="text-white font-bold text-4xl select-none" style={{ fontFamily: FONT_HEADING }}>
-                {initials}
-              </span>
-            </div>
-          )}
+      <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-8">
+        <div className="flex items-center gap-7 shrink-0">
+          <div className="w-36 h-36 rounded-full overflow-hidden shadow-md shrink-0">
+            {extIndex < PHOTO_EXTENSIONS.length ? (
+              <img
+                src={`/players/${player.slug}.${PHOTO_EXTENSIONS[extIndex]}`}
+                alt={player.name}
+                className="w-full h-full object-cover object-top"
+                onError={() => setExtIndex(i => i + 1)}
+              />
+            ) : (
+              <div className="w-full h-full bg-[#0072ce] flex items-center justify-center">
+                <span className="text-white font-bold text-4xl select-none" style={{ fontFamily: FONT_HEADING }}>
+                  {initials}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-5xl text-[#08060d] leading-none mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+              {player.name}
+            </h1>
+            <p className="text-gray-500 font-semibold text-base" style={{ fontFamily: FONT_BODY }}>
+              {[
+                isKoondis
+                  ? `Eesti Koondis${natAvg ? ` · ${natAvg.gp} mängu` : ''}`
+                  : lastSeason
+                    ? `${lastSeason.TEAM} · ${lastSeason.LEAGUE} · ${lastSeason.SEASON}`
+                    : '—',
+                !isVaaks && age && `${age} a.`,
+                !isVaaks && heightCm && `${heightCm} cm`,
+              ].filter(Boolean).join(' · ')}
+            </p>
+          </div>
         </div>
-        <div className="min-w-0">
-          <h1 className="text-5xl text-[#08060d] leading-none mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
-            {player.name}
-          </h1>
-          <p className="text-gray-500 font-semibold text-base" style={{ fontFamily: FONT_BODY }}>
-            {[
-              isKoondis
-                ? `Eesti Koondis${natAvg ? ` · ${natAvg.gp} mängu` : ''}`
-                : lastSeason
-                  ? `${lastSeason.TEAM} · ${lastSeason.LEAGUE} · ${lastSeason.SEASON}`
-                  : '—',
-              age && `${age} a.`,
-              heightCm && `${heightCm} cm`,
-            ].filter(Boolean).join(' · ')}
-          </p>
-        </div>
+        {/* HighlightReel on ajutiselt kasutusest väljas: komponent ja video on
+            alles, video assets-source/videos/ all, et see deploy'sse ei läheks. */}
+        {isVaaks && (
+          <div className="flex items-center gap-6 shrink-0 pt-3 mt-1 border-t border-gray-200
+                          md:pt-0 md:mt-0 md:border-t-0 md:border-l md:pl-8">
+            <FactItem label="Positsioon" value={player.position} />
+            <FactItem label="Vanus" value={age && `${age} a.`} />
+            <FactItem label="Pikkus" value={heightCm && `${heightCm} cm`} />
+          </div>
+        )}
       </div>
 
       {/* ② Tab toggle */}

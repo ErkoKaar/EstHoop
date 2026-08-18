@@ -1,0 +1,33 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "EstHoop logo EstHoop" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "EstHoop logo" [ref=e6]
+        - generic [ref=e7]: EstHoop
+      - generic [ref=e8]:
+        - list [ref=e9]:
+          - listitem [ref=e10]:
+            - link "Koondis" [ref=e11] [cursor=pointer]:
+              - /url: /koondis
+          - listitem [ref=e12]:
+            - link "Mängijad" [ref=e13] [cursor=pointer]:
+              - /url: /mangijad
+          - listitem [ref=e15]:
+            - link "Statistika" [ref=e16] [cursor=pointer]:
+              - /url: /statistika
+          - listitem [ref=e17]:
+            - link "Piletid" [ref=e18] [cursor=pointer]:
+              - /url: /piletid
+          - listitem [ref=e19]:
+            - link "Klubikorvpall" [ref=e20] [cursor=pointer]:
+              - /url: /klubikorvpall
+        - generic [ref=e21]:
+          - link "Eesti Korvpalliliit" [ref=e22] [cursor=pointer]:
+            - /url: https://www.basket.ee
+          - link "Instagram" [ref=e23] [cursor=pointer]:
+            - /url: https://www.instagram.com/basketee/?hl=en
+          - link "Facebook" [ref=e28] [cursor=pointer]:
+            - /url: https://www.facebook.com/Basket.ee
+  - status "Laadimine" [ref=e31]
+  - button "Ava AI abiline" [ref=e33] [cursor=pointer]

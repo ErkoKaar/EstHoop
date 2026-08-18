@@ -1,5 +1,4 @@
 alembic==1.18.5
-anthropic==0.115.0
 beautifulsoup4==4.15.0
 annotated-doc==0.0.4
 annotated-types==0.7.0

@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLoading } from '../contexts/LoadingContext'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import TeamFlag from '../components/TeamFlag'
+import Seo from '../components/Seo'
+import useIsMobile from '../hooks/useIsMobile'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -46,17 +48,6 @@ function shortTournament(name) {
 }
 function getOpponent(ev) {
   return isHome(ev) ? ev.awayTeam?.name : ev.homeTeam?.name
-}
-
-function useIsMobile(bp = 900) {
-  const [mobile, setMobile] = useState(() => window.matchMedia(`(max-width: ${bp - 1}px)`).matches)
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
-    const onChange = e => setMobile(e.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [bp])
-  return mobile
 }
 
 const fadeUp = (delay = 0) => ({
@@ -303,9 +294,8 @@ export default function PiletidPage() {
   const [error, setError] = useState(false)
   const { signalReady } = useLoading()
   const isMobile = useIsMobile()
-  const reducedMotion = useMemo(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []
-  )
+  // framer-motion oma hook on eelrenderdusel ohutu, window'i puutumist pole
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     fetch(`${API}/national-team/games`)
@@ -327,7 +317,16 @@ export default function PiletidPage() {
   const remainingEvents = events.filter(ev => ev !== featuredHome)
 
   return (
-    <div>
+    <div className="text-center">
+      <Seo
+        title="Eesti korvpallikoondise piletid"
+        path="/piletid"
+        description={
+          'Eesti korvpallikoondise kodumängude piletid ja mängupäevade info. Vaata, millal ' +
+          'ja kus järgmine kodumäng toimub ning kust piletid osta.'
+        }
+      />
+
       {/* Loading hero skeleton (full-width) */}
       {loading && (
         <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', marginBottom: 40 }}>

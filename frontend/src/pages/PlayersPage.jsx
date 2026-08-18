@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
+import Seo from '../components/Seo'
+import { getPreloadedPlayers } from '../preload'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -8,7 +10,8 @@ const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 
-const EXTENSIONS = ['jpg', 'png']
+// Fotod on WebP-s. jpg ja png jäävad varuks, kui mõni pilt hiljem muus vormingus lisatakse.
+const EXTENSIONS = ['webp', 'jpg', 'png']
 
 const GROUPS = [
   { key: 'guard',   label: 'Tagamängijad', sub: 'PG · SG', positions: ['PG', 'SG'] },
@@ -24,7 +27,6 @@ const COACHES = [
 ]
 
 function PlayerCard({ player }) {
-  const navigate = useNavigate()
   const [extIndex, setExtIndex] = useState(0)
 
   const initials = player.name
@@ -37,8 +39,10 @@ function PlayerCard({ player }) {
   const showPlaceholder = extIndex >= EXTENSIONS.length
 
   return (
-    <button
-      onClick={() => navigate(`/mangijad/${player.slug}`)}
+    // Link, mitte button: nii saab crawler mängijate lehed üles leida ja
+    // klaviatuur ning "ava uues aknas" töötavad nagu lingi puhul ootad.
+    <Link
+      to={`/mangijad/${player.slug}`}
       className="group flex flex-col items-center gap-2 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] rounded-xl p-3 transition-all duration-200"
     >
       <div className="relative w-full aspect-square">
@@ -85,7 +89,7 @@ function PlayerCard({ player }) {
         {player.name}
       </span>
 
-    </button>
+    </Link>
   )
 }
 
@@ -110,7 +114,7 @@ function CoachCard({ coach }) {
         <div className="relative w-full h-full rounded-full overflow-hidden shadow-md transition-transform duration-300 ease-out group-hover:shadow-lg group-hover:scale-[1.05] motion-reduce:group-hover:scale-100">
           {!hasError ? (
             <img
-              src={`/coaches/${coach.slug}.png`}
+              src={`/coaches/${coach.slug}.webp`}
               alt={coach.name}
               className="w-full h-full object-cover object-top"
               onError={() => setHasError(true)}
@@ -183,9 +187,12 @@ function GroupSection({ group, players, statsMap, statsLoading }) {
 }
 
 export default function PlayersPage() {
-  const [players, setPlayers] = useState([])
+  // Eelrenderdatud HTML-is on nimekiri juba olemas, siis pole skeletti vaja ja
+  // crawler näeb kõiki mängijaid koos linkidega.
+  const preloaded = getPreloadedPlayers()
+  const [players, setPlayers] = useState(preloaded ?? [])
   const [statsMap, setStatsMap] = useState({})
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!preloaded)
   const [statsLoading, setStatsLoading] = useState(true)
   const [error, setError] = useState(null)
   const { signalReady } = useLoading()
@@ -258,13 +265,27 @@ export default function PlayersPage() {
   }
 
   return (
-    <div className="px-6 py-10 max-w-screen-xl mx-auto">
-      <h1
-        className="text-5xl text-[#08060d] mb-10"
-        style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}
-      >
-        Mängijad
-      </h1>
+    <div className="px-6 py-10 max-w-screen-xl mx-auto text-center">
+      <Seo
+        title="Eesti korvpallikoondise mängijad"
+        path="/mangijad"
+        description={
+          'Kõigi Eesti korvpallikoondise mängijate profiilid: positsioon, vanus, pikkus ' +
+          'ning statistika koondises ja klubis. Lisaks koondise treenerid.'
+        }
+      />
+
+      <div className="mb-10">
+        <h1
+          className="text-5xl text-[#08060d]"
+          style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}
+        >
+          Mängijad
+        </h1>
+        <p style={{ fontFamily: FONT_BODY, fontSize: '1.05rem', color: '#6b7280', fontWeight: 500, marginTop: 6 }}>
+          Eesti korvpallikoondise koosseis: profiilid, positsioonid ja statistika
+        </p>
+      </div>
 
       {GROUPS.map(group => {
         const groupPlayers = players.filter(p => group.positions.includes(p.position))

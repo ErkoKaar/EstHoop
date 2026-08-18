@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap');
+/* Fondid laeb index.html <link>. CSS @import oleks renderdust blokeeriv ja
+   järjestikune: brauser peaks enne CSS-i laadima ja parsima, alles siis
+   avastaks fondipäringu. */
 @import "tailwindcss";
 
 html, body {
@@ -9,11 +11,12 @@ body {
   overflow-x: clip;
 }
 
+/* Vaikimisi vasakjoondus. Keskjoondust deklareerib iga leht ise oma juurel,
+   et uued komponendid ei päriks seda vaikselt ja ootamatult. */
 #root {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
   min-height: 100svh;
   display: flex;
   flex-direction: column;

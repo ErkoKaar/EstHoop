@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLoading } from '../contexts/LoadingContext'
+import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 
@@ -224,7 +225,16 @@ export default function KlubiKorvpallPage() {
   const todayKey = tallinDate(Date.now() / 1000)
 
   return (
-    <div className="pt-8 pb-12">
+    <div className="pt-8 pb-12 text-center">
+      <Seo
+        title="Eesti korvpallurid klubides"
+        path="/klubikorvpall"
+        description={
+          'Eesti koondislaste mängud klubides üle maailma. Tulemused ja statistika ' +
+          'päevade kaupa, kes kus ja kui hästi mängis.'
+        }
+      />
+
       {/* Header */}
       <div className="mb-8">
         <h1 style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', color: DARK, letterSpacing: '2px', lineHeight: 1 }}>

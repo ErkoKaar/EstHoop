@@ -1,0 +1,41 @@
+name: Rebuild site
+
+# Lehed eelrenderdatakse ehituse ajal (frontend/scripts/prerender.js), seega
+# staatiline HTML ja sitemap on nii värsked kui viimane build. Ilma selleta
+# näitaks Google eilseid pealkirju ja uued mängijad ei jõuaks sitemapi.
+#
+# Aeg on valitud nii, et kõik andmeuuendused oleksid läbi:
+#   02:00 UTC  refresh_club_stats
+#   04:00 UTC  refresh_national_team (teine käik)
+#   05:00 UTC  see töövoog
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # Kell 07:00 Eesti aja järgi (UTC+2)
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel deploy hook
+        env:
+          HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "Saladus VERCEL_DEPLOY_HOOK_URL puudub. Loo see Vercelis:"
+            echo "  Settings > Git > Deploy Hooks > Create Hook (branch: main)"
+            echo "ja lisa GitHubi: Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+
+          status=$(curl -sS -o response.txt -w '%{http_code}' -X POST "$HOOK_URL")
+          echo "HTTP $status"
+          cat response.txt
+
+          # Deploy hook vastab 201-ga, kui build pandi järjekorda
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "Deploy hook ebaõnnestus"
+            exit 1
+          fi

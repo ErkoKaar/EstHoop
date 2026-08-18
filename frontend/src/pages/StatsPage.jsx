@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
+import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
@@ -189,7 +190,16 @@ export default function StatsPage() {
   const podiumOrder = loading ? [] : [top3[1], top3[0], top3[2]]
 
   return (
-    <div className="w-full px-6 py-8 max-w-5xl mx-auto">
+    <div className="w-full px-6 py-8 max-w-5xl mx-auto text-center">
+      <Seo
+        title="Eesti korvpalli statistika ja pingeread"
+        path="/statistika"
+        description={
+          'Eesti koondislaste ja klubimängijate statistika: punktid, lauapallid ja ' +
+          'resultatiivsed söödud mängu kohta. Pingeread nii koondise kui klubinumbrite peal.'
+        }
+      />
+
       <div className="mb-6">
         <h1 className="text-5xl text-[#08060d]" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
           Statistika

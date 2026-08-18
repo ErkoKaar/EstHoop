@@ -1,8 +1,7 @@
 # EstHoop
 
 Estonian basketball fan site ([esthoop.ee](https://esthoop.ee)) — profiles and stats for
-Estonian national team and club players, national team games/standings, a tickets page, and
-an AI chatbot.
+Estonian national team and club players, national team games/standings, and a tickets page.
 
 ## Screenshots
 
@@ -25,7 +24,6 @@ an AI chatbot.
 - **National team** — upcoming games, recent results with box scores, group standings
 - **Club basketball** — club games played by Estonian national team players worldwide (ProBallers)
 - **Tickets** — national team home game info, link to Piletitasku
-- **Chatbot** — Anthropic Claude based, answers only from the site's own data
 
 ## Tech stack
 
@@ -33,7 +31,7 @@ an AI chatbot.
 Framer Motion + tsParticles (national team hero animation).
 
 **Backend** — FastAPI + SQLAlchemy (Python), PostgreSQL, BeautifulSoup (ProBallers/FIBA
-scraping), Anthropic API (chatbot, `claude-haiku-4-5`).
+scraping).
 
 **Hosting** — Frontend: [Vercel](https://vercel.com) (project `est-hoop`). Backend:
 [Render](https://render.com) (`esthoop-backend`). Data is refreshed by scheduled GitHub
@@ -54,7 +52,7 @@ backend/
 frontend/
   src/
     pages/                 KoondisPage, PlayersPage, PlayerPage, StatsPage, PiletidPage, KlubiKorvpallPage
-    components/             Navbar, PlayerAvatar, Panel, FlagDivider, StatsTabToggle, ChatWidget, Skeleton, PageLoader
+    components/             Navbar, PlayerAvatar, Panel, FlagDivider, StatsTabToggle, Skeleton, PageLoader
     contexts/                LoadingContext
   public/
     players/                Player headshots ({slug}.jpg/png)
@@ -87,7 +85,6 @@ npm run dev                  # http://localhost:5173
 | Variable | Description |
 |---|---|
 | `DATABASE_URL` | Postgres connection string |
-| `ANTHROPIC_API_KEY` | For the chatbot (Anthropic API) |
 | `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | Optional — only for `migrations/check_new_competition.py` notifications |
 
 **`frontend/.env`**
