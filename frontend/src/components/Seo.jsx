@@ -6,7 +6,13 @@ import { useLocation } from 'react-router-dom'
 
 export const SITE_URL = 'https://esthoop.ee'
 export const SITE_NAME = 'EstHoop'
-export const DEFAULT_IMAGE = `${SITE_URL}/logo/logo.png`
+
+// Facebook näitab alla 600x315 pilti väikese ruudukesena teksti kõrval, mitte
+// suure kaardina. Vana vaikepilt oli logo/logo.png 300x250, seega jäid kõik
+// ilma oma pildita lehed väikese pisipildi peale. Kaart tuleb skriptist
+// scripts/generate-brand-assets.py.
+export const DEFAULT_IMAGE = `${SITE_URL}/og/default.jpg`
+export const DEFAULT_IMAGE_SIZE = { width: 1200, height: 630 }
 
 const DEFAULT_TITLE = 'Eesti korvpallikoondis, mängijad ja statistika | EstHoop'
 const DEFAULT_DESCRIPTION =
@@ -48,6 +54,12 @@ export default function Seo({
   description = DEFAULT_DESCRIPTION,
   path,
   image = DEFAULT_IMAGE,
+  // Mõõdud peavad pildiga kaasa käima: nendega paigutab Facebook kaardi ära
+  // juba enne, kui ta pildi ise alla on laadinud. Vale number on halvem kui
+  // puuduv, seega kes annab oma pildi, annab ka oma mõõdud.
+  imageWidth = DEFAULT_IMAGE_SIZE.width,
+  imageHeight = DEFAULT_IMAGE_SIZE.height,
+  imageAlt = `${SITE_NAME}, Eesti korvpalli fännileht`,
   ogType = 'website',
   noindex = false,
   jsonLd = null,
@@ -77,11 +89,19 @@ export default function Seo({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={image} />
+      {/* Kõik jagamispildid saidil on JPEG: og/default.jpg, og/players/*.jpg
+          ja hero.jpg. Kui mõni neist kunagi PNG-ks läheb, tuleb see siit üle
+          antavaks muuta. */}
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:width" content={imageWidth} />
+      <meta property="og:image:height" content={imageHeight} />
+      <meta property="og:image:alt" content={imageAlt} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content={imageAlt} />
 
       {structured.length > 0 && (
         <script

@@ -495,6 +495,7 @@ export default function PlayerPage() {
         path={`/mangijad/${player.slug}`}
         description={playerDescription(player, lastSeason, natAvg)}
         image={`${SITE_URL}/og/players/${player.slug}.jpg`}
+        imageAlt={`${player.name}, Eesti korvpallikoondis`}
         ogType="profile"
         jsonLd={playerJsonLd(player, { heightCm, lastSeason })}
         breadcrumbs={[

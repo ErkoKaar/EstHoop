@@ -797,6 +797,9 @@ export default function KoondisPage() {
           'MM-valiksarjas. Iga mängu juurest leiad koondislaste statistika.'
         }
         image={`${SITE_URL}/hero.jpg`}
+        imageWidth={2400}
+        imageHeight={1600}
+        imageAlt="Eesti korvpallikoondis mängus"
         jsonLd={upcoming.length ? gamesJsonLd(upcoming) : null}
       />
 

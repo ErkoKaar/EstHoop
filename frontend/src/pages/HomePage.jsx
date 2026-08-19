@@ -143,7 +143,7 @@ const JSON_LD = [
     '@type': 'Organization',
     name: 'EstHoop',
     url: `${SITE_URL}/`,
-    logo: `${SITE_URL}/logo/logo.png`,
+    logo: `${SITE_URL}/logo/logo-square.png`,
   },
   {
     '@context': 'https://schema.org',
@@ -156,7 +156,7 @@ const JSON_LD = [
     ],
     sport: 'Korvpall',
     url: `${SITE_URL}/koondis`,
-    logo: `${SITE_URL}/logo/logo.png`,
+    logo: `${SITE_URL}/logo/logo-square.png`,
     // TOIMETADA: kontrolli, et peatreener on endiselt Heiko Rannula
     coach: { '@type': 'Person', name: 'Heiko Rannula' },
     memberOf: {
@@ -294,6 +294,9 @@ export default function HomePage() {
           'ja Eesti mängijate käekäiku klubides.'
         }
         image={`${SITE_URL}/hero.jpg`}
+        imageWidth={2400}
+        imageHeight={1600}
+        imageAlt="Eesti korvpallikoondis mängus"
         jsonLd={JSON_LD}
       />
 
