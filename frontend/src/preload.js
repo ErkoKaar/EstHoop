@@ -30,3 +30,10 @@ export function getPreloadedPlayerStats(slug) {
   const data = preload()?.playerStats
   return data && data.slug === slug ? data : null
 }
+
+// upcoming süstitakse API-st sellisena, nagu ta tuli, ilma "kas on juba möödas"
+// filtrita. Filter sõltub praegusest ajast ja annaks build'i ning vaatamise
+// hetkel eri tulemuse, mis lõhuks hydration'i. Klient filtreerib effectis.
+export function getPreloadedNationalTeam() {
+  return preload()?.nationalTeam ?? null
+}

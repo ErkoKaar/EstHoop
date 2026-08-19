@@ -4,6 +4,8 @@ import { motion, useReducedMotion } from 'framer-motion'
 import TeamFlag from '../components/TeamFlag'
 import Seo, { SITE_URL } from '../components/Seo'
 import useIsMobile from '../hooks/useIsMobile'
+import useHydrated from '../hooks/useHydrated'
+import { getPreloadedNationalTeam } from '../preload'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -552,6 +554,9 @@ function PlayerStatsTable({ teamLabel, players, accent }) {
 // ── Teekond — mängitud ja tulevased mängud ühel lipujoonel ─────
 function TimelineSection({ recent, upcoming, gameStats, loading, reducedMotion }) {
   const [openId, setOpenId] = useState(null)
+  // Päevade arv sõltub praegusest ajast: build'i ajal ja vaatamise ajal oleks
+  // see eri number ja hydration läheks rikki. Arvutame alles pärast hüdreerimist.
+  const hydrated = useHydrated()
   const statsById = useMemo(
     () => Object.fromEntries(gameStats.map(g => [g.id, g])),
     [gameStats]
@@ -565,6 +570,7 @@ function TimelineSection({ recent, upcoming, gameStats, loading, reducedMotion }
     () => [...upcoming].sort((a, b) => a.startTimestamp - b.startTimestamp),
     [upcoming]
   )
+
 
   const reveal = reducedMotion ? {} : {
     initial: { opacity: 0, y: 16 },
@@ -585,7 +591,7 @@ function TimelineSection({ recent, upcoming, gameStats, loading, reducedMotion }
   }
 
   const nextGame = future[0]
-  const daysToNext = nextGame
+  const daysToNext = hydrated && nextGame
     ? Math.max(0, Math.ceil((nextGame.startTimestamp * 1000 - Date.now()) / 86400000))
     : null
 
@@ -626,9 +632,15 @@ function TimelineSection({ recent, upcoming, gameStats, loading, reducedMotion }
               Praegu
             </span>
             <span style={{ fontFamily: FONT_BODY, color: GRAY, fontWeight: 600, fontSize: '0.8rem', marginLeft: 12 }}>
-              {nextGame
-                ? (daysToNext === 0 ? 'Mängupäev!' : `Järgmine mäng ${daysToNext} päeva pärast`)
-                : 'Järgmist mängu pole veel kinnitatud'}
+              {/* daysToNext on null kuni effect jookseb, siis jääb päevade arv
+                  välja ja HTML-i läheb ainult see, mis ajast ei sõltu */}
+              {!nextGame
+                ? 'Järgmist mängu pole veel kinnitatud'
+                : daysToNext == null
+                  ? 'Järgmine mäng tulemas'
+                  : daysToNext === 0
+                    ? 'Mängupäev!'
+                    : `Järgmine mäng ${daysToNext} päeva pärast`}
             </span>
           </div>
         </motion.div>
@@ -751,11 +763,14 @@ function gamesJsonLd(upcoming) {
 
 // ── Main component ─────────────────────────────────────────────
 export default function KoondisPage() {
-  const [upcoming, setUpcoming] = useState([])
-  const [recent, setRecent] = useState([])
-  const [standings, setStandings] = useState({ name: null, rows: [] })
-  const [gameStats, setGameStats] = useState([])
-  const [loading, setLoading] = useState(true)
+  // Eelrenderdusel on mängud, tulemused ja alagrupi seis HTML-i süstitud, seega
+  // crawler näeb vastaseid ja tabelit ilma JS-ita. Klient laeb effectis üle.
+  const pre = getPreloadedNationalTeam()
+  const [upcoming, setUpcoming] = useState(pre?.upcoming ?? [])
+  const [recent, setRecent] = useState(pre?.recent ?? [])
+  const [standings, setStandings] = useState(pre?.standings ?? { name: null, rows: [] })
+  const [gameStats, setGameStats] = useState(pre?.gameStats ?? [])
+  const [loading, setLoading] = useState(!pre)
   const [error] = useState(null)
   const { signalReady } = useLoading()
   const isMobile = useIsMobile()

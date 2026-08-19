@@ -103,14 +103,33 @@ async function fetchPlayerStats(players) {
   return byslug
 }
 
+// Koondise leht ilma nende andmeteta on HTML-is peaaegu tühi: ei vastaseid,
+// tulemusi ega alagrupi tabelit. upcoming antakse edasi filtreerimata, sest
+// "kas juba möödas" sõltub ajast ja lahkneks kliendi renderdusest.
+async function fetchNationalTeam() {
+  const [games, standings, gameStats] = await Promise.all([
+    getJson('/national-team/games').catch(() => null),
+    getJson('/national-team/standings').catch(() => null),
+    getJson('/national-team/game-stats').catch(() => null),
+  ])
+  if (!games && !standings) return null
+  return {
+    upcoming: games?.upcoming ?? [],
+    recent: games?.recent ?? [],
+    standings: standings ?? { name: null, rows: [] },
+    gameStats: Array.isArray(gameStats) ? gameStats : [],
+  }
+}
+
 // Iga leht saab ainult need andmed, mida ta ise vajab. Kogu statistika igale
 // lehele paisutaks HTML-i mitmesaja kilobaidini ilma igasuguse kasuta.
-function preloadFor(route, players, statsBySlug) {
+function preloadFor(route, players, statsBySlug, nationalTeam) {
   const match = route.match(/^\/mangijad\/([^/]+)$/)
   if (match) {
     return { players, playerStats: statsBySlug[match[1]] ?? null }
   }
   if (route === '/mangijad') return { players }
+  if (route === '/koondis' && nationalTeam) return { nationalTeam }
   return null
 }
 
@@ -161,12 +180,22 @@ async function main() {
     console.log(`[prerender] statistika saadud ${Object.keys(statsBySlug).length}/${players.length} mängijale`)
   }
 
+  const nationalTeam = await fetchNationalTeam()
+  if (nationalTeam) {
+    console.log(
+      `[prerender] koondis: ${nationalTeam.upcoming.length} eelseisvat, ` +
+      `${nationalTeam.recent.length} viimast, ${nationalTeam.standings.rows?.length ?? 0} tabelirida`
+    )
+  } else {
+    console.warn('[prerender] HOIATUS: koondise andmeid ei saanud, /koondis jääb kliendipoolseks')
+  }
+
   let ok = 0
   const failed = []
 
   for (const route of routes) {
     try {
-      const data = preloadFor(route, players, statsBySlug)
+      const data = preloadFor(route, players, statsBySlug, nationalTeam)
       const preload = preloadScript(data)
       const { head, body } = splitHeadTags(render(route, data))
       const html = template
