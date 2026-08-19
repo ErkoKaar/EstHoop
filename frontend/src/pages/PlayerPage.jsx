@@ -90,21 +90,6 @@ function computeNatAvg(data) {
   }
 }
 
-// ── Hero infolahter ───────────────────────────────────────
-function FactItem({ label, value }) {
-  if (!value) return null
-  return (
-    <div className="flex flex-col">
-      <span className="text-gray-400 text-xs font-semibold tracking-widest uppercase" style={{ fontFamily: FONT_BODY }}>
-        {label}
-      </span>
-      <span className="text-[#08060d] text-xl font-bold" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
-        {value}
-      </span>
-    </div>
-  )
-}
-
 // ── Stat highlight kaart ──────────────────────────────────
 function StatCard({ label, value, sub }) {
   return (
@@ -481,7 +466,6 @@ export default function PlayerPage() {
   const clubGames = stats?.clubGames || []
   const age = computeAge(stats?.birthDate)
   const heightCm = stats?.heightCm
-  const isVaaks = player.slug === 'stefan-vaaks'
 
   return (
     <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0 text-center">
@@ -546,22 +530,14 @@ export default function PlayerPage() {
                   : lastSeason
                     ? `${lastSeason.TEAM} · ${lastSeason.LEAGUE} · ${lastSeason.SEASON}`
                     : '—',
-                !isVaaks && age && `${age} a.`,
-                !isVaaks && heightCm && `${heightCm} cm`,
+                age && `${age} a.`,
+                heightCm && `${heightCm} cm`,
               ].filter(Boolean).join(' · ')}
             </p>
           </div>
         </div>
-        {/* HighlightReel on ajutiselt kasutusest väljas: komponent ja video on
-            alles, video assets-source/videos/ all, et see deploy'sse ei läheks. */}
-        {isVaaks && (
-          <div className="flex items-center gap-6 shrink-0 pt-3 mt-1 border-t border-gray-200
-                          md:pt-0 md:mt-0 md:border-t-0 md:border-l md:pl-8">
-            <FactItem label="Positsioon" value={player.position} />
-            <FactItem label="Vanus" value={age && `${age} a.`} />
-            <FactItem label="Pikkus" value={heightCm && `${heightCm} cm`} />
-          </div>
-        )}
+        {/* HighlightReel on kasutusest väljas: komponent on alles, video
+            assets-source/videos/ all, et see deploy'sse ei läheks. */}
       </div>
 
       {/* ② Tab toggle */}

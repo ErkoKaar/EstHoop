@@ -58,12 +58,42 @@ def centered(canvas, mark, dy=0):
     canvas.paste(mark, (x, y), mark)
 
 
-def icon(mark, size, fill, background, out):
+def icon_image(mark, size, fill, background):
     """Ruudukujuline paan. fill on märgi kõrgus paani kõrgusest."""
     tile = Image.new("RGB", (size, size), background)
     centered(tile, fitted(mark, round(size * fill)))
-    tile.save(out, "PNG", optimize=True)
+    return tile
+
+
+def icon(mark, size, fill, background, out):
+    icon_image(mark, size, fill, background).save(out, "PNG", optimize=True)
     return out
+
+
+# Väikestel mõõtudel kaob märk äärise sisse ära, seega anname talle rohkem
+# pinda. 48 on nimekirjas sellepärast, et kui Google võtab favikooni ICO seest,
+# leiab ta sealt ka 48 piksli kordse variandi.
+ICO_TILES = ((48, 0.78), (32, 0.84), (16, 0.90))
+
+
+def favicon_ico(mark, out):
+    """Brauserid ja mitmed roomajad küsivad /favicon.ico juurest ka ilma
+    sildita. Iga mõõt joonistatakse eraldi, sest ühe pildi allaskaleerimisel
+    jääks väikestel äär liiga laiaks."""
+    tiles = {size: icon_image(mark, size, fill, BLUE) for size, fill in ICO_TILES}
+    tiles[48].save(
+        out,
+        format="ICO",
+        sizes=[(size, size) for size, _ in ICO_TILES],
+        append_images=[tiles[32], tiles[16]],
+    )
+    return out
+
+
+# Android lõikab maskable ikooni ringiks ja turvatsoon on keskmine 80%. Märgi
+# ümbriskasti pooldiagonaal on 1.31 korda pool kõrgust, millest tuleb ülempiir
+# 0.61. Võtame 0.56, et pointsed kõrvad kindlasti sisse jääksid.
+MASKABLE_FILL = 0.56
 
 
 def share_card(mark, out):
@@ -101,8 +131,12 @@ def main():
     written = [
         # 192 on 48 kordne, nagu Google favikoonilt ootab
         icon(white_mark, 192, 0.68, BLUE, PUBLIC / "favicon-192.png"),
+        favicon_ico(white_mark, PUBLIC / "favicon.ico"),
         # iOS lõikab nurgad ümaraks, seega märk siin veidi väiksem
         icon(white_mark, 180, 0.60, BLUE, PUBLIC / "apple-touch-icon.png"),
+        # manifest.json: tavaline ja maskable variant Androidi jaoks
+        icon(white_mark, 512, 0.68, BLUE, PUBLIC / "icon-512.png"),
+        icon(white_mark, 512, MASKABLE_FILL, BLUE, PUBLIC / "icon-maskable-512.png"),
         # JSON-LD Organization.logo: teadmuspaneelis on taust hele
         icon(blue_mark, 512, 0.72, WHITE, PUBLIC / "logo" / "logo-square.png"),
         share_card(white_mark, PUBLIC / "og" / "default.jpg"),

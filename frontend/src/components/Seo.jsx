@@ -12,7 +12,10 @@ export const SITE_NAME = 'EstHoop'
 // ilma oma pildita lehed väikese pisipildi peale. Kaart tuleb skriptist
 // scripts/generate-brand-assets.py.
 export const DEFAULT_IMAGE = `${SITE_URL}/og/default.jpg`
-export const DEFAULT_IMAGE_SIZE = { width: 1200, height: 630 }
+// Eraldi arvudena, mitte objektina: react-refresh lubab komponendifailist
+// eksportida ainult lihtväärtusi, objekt lõhuks Fast Refreshi.
+const DEFAULT_IMAGE_WIDTH = 1200
+const DEFAULT_IMAGE_HEIGHT = 630
 
 const DEFAULT_TITLE = 'Eesti korvpallikoondis, mängijad ja statistika | EstHoop'
 const DEFAULT_DESCRIPTION =
@@ -57,8 +60,8 @@ export default function Seo({
   // Mõõdud peavad pildiga kaasa käima: nendega paigutab Facebook kaardi ära
   // juba enne, kui ta pildi ise alla on laadinud. Vale number on halvem kui
   // puuduv, seega kes annab oma pildi, annab ka oma mõõdud.
-  imageWidth = DEFAULT_IMAGE_SIZE.width,
-  imageHeight = DEFAULT_IMAGE_SIZE.height,
+  imageWidth = DEFAULT_IMAGE_WIDTH,
+  imageHeight = DEFAULT_IMAGE_HEIGHT,
   imageAlt = `${SITE_NAME}, Eesti korvpalli fännileht`,
   ogType = 'website',
   noindex = false,
@@ -79,8 +82,11 @@ export default function Seo({
     <>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={url} />
-      {noindex && <meta name="robots" content="noindex, follow" />}
+      {/* noindex-lehel canonical'it pole: Google seda niikuinii ei arvesta ja
+          404.html puhul osutaks see väljamõeldud teele, mida ei eksisteeri */}
+      {noindex
+        ? <meta name="robots" content="noindex, follow" />
+        : <link rel="canonical" href={url} />}
 
       <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content={SITE_NAME} />

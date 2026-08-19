@@ -211,7 +211,22 @@ async function main() {
     }
   }
 
-  console.log(`[prerender] ${ok}/${routes.length} lehte kirjutatud`)
+  // Vercel serveerib dist/404.html tundmatute teede peal ja annab päris 404
+  // staatuse. Ilma selleta läheks käiku vercel.json catch-all rewrite, mis
+  // serveeriks avalehe: Google näeks soft 404-e ja NotFoundPage noindex ei
+  // jõuaks kunagi märgistusse.
+  try {
+    const { head, body } = splitHeadTags(render('/__404__', null))
+    const html = template
+      .replace('</head>', `${head.map(t => `    ${t}`).join('\n')}\n  </head>`)
+      .replace(rootTag[0], `<div id="root">${body}</div>`)
+    writeFileSync(join(DIST, '404.html'), html, 'utf8')
+    ok++
+  } catch (err) {
+    failed.push(`404.html: ${err.message}`)
+  }
+
+  console.log(`[prerender] ${ok} lehte kirjutatud (${routes.length} marsruuti + 404.html)`)
 
   if (failed.length) {
     // Ebaõnnestunud tee jääb SPA rewrite'i peale ehk töötab endiselt, aga ilma
