@@ -1,10 +1,27 @@
 name: Refresh national team data
 
+# Mängude aknas käiakse tihedalt, et boxscore jõuaks lehele juba samal õhtul.
+#
+# MIKS KORDUS, MITTE ÜKS KÄIK PÄRAST MÄNGU: scrape_fiba_box_scores nõuab, et
+# mängijate punktisumma klapiks täpselt lõppskooriga (scraper.py). FIBA
+# mängijastatistika jõuab lõppskoorile järele ebaühtlase viitega, seega üks
+# käivitus võib tabada hetke, mil andmed on veel poolikud. Mäng jääb siis
+# have_box nimekirjast välja ja järgmine käivitus proovib ise uuesti.
+#
+# HIND: repo on privaatne, ehk Actionsi minutid on piiratud (2000 kuus Free
+# plaaniga). Üks käivitus kestab ~70 s ja arveldatakse kahe minutina, seega
+# aken 16-22 UTC teeb ~840 minutit kuus. Akna laiendamisel arvesta sellega.
+
 on:
   schedule:
-    - cron: '0 21 * * *'  # Kell 23:00 Eesti aja järgi (UTC+2)
-    - cron: '0 4 * * *'   # Kell 06:00 Eesti aja järgi (UTC+2) — püüab kinni hilisõhtused mängud
+    - cron: '*/30 16-22 * * *'  # 18:00-00:30 Eesti aja järgi (suveajal tund hiljem) — mängujärgne aken
+    - cron: '0 4 * * *'         # Kell 06:00 Eesti aja järgi — varuvõrk aknast välja jäänud mängudele
   workflow_dispatch:
+
+# Kaks käivitust ei tohi sama cache'i korraga kirjutada
+concurrency:
+  group: refresh-national-team
+  cancel-in-progress: false
 
 jobs:
   refresh:
