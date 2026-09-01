@@ -130,6 +130,20 @@ function preloadFor(route, players, statsBySlug, nationalTeam) {
   }
   if (route === '/mangijad') return { players }
   if (route === '/koondis' && nationalTeam) return { nationalTeam }
+
+  // Statistika leht vajab ainult kahte tuletatud kaarti, mitte tervet
+  // statistikat. Terve statistika oleks ~140 KB, need kaardid on ~30 KB.
+  if (route === '/statistika' && players?.length) {
+    const clubMap = {}
+    const natMap = {}
+    for (const p of players) {
+      const seasons = statsBySlug[p.slug]?.stats?.seasons
+      clubMap[p.slug] = seasons?.length ? seasons[seasons.length - 1] : null
+      natMap[p.slug] = statsBySlug[p.slug]?.fibaStats ?? null
+    }
+    return { stats: { players, clubMap, natMap } }
+  }
+
   return null
 }
 

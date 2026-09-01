@@ -37,3 +37,11 @@ export function getPreloadedPlayerStats(slug) {
 export function getPreloadedNationalTeam() {
   return preload()?.nationalTeam ?? null
 }
+
+// Statistika leht tegi ilma selleta ~45 päringut: /players ja iga mängija
+// kohta eraldi stats ja fiba-stats. Kaardid arvutatakse ehituse ajal valmis,
+// samadest andmetest, mida mängijate lehed niikuinii vajavad.
+export function getPreloadedStats() {
+  const data = preload()?.stats
+  return Array.isArray(data?.players) && data.players.length ? data : null
+}

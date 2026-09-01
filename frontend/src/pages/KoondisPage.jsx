@@ -506,8 +506,43 @@ function FutureGameCard({ event }) {
 }
 
 // ── Mängija statistika tabel (boxscore'i osa, tume) ────────────
+// Enne veergude laiendamist cache'itud mängud ei sisalda uusi välju ja neid
+// ei kraabita üle (vt 09_refresh_national_team.py) — siis kuvame kriipsu.
+const BOX_COLUMNS = [
+  { key: 'min',  label: 'MIN',  get: p => p.min },
+  { key: 'pts',  label: 'PTS',  get: p => p.pts,
+    style: p => ({ fontWeight: p.pts >= 10 ? 700 : 400, color: p.pts >= 10 ? DARK : '#6b7280' }) },
+  { key: 'fg',   label: 'FG',   get: p => p.fg },
+  { key: 'fg3',  label: '3P',   get: p => p.fg3 },
+  { key: 'ft',   label: 'FT',   get: p => p.ft },
+  { key: 'oreb', label: 'OREB', get: p => p.oreb },
+  { key: 'dreb', label: 'DREB', get: p => p.dreb },
+  { key: 'reb',  label: 'REB',  get: p => p.reb },
+  { key: 'ast',  label: 'AST',  get: p => p.ast },
+  { key: 'stl',  label: 'STL',  get: p => p.stl },
+  { key: 'blk',  label: 'BLK',  get: p => p.blk },
+  { key: 'to',   label: 'TO',   get: p => p.to },
+  { key: 'pf',   label: 'PF',   get: p => p.pf },
+  { key: 'eff',  label: 'EFF',  get: p => p.eff },
+  { key: 'pm',   label: '+/-',  get: p => p.pm,
+    style: p => ({ color: parseInt(p.pm) > 0 ? WIN : parseInt(p.pm) < 0 ? LOSS : '#6b7280', fontWeight: 600 }) },
+]
+
+// Nimeveerg jääb horisontaalsel kerimisel paigale, seega peab tema taust
+// hover'il koos reaga muutuma — läbipaistvana jookseks sisu selle alt läbi.
+const NAME_CELL = {
+  padding: '8px 10px', color: DARK, fontWeight: 600, whiteSpace: 'nowrap',
+  position: 'sticky', left: 0, zIndex: 1,
+  borderRight: '1px solid #f3f4f6',
+}
+
 function PlayerStatsTable({ teamLabel, players, accent }) {
   if (!players?.length) return null
+
+  const hover = (e, rowBg, nameBg) => {
+    e.currentTarget.style.background = rowBg
+    if (e.currentTarget.firstChild) e.currentTarget.firstChild.style.background = nameBg
+  }
   return (
     <div>
       <div style={{ padding: '14px 18px 8px' }}>
@@ -519,34 +554,42 @@ function PlayerStatsTable({ teamLabel, players, accent }) {
           {teamLabel}
         </span>
       </div>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', fontFamily: FONT_BODY }}>
-        <thead>
-          <tr style={{ background: '#f9fafb' }}>
-            {['Mängija', 'MIN', 'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG%', '+/-'].map(h => (
-              <th key={h} style={{ padding: '6px 10px', textAlign: h === 'Mängija' ? 'left' : 'center', color: GRAY, fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                {h}
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', minWidth: 940, borderCollapse: 'collapse', fontSize: '0.82rem', fontFamily: FONT_BODY }}>
+          <thead>
+            <tr style={{ background: '#f9fafb' }}>
+              <th style={{ ...NAME_CELL, background: '#f9fafb', zIndex: 2, padding: '6px 10px', textAlign: 'left', color: GRAY, fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Mängija
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {players.map((p, pi) => (
-            <tr key={pi} style={{ borderTop: '1px solid #f3f4f6' }}
-              onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'}
-              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <td style={{ padding: '8px 10px', color: DARK, fontWeight: 600, whiteSpace: 'nowrap' }}>{p.name}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.min}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: p.pts >= 10 ? 700 : 400, color: p.pts >= 10 ? DARK : '#6b7280' }}>{p.pts}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.reb}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.ast}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.stl}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.blk}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: '#6b7280' }}>{p.fg}</td>
-              <td style={{ padding: '8px 10px', textAlign: 'center', color: parseInt(p.pm) > 0 ? WIN : parseInt(p.pm) < 0 ? LOSS : '#6b7280', fontWeight: 600 }}>{p.pm}</td>
+              {BOX_COLUMNS.map(col => (
+                <th key={col.key} style={{ padding: '6px 9px', textAlign: 'center', color: GRAY, fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                  {col.label}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {players.map((p, pi) => (
+              <tr key={pi} style={{ borderTop: '1px solid #f3f4f6' }}
+                onMouseEnter={e => hover(e, '#f9fafb', '#f9fafb')}
+                onMouseLeave={e => hover(e, 'transparent', CARD_BG)}>
+                <td style={{ ...NAME_CELL, background: CARD_BG }}>{p.name}</td>
+                {BOX_COLUMNS.map(col => {
+                  const value = col.get(p)
+                  return (
+                    <td key={col.key} style={{
+                      padding: '8px 9px', textAlign: 'center', color: '#6b7280', whiteSpace: 'nowrap',
+                      ...(value == null ? {} : col.style?.(p)),
+                    }}>
+                      {value ?? '-'}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

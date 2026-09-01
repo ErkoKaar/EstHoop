@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo from '../components/Seo'
+import { getPreloadedStats } from '../preload'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
@@ -105,18 +106,55 @@ function computeNatStat(data, key) {
   return parseFloat((data.reduce((s, r) => s + r[key] * r.gp, 0) / gp).toFixed(1))
 }
 
+// Sama lühendiloogika mis koondise ja piletite lehel, et sari kannaks kogu
+// saidil sama nime.
+function shortTournament(name) {
+  if (!name) return ''
+  if (name.includes('World Cup') && name.includes('Qualifiers')) return 'FIBA MM Kval.'
+  if (name.includes('EuroBasket') && name.includes('Qualifiers')) return 'EuroBasket Kval.'
+  if (name.includes('EuroBasket')) return 'EuroBasket'
+  if (name.includes('Olympic')) return 'Olümpia Kval.'
+  return name.length > 22 ? name.slice(0, 20) + '…' : name
+}
+
+// Käimasolev sari tuletatakse andmetest, mitte kõvakodeeringust: kui valiksari
+// lõpeb ja algab EuroBasket, vahetub silt ise. Valik langeb suurima aasta peale,
+// võrdse aasta korral sellele, kus on rohkem mänge.
+function findCurrentEvent(natMap) {
+  let best = null
+  for (const rows of Object.values(natMap)) {
+    for (const r of rows ?? []) {
+      if (!r?.event || !r.year) continue
+      if (!best || r.year > best.year) best = { year: r.year, event: r.event, gp: r.gp ?? 0 }
+      else if (r.year === best.year && r.event === best.event) best.gp += r.gp ?? 0
+    }
+  }
+  return best
+}
+
 export default function StatsPage() {
   const [view, setView] = useState('koondis')
   const [activeClubStat, setActiveClubStat] = useState('PTS')
   const [activeNatStat, setActiveNatStat] = useState('ppg')
-  const [players, setPlayers] = useState([])
-  const [clubMap, setClubMap] = useState({})
-  const [natMap, setNatMap] = useState({})
-  const [clubLoading, setClubLoading] = useState(true)
-  const [natLoading, setNatLoading] = useState(true)
+  // 'all' = kogu koondisekarjäär, 'current' = ainult käimasolev sari
+  const [natScope, setNatScope] = useState('all')
+  // Eelrenderdusel on pingeread HTML-i süstitud. Siis ei tehta ühtegi päringut:
+  // andmebaas uueneb niikuinii ainult öösel ja leht ehitatakse pärast seda
+  // uuesti, seega päringud annaksid täpselt samad numbrid 45 käigu hinnaga.
+  const pre = getPreloadedStats()
+  const [players, setPlayers] = useState(pre?.players ?? [])
+  const [clubMap, setClubMap] = useState(pre?.clubMap ?? {})
+  const [natMap, setNatMap] = useState(pre?.natMap ?? {})
+  const [clubLoading, setClubLoading] = useState(!pre)
+  const [natLoading, setNatLoading] = useState(!pre)
   const { signalReady } = useLoading()
 
   useEffect(() => {
+    if (pre) {
+      signalReady()
+      return
+    }
+
     async function load() {
       const res = await fetch(`${API}/players`)
       const allPlayers = await res.json()
@@ -167,11 +205,22 @@ export default function StatsPage() {
   const activeStat = isKoondis ? activeNatStat : activeClubStat
   const statTabs = isKoondis ? NAT_TABS : CLUB_TABS
 
+  const currentEvent = useMemo(() => findCurrentEvent(natMap), [natMap])
+  const scopedNat = natScope === 'current' && currentEvent
+    ? slug => (natMap[slug] ?? []).filter(r => r.event === currentEvent.event)
+    : slug => natMap[slug]
+
+  // Mitmel mängijal on selles sarjas üldse kirje: ilma selleta jääks arusaamatuks,
+  // miks osa nimesid on kriipsuga.
+  const inCurrentEvent = currentEvent
+    ? players.filter(p => (natMap[p.slug] ?? []).some(r => r.event === currentEvent.event)).length
+    : 0
+
   const ranked = [...players]
     .map(p => {
       let statValue = null
       if (isKoondis) {
-        statValue = computeNatStat(natMap[p.slug], activeNatStat)
+        statValue = computeNatStat(scopedNat(p.slug), activeNatStat)
       } else {
         const raw = clubMap[p.slug]?.[activeClubStat]
         statValue = raw != null ? parseFloat(raw) : null
@@ -213,8 +262,9 @@ export default function StatsPage() {
       {/* Koondis / Klubi toggle */}
       <StatsTabToggle active={view} onChange={v => { setView(v); }} />
 
-      {/* Stat tabid */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* Stat tabid ja vasakul, ajavahemiku lüliti paremal. Lüliti on tahtlikult
+          teistsuguse kaaluga kui pillid: pillid valivad MIDA vaadata, lüliti MILLAL. */}
+      <div className="flex flex-wrap items-center gap-2 mb-8">
         {statTabs.map(({ key, label }) => {
           const isActive = isKoondis ? activeNatStat === key : activeClubStat === key
           return (
@@ -230,7 +280,49 @@ export default function StatsPage() {
             </button>
           )
         })}
+
+        {isKoondis && currentEvent && (
+          <div
+            className="ml-auto flex items-center overflow-hidden rounded-full border border-gray-300"
+            role="group"
+            aria-label="Statistika ajavahemik"
+          >
+            {[
+              { key: 'all', label: 'Läbi aegade' },
+              { key: 'current', label: shortTournament(currentEvent.event) },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setNatScope(key)}
+                aria-pressed={natScope === key}
+                className={`px-3.5 py-1 text-xs font-bold tracking-wide cursor-pointer
+                  transition-colors duration-150 focus-visible:outline focus-visible:outline-2
+                  focus-visible:-outline-offset-2 focus-visible:outline-[#0072ce]
+                  ${natScope === key
+                    ? 'bg-[#08060d] text-white'
+                    : 'bg-white text-gray-500 hover:text-[#08060d]'}`}
+                style={{ fontFamily: FONT_BODY }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Sarja täisnimi ja kaetus. Ilma selleta jääks arusaamatuks, mis sari
+          täpselt on ja miks osa mängijaid on kriipsuga. */}
+      {isKoondis && natScope === 'current' && currentEvent && (
+        <p
+          className="-mt-6 mb-8 text-sm"
+          style={{ fontFamily: FONT_BODY, color: '#6b7280', fontWeight: 500 }}
+        >
+          {currentEvent.event}
+          <span style={{ color: '#9ca3af' }}>
+            {' · '}{inCurrentEvent} mängijat {players.length}-st on selles sarjas mänginud
+          </span>
+        </p>
+      )}
 
       {/* Poodium */}
       {loading ? (

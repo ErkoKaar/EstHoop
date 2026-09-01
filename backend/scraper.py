@@ -362,6 +362,12 @@ def scrape_fiba_box_scores(games: list[dict], competition_id: int) -> list[dict]
                 "stl":  s.get("steals", 0),
                 "blk":  s.get("blockedShots", 0),
                 "fg":   f'{s.get("fieldGoalsMade", 0)}/{s.get("fieldGoalsAttempted", 0)}',
+                "fg3":  f'{s.get("threePointsMade", 0)}/{s.get("threePointsAttempted", 0)}',
+                "ft":   f'{s.get("freeThrowsMade", 0)}/{s.get("freeThrowsAttempted", 0)}',
+                "oreb": s.get("offensiveRebounds", 0),
+                "dreb": s.get("defensiveRebounds", 0),
+                "to":   s.get("turnovers", 0),
+                "pf":   s.get("personalFouls", 0),
                 "pm":   str(s.get("plusMinus", 0)),
                 "eff":  s.get("efficiency", 0),
             }
