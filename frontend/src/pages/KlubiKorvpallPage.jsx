@@ -113,111 +113,213 @@ function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index
   })
   const metaStyle = { fontFamily: FONT_BODY, fontSize: '0.8rem', color: GRAY, fontWeight: 600, lineHeight: 1.2 }
 
-  return (
-    <motion.div
-      className="flex gap-4 px-4 py-4 rounded-2xl bg-white text-left border border-gray-200 transition-shadow duration-300 ease-out hover:shadow-[0_0_0_1px_#0072ce,0_8px_32px_rgba(0,114,206,0.22)]"
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: EASE, delay: enterDelay }}
-      whileHover={reduce ? undefined : { scale: 1.015, transition: { duration: 0.25, ease: EASE } }}
+  const avatar = (
+    <Link
+      to={profileHref}
+      aria-label={`${player.name} profiil`}
+      className="shrink-0 self-start rounded-full transition-transform duration-300 ease-out hover:scale-[1.05] motion-reduce:hover:scale-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
     >
+      <PlayerAvatar slug={player.slug} name={player.name} size={isMobile ? 'md' : 'lg'} />
+    </Link>
+  )
+
+  const playerBlock = (
+    <div className="min-w-0">
       <Link
         to={profileHref}
-        aria-label={`${player.name} profiil`}
-        className="shrink-0 self-start rounded-full transition-transform duration-300 ease-out hover:scale-[1.05] motion-reduce:hover:scale-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
+        className="inline-block text-[#08060d] hover:text-[#0072ce] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded"
+        style={{ fontFamily: FONT_HEADING, fontSize: '1.45rem', letterSpacing: '0.5px', lineHeight: 1 }}
       >
-        <PlayerAvatar slug={player.slug} name={player.name} size={isMobile ? 'md' : 'lg'} />
+        {player.name}
       </Link>
+      <div className="flex items-baseline gap-2 mt-1" style={metaStyle}>
+        {player.position && <span style={{ letterSpacing: '0.1em' }}>{player.position}</span>}
+        <span style={{ color: '#6b7280' }}>{clubName}</span>
+      </div>
+    </div>
+  )
 
-      <div className="min-w-0 flex-1 flex flex-col gap-3">
-        {/* Ülemine rida: mängija ja mäng */}
-        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
-          <div className="min-w-0">
-            <Link
-              to={profileHref}
-              className="inline-block text-[#08060d] hover:text-[#0072ce] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded"
-              style={{ fontFamily: FONT_HEADING, fontSize: '1.45rem', letterSpacing: '0.5px', lineHeight: 1 }}
+  const gameBlock = (
+    <div className={isMobile ? 'min-w-0' : 'min-w-0 text-right'}>
+      <div className="flex items-baseline gap-2" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
+        <span style={teamStyle(playerIsHome)}>{home}</span>
+        {hasScore ? (
+          ev.gameUrl ? (
+            <a
+              href={ev.gameUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Vaata mängu statistikat ProBallersis"
+              style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}
+              className="rounded underline decoration-2 underline-offset-4 decoration-gray-300
+                         transition-colors duration-150 hover:decoration-current
+                         focus-visible:outline focus-visible:outline-2
+                         focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
             >
-              {player.name}
-            </Link>
-            <div className="flex items-baseline gap-2 mt-1" style={metaStyle}>
-              {player.position && <span style={{ letterSpacing: '0.1em' }}>{player.position}</span>}
-              <span style={{ color: '#6b7280' }}>{clubName}</span>
-            </div>
-          </div>
+              {hs}:{as_}
+            </a>
+          ) : (
+            <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
+              {hs}:{as_}
+            </span>
+          )
+        ) : ts ? (
+          <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: BLUE, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
+            {formatTime(ts)}
+          </span>
+        ) : (
+          <span style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: GRAY, fontWeight: 600 }}>vs</span>
+        )}
+        <span style={teamStyle(!playerIsHome)}>{away}</span>
+      </div>
+      <div className="flex flex-wrap items-center gap-2 mt-1" style={{ ...metaStyle, justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
+        <span style={outcome && won != null ? { color: scoreColor } : undefined}>
+          {outcome ? `${outcome} ${venue}` : venue}
+        </span>
+        {tournament && (
+          <span className="px-2 py-0.5 rounded-full text-xs" style={{ background: '#f3f4f6', color: '#6b7280' }}>
+            {tournament}
+          </span>
+        )}
+      </div>
+    </div>
+  )
 
-          <div className={isMobile ? 'min-w-0' : 'min-w-0 text-right'}>
-            <div className="flex items-baseline gap-2" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
-              <span style={teamStyle(playerIsHome)}>{home}</span>
-              {hasScore ? (
-                ev.gameUrl ? (
-                  <a
-                    href={ev.gameUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Vaata mängu statistikat ProBallersis"
-                    style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}
-                    className="rounded underline decoration-2 underline-offset-4 decoration-gray-300
-                               transition-colors duration-150 hover:decoration-current
-                               focus-visible:outline focus-visible:outline-2
-                               focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
-                  >
-                    {hs}:{as_}
-                  </a>
-                ) : (
-                  <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
-                    {hs}:{as_}
-                  </span>
-                )
-              ) : ts ? (
-                <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: BLUE, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
-                  {formatTime(ts)}
-                </span>
-              ) : (
-                <span style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: GRAY, fontWeight: 600 }}>vs</span>
-              )}
-              <span style={teamStyle(!playerIsHome)}>{away}</span>
-            </div>
-            <div className="flex items-center gap-2 mt-1" style={{ ...metaStyle, justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
-              <span style={outcome && won != null ? { color: scoreColor } : undefined}>
-                {outcome ? `${outcome} ${venue}` : venue}
+  // Tabloo riba: mängija boxscore
+  const statsBar = stats && (
+    <div className="overflow-x-auto rounded-lg" style={{ background: DARK }}>
+      <div className="flex" style={{ minWidth: 'max-content' }}>
+        {STAT_COLS.map((c, i) => {
+          const isPts = c.key === 'PTS'
+          return (
+            <motion.div
+              key={c.key}
+              className="flex flex-col items-center px-2 py-1.5"
+              style={{ flex: '1 0 auto', minWidth: 52, background: isPts ? BLUE : undefined }}
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
+            >
+              <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.5px', lineHeight: 1, whiteSpace: 'nowrap' }}>
+                {statValue(stats[c.key])}
               </span>
-              {tournament && (
-                <span className="px-2 py-0.5 rounded-full text-xs" style={{ background: '#f3f4f6', color: '#6b7280' }}>
-                  {tournament}
-                </span>
-              )}
-            </div>
+              <span style={{ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color: isPts ? '#dbeafe' : MUTED, marginTop: 2 }}>
+                {c.label}
+              </span>
+            </motion.div>
+          )
+        })}
+      </div>
+    </div>
+  )
+
+  const cardClass = 'px-4 py-4 rounded-2xl bg-white text-left border border-gray-200 transition-shadow duration-300 ease-out md:hover:shadow-[0_0_0_1px_#0072ce,0_8px_32px_rgba(0,114,206,0.22)]'
+  const motionProps = {
+    initial: reduce ? false : { opacity: 0, y: 12 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.4, ease: EASE, delay: enterDelay },
+    whileHover: reduce ? undefined : { scale: 1.015, transition: { duration: 0.25, ease: EASE } },
+  }
+
+  // Mobiilis kolm täislaiuses plokki: avatar + mängija, mäng kahe reana nagu
+  // spordirakenduse tabelis (nimi vasakul, skoor paremal — pikad nimed ega
+  // kolmetähelised lühendid ei riku rida), tabloo 7x2 ruudustikuna ilma kerimiseta.
+  if (isMobile) {
+    const ownScore = playerIsHome ? hs : as_
+    const scoreStyle = own => ({
+      fontFamily: FONT_HEADING, fontSize: '1.6rem', letterSpacing: '1px', lineHeight: 1, flexShrink: 0,
+      color: own ? scoreColor : '#9ca3af',
+    })
+    const scoreLink = ev.gameUrl && (
+      <a
+        href={ev.gameUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Vaata mängu statistikat ProBallersis"
+        style={scoreStyle(true)}
+        className="rounded underline decoration-2 underline-offset-4 decoration-gray-300
+                   transition-colors duration-150 hover:decoration-current
+                   focus-visible:outline focus-visible:outline-2
+                   focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
+      >
+        {ownScore}
+      </a>
+    )
+    const teamLine = (name, score, own) => (
+      <div className="flex items-baseline justify-between gap-4">
+        <span style={{
+          fontFamily: FONT_HEADING, fontSize: '1.25rem', letterSpacing: '0.5px', lineHeight: 1.1,
+          color: own ? DARK : '#6b7280', minWidth: 0, overflowWrap: 'anywhere',
+        }}>
+          {name}
+        </span>
+        {hasScore && (own && scoreLink ? scoreLink : <span style={scoreStyle(own)}>{score}</span>)}
+      </div>
+    )
+
+    return (
+      <motion.div className={`flex flex-col gap-3 ${cardClass}`} {...motionProps}>
+        <div className="flex items-center gap-3 min-w-0">
+          {avatar}
+          {playerBlock}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          {teamLine(home, hs, playerIsHome)}
+          {teamLine(away, as_, !playerIsHome)}
+          <div className="flex flex-wrap items-center justify-between gap-2 mt-1" style={metaStyle}>
+            <span style={outcome && won != null ? { color: scoreColor } : undefined}>
+              {outcome ? `${outcome} ${venue}` : ts ? `${formatTime(ts)} ${venue}` : venue}
+            </span>
+            {tournament && (
+              <span className="px-2 py-0.5 rounded-full text-xs" style={{ background: '#f3f4f6', color: '#6b7280' }}>
+                {tournament}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Tabloo riba: mängija boxscore */}
         {stats && (
-          <div className="overflow-x-auto rounded-lg" style={{ background: DARK }}>
-            <div className="flex" style={{ minWidth: 'max-content' }}>
-              {STAT_COLS.map((c, i) => {
-                const isPts = c.key === 'PTS'
-                return (
-                  <motion.div
-                    key={c.key}
-                    className="flex flex-col items-center px-2 py-1.5"
-                    style={{ flex: '1 0 auto', minWidth: 52, background: isPts ? BLUE : undefined }}
-                    initial={reduce ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
-                  >
-                    <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.5px', lineHeight: 1, whiteSpace: 'nowrap' }}>
-                      {statValue(stats[c.key])}
-                    </span>
-                    <span style={{ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color: isPts ? '#dbeafe' : MUTED, marginTop: 2 }}>
-                      {c.label}
-                    </span>
-                  </motion.div>
-                )
-              })}
-            </div>
+          <div className="rounded-lg overflow-hidden" style={{ background: DARK, display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))' }}>
+            {STAT_COLS.map((c, i) => {
+              const isPts = c.key === 'PTS'
+              return (
+                <motion.div
+                  key={c.key}
+                  className="flex flex-col items-center py-2 px-0.5 min-w-0"
+                  style={{
+                    background: isPts ? BLUE : undefined,
+                    borderTop: i >= 7 ? '1px solid rgba(255,255,255,0.08)' : undefined,
+                  }}
+                  initial={reduce ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
+                >
+                  <span style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(0.95rem, 4.2vw, 1.3rem)', color: '#fff', lineHeight: 1, whiteSpace: 'nowrap' }}>
+                    {statValue(stats[c.key])}
+                  </span>
+                  <span style={{ fontFamily: FONT_BODY, fontSize: '0.58rem', fontWeight: 600, letterSpacing: '0.06em', color: isPts ? '#dbeafe' : MUTED, marginTop: 3 }}>
+                    {c.label}
+                  </span>
+                </motion.div>
+              )
+            })}
           </div>
         )}
+      </motion.div>
+    )
+  }
+
+  return (
+    <motion.div className={`flex gap-4 ${cardClass}`} {...motionProps}>
+      {avatar}
+      <div className="min-w-0 flex-1 flex flex-col gap-3">
+        {/* Ülemine rida: mängija ja mäng */}
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+          {playerBlock}
+          {gameBlock}
+        </div>
+        {statsBar}
       </div>
     </motion.div>
   )
@@ -314,7 +416,7 @@ export default function KlubiKorvpallPage() {
   const todayKey = tallinDate(Date.now() / 1000)
 
   return (
-    <div className="pt-8 pb-12 text-center">
+    <div className="px-4 sm:px-6 pt-8 pb-12 max-w-5xl mx-auto text-center">
       <Seo
         title="Eesti korvpallurid klubides"
         path="/klubikorvpall"

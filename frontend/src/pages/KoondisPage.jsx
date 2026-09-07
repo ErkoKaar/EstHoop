@@ -886,7 +886,9 @@ export default function KoondisPage() {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : 'minmax(0, 1fr) 320px',
+          // minmax(0, …) ka mobiilis: paljas 1fr võtab miinimumiks sisu laiuse ja
+          // avatud boxscore'i 940px tabel venitaks veeru ekraanist laiemaks.
+          gridTemplateColumns: isMobile ? 'minmax(0, 1fr)' : 'minmax(0, 1fr) 320px',
           gap: 48,
           alignItems: 'start',
         }}>
