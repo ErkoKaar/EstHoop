@@ -13,6 +13,7 @@ HEADERS = {
 }
 
 NATIONAL_TEAM_LEAGUE = "WC-QR"
+PROBALLERS_BASE = "https://www.proballers.com"
 
 
 def split_games_by_type(games: list[dict]) -> tuple[list[dict], list[dict]]:
@@ -33,7 +34,7 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
     if len(tables) < 2:
         raise ValueError("Ei leidnud statistika tabeleid")
 
-    def parse_table(table, empty_header_name=None):
+    def parse_table(table, empty_header_name=None, with_game_url=False):
         # HTML kasutab mixed case, CSS teeb need uppercase — normaliseerime
         raw = [th.get_text(strip=True).upper() for th in table.select("thead th")]
         if empty_header_name is None:
@@ -51,8 +52,17 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
         rows = []
         for tr in table.select("tbody tr"):
             cells = [td.get_text(strip=True) for td in tr.find_all("td")]
-            if cells:
-                rows.append(dict(zip(headers, cells)))
+            if not cells:
+                continue
+            row = dict(zip(headers, cells))
+            if with_game_url:
+                # Mängu link on kuupäeva ja skoori lahtris <a> sees, aga
+                # get_text jätab hrefi välja. Korjame selle eraldi.
+                link = tr.select_one('a[href*="/basketball/game/"]')
+                href = link.get("href") if link else None
+                if href:
+                    row["GAME_URL"] = href if href.startswith("http") else PROBALLERS_BASE + href
+            rows.append(row)
         return rows
 
     # Sünniaeg ja pikkus profiili bio-plokkidest (title/info paarid)
@@ -78,7 +88,7 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
 
     return {
         # Tühi TH (W/L veerg) nimetatakse RESULT-iks; duplikaatpäised saavad _1 suffiksi
-        "games":     parse_table(tables[0], empty_header_name="RESULT"),
+        "games":     parse_table(tables[0], empty_header_name="RESULT", with_game_url=True),
         "seasons":   parse_table(tables[1]),
         "playoffs":  parse_table(tables[2]) if len(tables) > 2 else [],
         "birthDate": birth_date,

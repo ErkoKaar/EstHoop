@@ -284,7 +284,24 @@ function GamesTable({ games }) {
                           : 'text-[#08060d]'
                       }`}
                     >
-                      {g[key] ?? '—'}
+                      {/* Skoor viib ProBallersi mängu lehele. GAME_URL puudub
+                          vanematel ridadel, siis jääb lihtsalt tavaline tekst. */}
+                      {key === 'SCORE' && g.GAME_URL && g[key] ? (
+                        <a
+                          href={g.GAME_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Vaata mängu statistikat ProBallersis"
+                          className="rounded underline decoration-gray-300 underline-offset-2
+                                     transition-colors duration-150 hover:decoration-current
+                                     focus-visible:outline focus-visible:outline-2
+                                     focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
+                        >
+                          {g[key]}
+                        </a>
+                      ) : (
+                        g[key] ?? '—'
+                      )}
                     </td>
                   ))}
                 </tr>

@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
+import useIsMobile from '../hooks/useIsMobile'
+
+const EASE = [0.22, 1, 0.36, 1]
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
 const BLUE = '#0072ce'
 const DARK = '#08060d'
+const GRAY = '#9ca3af'
+const MUTED = '#8a97ac'
+const WIN = '#16a34a'
+const LOSS = '#dc2626'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const TWO_WEEKS = 14 * 86400
@@ -48,7 +57,36 @@ function shortTournament(name) {
 }
 
 // ── Game row ──────────────────────────────────────────────────────────────────
-function GameRow({ player, event: ev, isPast, stats }) {
+// ProBallersi mängurea veerud tabloo ribal, vasakult paremale.
+const STAT_COLS = [
+  { key: 'MIN', label: 'MIN' },
+  { key: 'PTS', label: 'PTS' },
+  { key: '2M-2A', label: '2P' },
+  { key: '3M-3A', label: '3P' },
+  { key: '1M-1A', label: 'FT' },
+  { key: 'FG%', label: 'FG%' },
+  { key: 'REB', label: 'REB' },
+  { key: 'AST', label: 'AST' },
+  { key: 'STL', label: 'STL' },
+  { key: 'BLK', label: 'BLK' },
+  { key: 'TO', label: 'TO' },
+  { key: 'FO', label: 'FO' },
+  { key: 'EFF', label: 'EFF' },
+  { key: '+/-', label: '+/-' },
+]
+
+function statValue(v) {
+  if (v == null) return '–'
+  const str = String(v).trim()
+  return str === '' || str === '-' ? '–' : str
+}
+
+function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index }) {
+  const isMobile = useIsMobile()
+  const reduce = useReducedMotion()
+  // Üks orkestreeritud sisenemine: esimesed read tulevad järjest, ülejäänud kohe.
+  const enterDelay = index < 15 ? index * 0.04 : 0
+  const profileHref = `/mangijad/${player.slug}`
   const home = ev.homeTeam?.name || '?'
   const away = ev.awayTeam?.name || '?'
   const tournament = shortTournament(ev.tournament?.name)
@@ -57,81 +95,131 @@ function GameRow({ player, event: ev, isPast, stats }) {
   const as_ = ev.awayScore?.current
   const hasScore = isPast && hs != null && as_ != null
 
-  const teamNameStyle = {
-    fontFamily: FONT_HEADING, fontSize: '1.15rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1,
-    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-  }
+  // Võit/kaotus: esmalt ProBallersi W/L veerg, selle puudumisel skoorist.
+  let won = null
+  if (result === 'W') won = true
+  else if (result === 'L') won = false
+  else if (hasScore && hs !== as_) won = playerIsHome ? hs > as_ : as_ > hs
+
+  const clubName = playerIsHome ? home : away
+  const outcome = hasScore ? (won == null ? 'Lõpp' : won ? 'Võit' : 'Kaotus') : null
+  const venue = playerIsHome ? 'kodus' : 'võõrsil'
+  const scoreColor = won == null ? DARK : won ? WIN : LOSS
+
+  const teamStyle = own => ({
+    fontFamily: FONT_HEADING, fontSize: '1.15rem', letterSpacing: '0.5px', lineHeight: 1.1,
+    color: own ? DARK : '#6b7280',
+    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0,
+  })
+  const metaStyle = { fontFamily: FONT_BODY, fontSize: '0.8rem', color: GRAY, fontWeight: 600, lineHeight: 1.2 }
 
   return (
-    <div
-      className="grid items-center gap-3 px-4 py-3 rounded-2xl bg-white border border-gray-100 hover:shadow-md transition-shadow duration-200"
-      style={{ gridTemplateColumns: '190px 1px minmax(0, 1fr) 104px 84px', minWidth: 640 }}
+    <motion.div
+      className="flex gap-4 px-4 py-4 rounded-2xl bg-white text-left border border-gray-200 transition-shadow duration-300 ease-out hover:shadow-[0_0_0_1px_#0072ce,0_8px_32px_rgba(0,114,206,0.22)]"
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: EASE, delay: enterDelay }}
+      whileHover={reduce ? undefined : { scale: 1.015, transition: { duration: 0.25, ease: EASE } }}
     >
-      {/* Player */}
-      <div className="flex items-center gap-3 min-w-0">
-        <PlayerAvatar slug={player.slug} name={player.name} size="sm" />
-        <div className="min-w-0">
-          <div style={{ fontFamily: FONT_HEADING, fontSize: '1.1rem', color: DARK, letterSpacing: '0.5px', lineHeight: 1.1 }}>
-            {player.name}
+      <Link
+        to={profileHref}
+        aria-label={`${player.name} profiil`}
+        className="shrink-0 self-start rounded-full transition-transform duration-300 ease-out hover:scale-[1.05] motion-reduce:hover:scale-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
+      >
+        <PlayerAvatar slug={player.slug} name={player.name} size={isMobile ? 'md' : 'lg'} />
+      </Link>
+
+      <div className="min-w-0 flex-1 flex flex-col gap-3">
+        {/* Ülemine rida: mängija ja mäng */}
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+          <div className="min-w-0">
+            <Link
+              to={profileHref}
+              className="inline-block text-[#08060d] hover:text-[#0072ce] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded"
+              style={{ fontFamily: FONT_HEADING, fontSize: '1.45rem', letterSpacing: '0.5px', lineHeight: 1 }}
+            >
+              {player.name}
+            </Link>
+            <div className="flex items-baseline gap-2 mt-1" style={metaStyle}>
+              {player.position && <span style={{ letterSpacing: '0.1em' }}>{player.position}</span>}
+              <span style={{ color: '#6b7280' }}>{clubName}</span>
+            </div>
           </div>
-          {player.position && (
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.1em' }}>
-              {player.position}
+
+          <div className={isMobile ? 'min-w-0' : 'min-w-0 text-right'}>
+            <div className="flex items-baseline gap-2" style={{ justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
+              <span style={teamStyle(playerIsHome)}>{home}</span>
+              {hasScore ? (
+                ev.gameUrl ? (
+                  <a
+                    href={ev.gameUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Vaata mängu statistikat ProBallersis"
+                    style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}
+                    className="rounded underline decoration-2 underline-offset-4 decoration-gray-300
+                               transition-colors duration-150 hover:decoration-current
+                               focus-visible:outline focus-visible:outline-2
+                               focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
+                  >
+                    {hs}:{as_}
+                  </a>
+                ) : (
+                  <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: scoreColor, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
+                    {hs}:{as_}
+                  </span>
+                )
+              ) : ts ? (
+                <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: BLUE, letterSpacing: '1px', lineHeight: 1, flexShrink: 0 }}>
+                  {formatTime(ts)}
+                </span>
+              ) : (
+                <span style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: GRAY, fontWeight: 600 }}>vs</span>
+              )}
+              <span style={teamStyle(!playerIsHome)}>{away}</span>
             </div>
-          )}
-          {stats && (
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.85rem', color: DARK, fontWeight: 700, marginTop: 3, whiteSpace: 'nowrap' }}>
-              {stats.points ?? 0} PTS · {stats.rebounds ?? 0} REB · {stats.assists ?? 0} AST
+            <div className="flex items-center gap-2 mt-1" style={{ ...metaStyle, justifyContent: isMobile ? 'flex-start' : 'flex-end' }}>
+              <span style={outcome && won != null ? { color: scoreColor } : undefined}>
+                {outcome ? `${outcome} ${venue}` : venue}
+              </span>
+              {tournament && (
+                <span className="px-2 py-0.5 rounded-full text-xs" style={{ background: '#f3f4f6', color: '#6b7280' }}>
+                  {tournament}
+                </span>
+              )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
 
-      {/* Divider */}
-      <div className="h-8 bg-gray-100" />
-
-      {/* Match */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'baseline', gap: 8, minWidth: 0 }}>
-        <span style={{ ...teamNameStyle, textAlign: 'right' }}>{home}</span>
-        <span style={{ fontFamily: FONT_BODY, fontSize: '0.72rem', color: '#9ca3af', fontWeight: 600 }}>vs</span>
-        <span style={{ ...teamNameStyle, textAlign: 'left' }}>{away}</span>
-      </div>
-
-      {/* Tournament badge */}
-      <div className="flex justify-center">
-        {tournament && (
-          <span
-            className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold text-center"
-            style={{ fontFamily: FONT_BODY, background: '#f3f4f6', color: '#6b7280' }}
-          >
-            {tournament}
-          </span>
+        {/* Tabloo riba: mängija boxscore */}
+        {stats && (
+          <div className="overflow-x-auto rounded-lg" style={{ background: DARK }}>
+            <div className="flex" style={{ minWidth: 'max-content' }}>
+              {STAT_COLS.map((c, i) => {
+                const isPts = c.key === 'PTS'
+                return (
+                  <motion.div
+                    key={c.key}
+                    className="flex flex-col items-center px-2 py-1.5"
+                    style={{ flex: '1 0 auto', minWidth: 52, background: isPts ? BLUE : undefined }}
+                    initial={reduce ? false : { opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
+                  >
+                    <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.5px', lineHeight: 1, whiteSpace: 'nowrap' }}>
+                      {statValue(stats[c.key])}
+                    </span>
+                    <span style={{ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color: isPts ? '#dbeafe' : MUTED, marginTop: 2 }}>
+                      {c.label}
+                    </span>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </div>
         )}
       </div>
-
-      {/* Score or time */}
-      <div className="text-right">
-        {hasScore ? (
-          <>
-            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: '#374151', letterSpacing: '2px', lineHeight: 1 }}>
-              {hs}:{as_}
-            </div>
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
-              Lõpp
-            </div>
-          </>
-        ) : ts ? (
-          <>
-            <div style={{ fontFamily: FONT_HEADING, fontSize: '1.4rem', color: BLUE, letterSpacing: '1px', lineHeight: 1 }}>
-              {formatTime(ts)}
-            </div>
-            <div style={{ fontFamily: FONT_BODY, fontSize: '0.68rem', color: '#9ca3af', fontWeight: 600, letterSpacing: '0.08em' }}>
-              Eesti aeg
-            </div>
-          </>
-        ) : null}
-      </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -170,11 +258,9 @@ export default function KlubiKorvpallPage() {
             rows.push({
               player,
               isPast: true,
-              stats: {
-                points: parseInt(g.PTS, 10) || 0,
-                rebounds: parseInt(g.REB, 10) || 0,
-                assists: parseInt(g.AST, 10) || 0,
-              },
+              stats: g,
+              result: (g.RESULT || '').trim().toUpperCase(),
+              playerIsHome: isHome,
               event: {
                 id: `pb-${player.slug}-${g.DATE}-${opponentField}`,
                 startTimestamp,
@@ -183,6 +269,9 @@ export default function KlubiKorvpallPage() {
                 tournament: { name: g.LEAGUE },
                 homeScore: { current: s1 },
                 awayScore: { current: s2 },
+                // Puudub vanematel ridadel, mis on juba DB-s ja ProBallersi
+                // profiililt kadunud. Skoor renderdatakse siis lihtsalt lingita.
+                gameUrl: g.GAME_URL || null,
               },
             })
           }
@@ -276,7 +365,7 @@ export default function KlubiKorvpallPage() {
       {/* Loading skeletons */}
       {loading && (
         <div className="flex flex-col gap-2">
-          {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16" />)}
+          {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-36" />)}
         </div>
       )}
 
@@ -294,6 +383,7 @@ export default function KlubiKorvpallPage() {
 
       {/* Grouped timeline */}
       {!loading && grouped.map((group, gi) => {
+        const rowOffset = grouped.slice(0, gi).reduce((n, g) => n + g.rows.length, 0)
         const isPastGroup = group.dateKey < todayKey
         const isTodayGroup = group.dateKey === todayKey
         // Show "TÄNA" divider before today's group or before first future group after past groups
@@ -324,9 +414,14 @@ export default function KlubiKorvpallPage() {
                 </span>
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
-              <div className="flex flex-col gap-2 overflow-x-auto">
+              <div className="flex flex-col gap-2">
                 {group.rows.map((g, i) => (
-                  <GameRow key={`${g.player.slug}-${g.event.id ?? i}`} player={g.player} event={g.event} isPast={g.isPast} stats={g.stats} />
+                  <GameRow
+                    key={`${g.player.slug}-${g.event.id ?? i}`}
+                    player={g.player} event={g.event} isPast={g.isPast}
+                    stats={g.stats} result={g.result} playerIsHome={g.playerIsHome}
+                    index={rowOffset + i}
+                  />
                 ))}
               </div>
             </div>
