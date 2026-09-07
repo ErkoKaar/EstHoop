@@ -17,7 +17,7 @@ const DARK = '#08060d'
 const GRAY = '#9ca3af'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const TICKETS_URL = 'https://www.piletitasku.ee/et/search?category=193'
+const TICKETS_URL = 'https://www.piletitasku.ee/et/search?dateFrom=2026-10-26&category=193&venue=1502&_=1788771349473'
 
 function formatDateLong(ts) {
   return new Date(ts * 1000).toLocaleDateString('et-EE', {
