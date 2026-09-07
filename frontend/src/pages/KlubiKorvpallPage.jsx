@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useLoading } from '../contexts/LoadingContext'
@@ -6,6 +6,9 @@ import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 import useIsMobile from '../hooks/useIsMobile'
+import useHydrated from '../hooks/useHydrated'
+import scheduleData from '../data/klubide_graafikud_2026-27.json'
+import { buildScheduleRows, upcomingRows, nextRowAfter, competitionLabel } from '../utils/clubSchedule'
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -325,8 +328,85 @@ function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index
   )
 }
 
+// ── Tulevase mängu kaart (graafik) ────────────────────────────────────────────
+// Erineb tulemuste kaardist tahtlikult: skoori asemel kellaaeg sinisel plaadil,
+// tablood pole. Sama paigutus töölaual ja mobiilis — plaat on kitsas ja
+// meeskonnanimed tohivad murduda.
+function UpcomingGameRow({ row }) {
+  const isMobile = useIsMobile()
+  const { players, club, opponent, home, timeTBD, startTimestamp } = row
+  const label = shortTournament(competitionLabel(row.competition))
+  const teamStyle = own => ({
+    fontFamily: FONT_HEADING, fontSize: '1.15rem', letterSpacing: '0.5px', lineHeight: 1.1,
+    color: own ? DARK : '#6b7280', minWidth: 0, overflowWrap: 'anywhere',
+  })
+
+  return (
+    <div className="flex flex-col gap-3 px-4 py-4 rounded-2xl bg-white text-left border border-gray-200">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="flex shrink-0">
+          {players.map((p, i) => (
+            <Link
+              key={p.slug}
+              to={`/mangijad/${p.slug}`}
+              aria-label={`${p.name} profiil`}
+              className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
+              style={{ marginLeft: i ? -14 : 0, zIndex: players.length - i, position: 'relative' }}
+            >
+              <PlayerAvatar slug={p.slug} name={p.name} size={isMobile ? 'md' : 'lg'} />
+            </Link>
+          ))}
+        </div>
+        <div className="min-w-0">
+          <div className="flex flex-wrap gap-x-2" style={{ fontFamily: FONT_HEADING, fontSize: '1.45rem', letterSpacing: '0.5px', lineHeight: 1 }}>
+            {players.map((p, i) => (
+              <Link
+                key={p.slug}
+                to={`/mangijad/${p.slug}`}
+                className="text-[#08060d] hover:text-[#0072ce] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded"
+              >
+                {p.name}{i < players.length - 1 ? ',' : ''}
+              </Link>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-baseline gap-x-2 mt-1" style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', color: GRAY, fontWeight: 600, lineHeight: 1.2 }}>
+            <span style={{ color: '#6b7280' }}>{club}</span>
+            {label && <span>{label}</span>}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <div
+          className="shrink-0 flex items-center justify-center rounded-lg"
+          style={{ minWidth: 84, padding: '10px 12px', background: '#e8f1fb' }}
+        >
+          {timeTBD ? (
+            <span style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 700, color: BLUE, lineHeight: 1.1, textAlign: 'center' }}>
+              aeg<br />selgub
+            </span>
+          ) : (
+            <span style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', color: BLUE, letterSpacing: '1px', lineHeight: 1 }}>
+              {formatTime(startTimestamp)}
+            </span>
+          )}
+        </div>
+        <div className="min-w-0 flex-1 flex flex-col gap-1">
+          <span style={teamStyle(home)}>{home ? club : opponent}</span>
+          <span style={teamStyle(!home)}>{home ? opponent : club}</span>
+          <span style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', color: GRAY, fontWeight: 600, lineHeight: 1.2 }}>
+            {home ? 'Kodus' : 'Võõrsil'}{row.note ? `, ${row.note}` : ''}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function KlubiKorvpallPage() {
+  const [tab, setTab] = useState('tulemused')
+  const [players, setPlayers] = useState([])
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadedCount, setLoadedCount] = useState(0)
@@ -334,10 +414,28 @@ export default function KlubiKorvpallPage() {
   const [error, setError] = useState(false)
   const { signalReady } = useLoading()
 
+  // Graafik sõltub kellast: arvutame alles pärast mount'i (eelrenderdus ja
+  // klient peavad esimesel renderdusel kokku langema) ja uuendame iga minut,
+  // et mäng kaoks nimekirjast täpselt algusajal ka ilma lehte värskendamata.
+  const hydrated = useHydrated()
+  const [now, setNow] = useState(null)
+  useEffect(() => {
+    if (!hydrated) return
+    const tick = () => setNow(Math.floor(Date.now() / 1000))
+    tick()
+    const id = setInterval(tick, 60_000)
+    return () => clearInterval(id)
+  }, [hydrated])
+
+  const scheduleRows = useMemo(() => buildScheduleRows(scheduleData, players), [players])
+  const upcoming = useMemo(() => (now ? upcomingRows(scheduleRows, now) : []), [scheduleRows, now])
+  const nextAfterWindow = useMemo(() => (now ? nextRowAfter(scheduleRows, now) : null), [scheduleRows, now])
+
   useEffect(() => {
     fetch(`${API}/players`)
       .then(r => r.json())
       .then(players => {
+        setPlayers(players)
         const active = players.filter(p => p.proballers_id)
         setTotalCount(active.length)
         const cutoff = Date.now() / 1000 - TWO_WEEKS
@@ -415,6 +513,21 @@ export default function KlubiKorvpallPage() {
   // Find today's date key to insert divider
   const todayKey = tallinDate(Date.now() / 1000)
 
+  // Graafik päevade kaupa (Eesti kuupäev), sama päisestiil mis tulemustel
+  const scheduleGrouped = useMemo(() => {
+    const groups = []
+    const byKey = {}
+    for (const row of upcoming) {
+      const key = tallinDate(row.sortTimestamp)
+      if (!byKey[key]) {
+        byKey[key] = { dateKey: key, ts: row.sortTimestamp, rows: [] }
+        groups.push(byKey[key])
+      }
+      byKey[key].rows.push(row)
+    }
+    return groups
+  }, [upcoming])
+
   return (
     <div className="px-4 sm:px-6 pt-8 pb-12 max-w-5xl mx-auto text-center">
       <Seo
@@ -437,6 +550,75 @@ export default function KlubiKorvpallPage() {
         </p>
       </div>
 
+      {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil */}
+      <div role="tablist" aria-label="Vaade" className="flex gap-6 mb-6 border-b border-gray-200 text-left">
+        {[['tulemused', 'Tulemused'], ['graafik', 'Graafik']].map(([key, text]) => {
+          const active = tab === key
+          return (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setTab(key)}
+              className="relative pb-2 cursor-pointer transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded-sm"
+              style={{ fontFamily: FONT_HEADING, fontSize: '1.6rem', letterSpacing: '1px', lineHeight: 1, color: active ? DARK : GRAY, background: 'none', border: 0, padding: '0 0 8px' }}
+            >
+              {text}
+              <span
+                aria-hidden="true"
+                className="absolute left-0 right-0 -bottom-px h-[3px] rounded-full transition-opacity duration-200"
+                style={{ background: BLUE, opacity: active ? 1 : 0 }}
+              />
+            </button>
+          )
+        })}
+      </div>
+
+      {tab === 'graafik' && (
+        <>
+          {error && !players.length && (
+            <p className="text-center py-16" style={{ fontFamily: FONT_BODY, color: '#9ca3af' }}>
+              Mängijate laadimine ebaõnnestus. Proovi hiljem uuesti.
+            </p>
+          )}
+
+          {!error && (!hydrated || !now || (loading && !players.length)) && (
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32" />)}
+            </div>
+          )}
+
+          {now && players.length > 0 && upcoming.length === 0 && (
+            <div className="text-center py-20 rounded-3xl" style={{ background: '#f8fafc' }}>
+              <p style={{ fontFamily: FONT_HEADING, fontSize: '2rem', color: '#d1d5db', letterSpacing: '1px' }}>
+                LÄHIAJAL MÄNGE EI OLE
+              </p>
+              <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
+                {nextAfterWindow
+                  ? `Järgmise kahe nädala jooksul mänge ei ole. Järgmine mäng on ${formatDateHeader(nextAfterWindow.sortTimestamp)}: ${nextAfterWindow.club} vs ${nextAfterWindow.opponent}.`
+                  : 'Graafikus pole ühtki tulevast mängu.'}
+              </p>
+            </div>
+          )}
+
+          {now && scheduleGrouped.map(group => (
+            <div key={group.dateKey} className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-xs font-bold tracking-widest uppercase" style={{ fontFamily: FONT_BODY, color: group.dateKey === todayKey ? BLUE : '#9ca3af' }}>
+                  {group.dateKey === todayKey ? 'Täna, ' : ''}{formatDateHeader(group.ts)}
+                </span>
+                <div className="flex-1 h-px bg-gray-100" />
+              </div>
+              <div className="flex flex-col gap-2">
+                {group.rows.map(row => <UpcomingGameRow key={row.id} row={row} />)}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {tab === 'tulemused' && (<>
       {/* Loading progress */}
       {loading && totalCount > 0 && (
         <div className="mb-4">
@@ -530,6 +712,7 @@ export default function KlubiKorvpallPage() {
           </div>
         )
       })}
+      </>)}
     </div>
   )
 }

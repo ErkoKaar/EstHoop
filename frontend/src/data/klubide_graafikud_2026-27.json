@@ -1,0 +1,5732 @@
+{
+  "generated_at": "2026-09-07",
+  "season": "2026-27",
+  "description": "Eesti koondise mängijate klubide 2026-27 hooaja mängugraafikud. Kuupäevad ISO (kohalik aeg), time_local null = kellaaeg veel avaldamata.",
+  "clubs": [
+    {
+      "club": "Rostock Seawolves",
+      "country": "Saksamaa",
+      "players": [
+        "Artur Konontšuk"
+      ],
+      "competitions": [
+        {
+          "name": "BBL",
+          "schedule_status": "full",
+          "sources": [
+            "https://seawolves.de/spielplan-2026-2027/"
+          ],
+          "notes": "All 34 easyCredit BBL main-round games published with dates and times; matchday (Spieltag) numbers not shown on the club schedule page.",
+          "games": [
+            {
+              "date": "2026-09-19",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Phoenix Hagen",
+              "round": null
+            },
+            {
+              "date": "2026-09-24",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "MHP Riesen Ludwigsburg",
+              "round": null
+            },
+            {
+              "date": "2026-09-27",
+              "time_local": "15:00",
+              "home": false,
+              "opponent": "Basketball Löwen Braunschweig",
+              "round": null
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": "16:30",
+              "home": false,
+              "opponent": "Veolia Towers Hamburg",
+              "round": null
+            },
+            {
+              "date": "2026-10-10",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Fitness First Würzburg Baskets",
+              "round": null
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Syntainics MBC",
+              "round": null
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "FC Bayern München Basketball",
+              "round": null
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "ratiopharm Ulm",
+              "round": null
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Rasta Vechta",
+              "round": null
+            },
+            {
+              "date": "2026-11-20",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Science City Jena",
+              "round": null
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Niners Chemnitz",
+              "round": null
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": "15:00",
+              "home": false,
+              "opponent": "Vet Concept Gladiators Trier",
+              "round": null
+            },
+            {
+              "date": "2026-12-26",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Basketball Löwen Braunschweig",
+              "round": null
+            },
+            {
+              "date": "2026-12-31",
+              "time_local": "14:00",
+              "home": false,
+              "opponent": "ALBA Berlin",
+              "round": null
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Telekom Baskets Bonn",
+              "round": null
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "BMA365 Bamberg Baskets",
+              "round": null
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "EWE Baskets Oldenburg",
+              "round": null
+            },
+            {
+              "date": "2027-01-20",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Fraport Skyliners",
+              "round": null
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Rasta Vechta",
+              "round": null
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Vet Concept Gladiators Trier",
+              "round": null
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Science City Jena",
+              "round": null
+            },
+            {
+              "date": "2027-02-13",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "EWE Baskets Oldenburg",
+              "round": null
+            },
+            {
+              "date": "2027-02-17",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Syntainics MBC",
+              "round": null
+            },
+            {
+              "date": "2027-03-04",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "BMA365 Bamberg Baskets",
+              "round": null
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "MHP Riesen Ludwigsburg",
+              "round": null
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Fitness First Würzburg Baskets",
+              "round": null
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Veolia Towers Hamburg",
+              "round": null
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Niners Chemnitz",
+              "round": null
+            },
+            {
+              "date": "2027-04-13",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "FC Bayern München Basketball",
+              "round": null
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Phoenix Hagen",
+              "round": null
+            },
+            {
+              "date": "2027-04-24",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "ratiopharm Ulm",
+              "round": null
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "ALBA Berlin",
+              "round": null
+            },
+            {
+              "date": "2027-05-05",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Telekom Baskets Bonn",
+              "round": null
+            },
+            {
+              "date": "2027-05-09",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Fraport Skyliners",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "EuroCup",
+          "schedule_status": "full",
+          "sources": [
+            "https://seawolves.de/spielplan-2026-2027/"
+          ],
+          "notes": "All 14 BKT EuroCup regular season games (double round-robin vs 7 group opponents) published with dates and times; round numbers not shown on the club schedule page. Rounds listed here in chronological order.",
+          "games": [
+            {
+              "date": "2026-09-29",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Hapoel Midtown Jerusalem",
+              "round": null
+            },
+            {
+              "date": "2026-10-06",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Rīga Zeļļi",
+              "round": null
+            },
+            {
+              "date": "2026-10-14",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Le Mans Sarthe Basket",
+              "round": null
+            },
+            {
+              "date": "2026-10-20",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Aris Thessaloniki Betsson",
+              "round": null
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Baglietto Derthona Tortona",
+              "round": null
+            },
+            {
+              "date": "2026-11-04",
+              "time_local": "20:30",
+              "home": false,
+              "opponent": "Recoletas Salud San Pablo Burgos",
+              "round": null
+            },
+            {
+              "date": "2026-11-10",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Cedevita Olimpija Ljubljana",
+              "round": null
+            },
+            {
+              "date": "2026-11-17",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Hapoel Midtown Jerusalem",
+              "round": null
+            },
+            {
+              "date": "2026-12-09",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Rīga Zeļļi",
+              "round": null
+            },
+            {
+              "date": "2026-12-15",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Le Mans Sarthe Basket",
+              "round": null
+            },
+            {
+              "date": "2026-12-22",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Aris Thessaloniki Betsson",
+              "round": null
+            },
+            {
+              "date": "2026-12-29",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Baglietto Derthona Tortona",
+              "round": null
+            },
+            {
+              "date": "2027-01-05",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Recoletas Salud San Pablo Burgos",
+              "round": null
+            },
+            {
+              "date": "2027-01-13",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Cedevita Olimpija Ljubljana",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "BBL-Pokal",
+          "schedule_status": "partial",
+          "sources": [
+            "https://seawolves.de/spielplan-2026-2027/"
+          ],
+          "notes": "Only the first-round cup tie is published; further rounds depend on advancement.",
+          "games": [
+            {
+              "date": "2026-09-11",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Veolia Towers Hamburg",
+              "round": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Start Lublin",
+      "country": "Poola",
+      "players": [
+        "Janari Jõesaar",
+        "Matthias Tass"
+      ],
+      "competitions": [
+        {
+          "name": "PLK (Orlen Basket Liga)",
+          "schedule_status": "full",
+          "sources": [
+            "https://plk.pl/druzyny/22/pge-start-lublin/terminarz",
+            "https://plk.pl/aktualnosci/27277/terminarz-20262027"
+          ],
+          "notes": "2026-27 Orlen Basket Liga regular season, 30 rounds (2026-10-02 to 2027-05-06). Rounds with time_local=null have published dates but tip-off times not yet set. Round 13 is scheduled before Round 12 (mid-week 2026-12-23). Full club name: PGE Start Lublin. No 2026 Superpuchar (participants: Legia, Trefl Sopot, Dziki, Zastal) and no 2026-27 European competition found for this club (not in BCL, FIBA Europe Cup or ENBL entry lists).",
+          "games": [
+            {
+              "date": "2026-10-03",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Stal Ostrów Wielkopolski",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": "15:00",
+              "home": false,
+              "opponent": "Dziki Warszawa",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-16",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Arka Gdynia",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": "15:00",
+              "home": false,
+              "opponent": "King Szczecin",
+              "round": "4"
+            },
+            {
+              "date": "2026-11-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-13",
+              "time_local": null,
+              "home": true,
+              "opponent": "GTK Gliwice",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": true,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "8"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "Śląsk Wrocław",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Trefl Sopot",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zastal Zielona Góra",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "Górnik Wałbrzych",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "Czarni Słupsk",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-01",
+              "time_local": null,
+              "home": true,
+              "opponent": "Legia Warszawa",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Anwil Włocławek",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-22",
+              "time_local": null,
+              "home": false,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "King Szczecin",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Śląsk Wrocław",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "Czarni Słupsk",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "Anwil Włocławek",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Arka Gdynia",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "GTK Gliwice",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Górnik Wałbrzych",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-12",
+              "time_local": null,
+              "home": true,
+              "opponent": "Trefl Sopot",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-16",
+              "time_local": null,
+              "home": false,
+              "opponent": "Stal Ostrów Wielkopolski",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "Zastal Zielona Góra",
+              "round": "28"
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": null,
+              "home": false,
+              "opponent": "Legia Warszawa",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-06",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Dziki Warszawa",
+              "round": "30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Stal Ostrów Wielkopolski",
+      "country": "Poola",
+      "players": [
+        "Karl-Johan Lips"
+      ],
+      "competitions": [
+        {
+          "name": "PLK (Orlen Basket Liga)",
+          "schedule_status": "full",
+          "sources": [
+            "https://plk.pl/druzyny/11309/tasomix-rosiek-stal-ostrow-wielkopolski/terminarz",
+            "https://plk.pl/aktualnosci/27277/terminarz-20262027"
+          ],
+          "notes": "2026-27 Orlen Basket Liga regular season, 30 rounds (2026-10-02 to 2027-05-06). Rounds with time_local=null have published dates but tip-off times not yet set. Round 13 is scheduled before Round 12 (mid-week 2026-12-23). Full club name: Tasomix Rosiek Stal Ostrów Wielkopolski. No 2026 Superpuchar and no published 2026-27 European competition participation found for this club.",
+          "games": [
+            {
+              "date": "2026-10-03",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Start Lublin",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-12",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Górnik Wałbrzych",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-19",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Czarni Słupsk",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Legia Warszawa",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-30",
+              "time_local": null,
+              "home": false,
+              "opponent": "Anwil Włocławek",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zastal Zielona Góra",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dziki Warszawa",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": true,
+              "opponent": "Arka Gdynia",
+              "round": "8"
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": null,
+              "home": false,
+              "opponent": "King Szczecin",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "GTK Gliwice",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Śląsk Wrocław",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "Trefl Sopot",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Czarni Słupsk",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": null,
+              "home": true,
+              "opponent": "Anwil Włocławek",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-29",
+              "time_local": null,
+              "home": false,
+              "opponent": "Arka Gdynia",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "GTK Gliwice",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Górnik Wałbrzych",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-05",
+              "time_local": null,
+              "home": true,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "Trefl Sopot",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-19",
+              "time_local": null,
+              "home": false,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-26",
+              "time_local": null,
+              "home": false,
+              "opponent": "Zastal Zielona Góra",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Legia Warszawa",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dziki Warszawa",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-16",
+              "time_local": null,
+              "home": true,
+              "opponent": "Start Lublin",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-24",
+              "time_local": null,
+              "home": false,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "28"
+            },
+            {
+              "date": "2027-04-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "King Szczecin",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-06",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Śląsk Wrocław",
+              "round": "30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Arka Gdynia",
+      "country": "Poola",
+      "players": [
+        "Kasper Suurorg"
+      ],
+      "competitions": [
+        {
+          "name": "PLK (Orlen Basket Liga)",
+          "schedule_status": "full",
+          "sources": [
+            "https://plk.pl/druzyny/121/amw-arka-gdynia/terminarz",
+            "https://plk.pl/aktualnosci/27277/terminarz-20262027"
+          ],
+          "notes": "2026-27 Orlen Basket Liga regular season, 30 rounds (2026-10-02 to 2027-05-06). Rounds with time_local=null have published dates but tip-off times not yet set. Round 13 is scheduled before Round 12 (mid-week 2026-12-23). Full club name: AMW Arka Gdynia. Round 3 tip-off time (18:00) taken from PGE Start Lublin's schedule page (same fixture). No 2026 Superpuchar and no published 2026-27 European competition participation found for this club.",
+          "games": [
+            {
+              "date": "2026-10-04",
+              "time_local": "17:30",
+              "home": true,
+              "opponent": "Śląsk Wrocław",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": "12:30",
+              "home": true,
+              "opponent": "Trefl Sopot",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-16",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Start Lublin",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Górnik Wałbrzych",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": null,
+              "home": false,
+              "opponent": "Czarni Słupsk",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": "12:30",
+              "home": true,
+              "opponent": "Legia Warszawa",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Anwil Włocławek",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": false,
+              "opponent": "Stal Ostrów Wielkopolski",
+              "round": "8"
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dziki Warszawa",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Zastal Zielona Góra",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": null,
+              "home": true,
+              "opponent": "King Szczecin",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "GTK Gliwice",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Trefl Sopot",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-29",
+              "time_local": null,
+              "home": true,
+              "opponent": "Stal Ostrów Wielkopolski",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zastal Zielona Góra",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Legia Warszawa",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dziki Warszawa",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-12",
+              "time_local": null,
+              "home": true,
+              "opponent": "Start Lublin",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Twarde Pierniki Toruń",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "King Szczecin",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-02",
+              "time_local": null,
+              "home": false,
+              "opponent": "Śląsk Wrocław",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Czarni Słupsk",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Anwil Włocławek",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-24",
+              "time_local": null,
+              "home": false,
+              "opponent": "Astoria Bydgoszcz",
+              "round": "28"
+            },
+            {
+              "date": "2027-04-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "GTK Gliwice",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-06",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Górnik Wałbrzych",
+              "round": "30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Legia Warszawa",
+      "country": "Poola",
+      "players": [
+        "Markus Ilver"
+      ],
+      "competitions": [
+        {
+          "name": "PLK (Orlen Basket Liga)",
+          "schedule_status": "full",
+          "sources": [
+            "https://plk.pl/terminarz",
+            "https://plk.pl/aktualnosci/27277/terminarz-20262027"
+          ],
+          "notes": "Full 30-round 2026-27 regular season from official PLK schedule. Times published only for early rounds (1-6) and the synchronized final round 30 (all 06.05.2027 19:00); remaining tip-off times not yet set (null). Round 24 venue (away at Energa Trefl Sopot) confirmed via the schedule's mirror structure and two independent extractions. Playoffs (from 13.05.2027) not included as pairings depend on standings.",
+          "games": [
+            {
+              "date": "2026-10-02",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Energa Czarni Słupsk",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-09",
+              "time_local": "20:15",
+              "home": false,
+              "opponent": "Zastal Zielona Góra",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-16",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Anwil Włocławek",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "17:30",
+              "home": true,
+              "opponent": "Tasomix Rosiek Stal Ostrów Wielkopolski",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": "17:30",
+              "home": true,
+              "opponent": "Dziki Warszawa",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": "12:30",
+              "home": false,
+              "opponent": "AMW Arka Gdynia",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "King Szczecin",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": false,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "8"
+            },
+            {
+              "date": "2026-12-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Enea Łaciate Astoria Bydgoszcz",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "GTK Gliwice",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": null,
+              "home": true,
+              "opponent": "Arriva Lotto Twarde Pierniki Toruń",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-26",
+              "time_local": null,
+              "home": false,
+              "opponent": "WKS Śląsk Wrocław",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-29",
+              "time_local": null,
+              "home": true,
+              "opponent": "Energa Trefl Sopot",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "PGE Start Lublin",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Górnik Zamek Książ Wałbrzych",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "King Szczecin",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "WKS Śląsk Wrocław",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "Energa Czarni Słupsk",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Anwil Włocławek",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "AMW Arka Gdynia",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-05",
+              "time_local": null,
+              "home": false,
+              "opponent": "GTK Gliwice",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Górnik Zamek Książ Wałbrzych",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-29",
+              "time_local": null,
+              "home": false,
+              "opponent": "Energa Trefl Sopot",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Tasomix Rosiek Stal Ostrów Wielkopolski",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zastal Zielona Góra",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Enea Łaciate Astoria Bydgoszcz",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dziki Warszawa",
+              "round": "28"
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "PGE Start Lublin",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-06",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Arriva Lotto Twarde Pierniki Toruń",
+              "round": "30"
+            }
+          ]
+        },
+        {
+          "name": "Basketball Champions League",
+          "schedule_status": "full",
+          "sources": [
+            "https://legia.net/news/koszykowka-terminy-meczow-legii-w-lidze-mistrzow/104535",
+            "https://legionisci.com/news/105539/terminy-meczow-legii-w-lidze-mistrzow",
+            "https://basketnews.com/news-251618-basketball-champions-league-2026-27-draw-revealed.html"
+          ],
+          "notes": "BCL 2026-27 regular season Group B (Galatasaray, SIG Strasbourg, Cibona Zagreb); all 6 group-stage dates published and confirmed by two sources. Times for Legia home games listed as TBD by legia.net (null here); away-game times consistent across sources. Play-in/knockout rounds from January 2027 depend on group results and are not included.",
+          "games": [
+            {
+              "date": "2026-10-06",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "SIG Strasbourg",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-20",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Cibona Zagreb",
+              "round": "2"
+            },
+            {
+              "date": "2026-11-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Galatasaray",
+              "round": "3"
+            },
+            {
+              "date": "2026-11-18",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Galatasaray",
+              "round": "4"
+            },
+            {
+              "date": "2026-12-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "Cibona Zagreb",
+              "round": "5"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "SIG Strasbourg",
+              "round": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Górnik Wałbrzych",
+      "country": "Poola",
+      "players": [
+        "Leemet Bockler"
+      ],
+      "competitions": [
+        {
+          "name": "PLK (Orlen Basket Liga)",
+          "schedule_status": "full",
+          "sources": [
+            "https://plk.pl/terminarz",
+            "https://plk.pl/aktualnosci/27277/terminarz-20262027"
+          ],
+          "notes": "Plays as Górnik Zamek Książ Wałbrzych. Full 30-round 2026-27 regular season from official PLK schedule. Times published only for rounds 1-4 and the synchronized final round 30 (06.05.2027 19:00); remaining tip-off times not yet set (null). Playoffs/play-in (from May 2027) not included as pairings depend on standings.",
+          "games": [
+            {
+              "date": "2026-10-05",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Anwil Włocławek",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-12",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Tasomix Rosiek Stal Ostrów Wielkopolski",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": "12:30",
+              "home": true,
+              "opponent": "Dziki Warszawa",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "12:30",
+              "home": false,
+              "opponent": "AMW Arka Gdynia",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "King Szczecin",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": false,
+              "opponent": "Enea Łaciate Astoria Bydgoszcz",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "GTK Gliwice",
+              "round": "8"
+            },
+            {
+              "date": "2026-12-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Arriva Lotto Twarde Pierniki Toruń",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": true,
+              "opponent": "WKS Śląsk Wrocław",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Energa Trefl Sopot",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "PGE Start Lublin",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zastal Zielona Góra",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Energa Czarni Słupsk",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": false,
+              "opponent": "Legia Warszawa",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "GTK Gliwice",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Enea Łaciate Astoria Bydgoszcz",
+              "round": "17"
+            },
+            {
+              "date": "2027-02-01",
+              "time_local": null,
+              "home": true,
+              "opponent": "MKS Dąbrowa Górnicza",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-05",
+              "time_local": null,
+              "home": false,
+              "opponent": "Energa Trefl Sopot",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-12",
+              "time_local": null,
+              "home": true,
+              "opponent": "Tasomix Rosiek Stal Ostrów Wielkopolski",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Zastal Zielona Góra",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Legia Warszawa",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dziki Warszawa",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "PGE Start Lublin",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Arriva Lotto Twarde Pierniki Toruń",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "King Szczecin",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-19",
+              "time_local": null,
+              "home": false,
+              "opponent": "WKS Śląsk Wrocław",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": false,
+              "opponent": "Energa Czarni Słupsk",
+              "round": "28"
+            },
+            {
+              "date": "2027-05-01",
+              "time_local": null,
+              "home": true,
+              "opponent": "Anwil Włocławek",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-06",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "AMW Arka Gdynia",
+              "round": "30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Derthona Tortona",
+      "country": "Itaalia",
+      "players": [
+        "Siim-Sander Vene"
+      ],
+      "competitions": [
+        {
+          "name": "Serie A (LBA)",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.derthonabasket.it/si-parte-in-casa-con-verona-svelato-il-calendario-della-bertram-derthona-tortona-in-lba-serie-a-sisalclub-26-27/",
+            "https://www.derthonabasket.it/date-e-orari-dei-primi-5-turni-lba-lesordio-casalingo-con-verona-domenica-27-settembre-alle-17/",
+            "https://sportando.basketball/derthona-tortona-debutto-in-casa-contro-verona-nel-calendario-lba-2026-27/"
+          ],
+          "notes": "Full 30-round asymmetric LBA calendar published 3 Aug 2026; exact tip-off times confirmed only for rounds 1-5, later rounds' dates are the published calendar dates and may still be moved. No league games between rounds 20 and 21 (Coppa Italia Final Eight, 17-21 Feb 2027 in Turin).",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Tezenis Verona",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-04",
+              "time_local": "16:00",
+              "home": false,
+              "opponent": "BC Roma SPQR",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "UNA Hotels Reggio Emilia",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Maxima Roma",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "12:00",
+              "home": true,
+              "opponent": "Napoli Basketball",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "APU Old Wild West Udine",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Nutribullet Treviso Basket",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": false,
+              "opponent": "Acqua S.Bernardo Cantu",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": true,
+              "opponent": "Olimpia Milano",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Umana Reyer Venezia",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dolomiti Energia Trentino",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Scafati Basket",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Virtus Bologna",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": true,
+              "opponent": "Pallacanestro Trieste",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": false,
+              "opponent": "Openjobmetis Varese",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": true,
+              "opponent": "APU Old Wild West Udine",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": null,
+              "home": false,
+              "opponent": "Napoli Basketball",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "BC Roma SPQR",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Scafati Basket",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dolomiti Energia Trentino",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Olimpia Milano",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Openjobmetis Varese",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "Umana Reyer Venezia",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Pallacanestro Trieste",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Maxima Roma",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "Acqua S.Bernardo Cantu",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Nutribullet Treviso Basket",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "UNA Hotels Reggio Emilia",
+              "round": "28"
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Virtus Bologna",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "Tezenis Verona",
+              "round": "30"
+            }
+          ]
+        },
+        {
+          "name": "Supercoppa LBA 2026",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.legabasket.it/news/138922/supercoppa-2026",
+            "https://sportando.basketball/supercoppa-lba-2026-calendario-orari-semifinali-finale/",
+            "https://www.derthonabasket.it/alle-17-la-semifinale-di-supercoppa-lba-con-venezia-l11-settembre-il-trophy-tour-alla-libreria-namaste-di-tortona/"
+          ],
+          "notes": "Final Four hosted by Tortona at the Nova Arena, 19-20 Sep 2026. Derthona plays the first semifinal; if it wins, the final is Sun 20 Sep 2026 at 17:00 vs the winner of Olimpia Milano - Virtus Bologna (final opponent not yet determined, so only the semifinal is listed as a fixture).",
+          "games": [
+            {
+              "date": "2026-09-19",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Umana Reyer Venezia",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Dinamo Sassari",
+      "country": "Itaalia",
+      "players": [
+        "Joonas Riismaa"
+      ],
+      "competitions": [
+        {
+          "name": "Serie A2",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.dinamobasket.com/calendar-results",
+            "https://www.cityandcity.it/serie-a2-ecco-il-calendario-della-dinamo-sassari-per-la-stagione-2026-27/",
+            "https://sardies.it/calendario-dinamo-esordio-a-milano-contro-lurania-dei-fratelli-gentile/"
+          ],
+          "notes": "Full 38-round Serie A2 Old Wild West calendar (20-team single group). Dates and times taken from the official club calendar (dinamobasket.com); times shown only where the club lists a confirmed tip-off (roughly through round 20), null elsewhere. Rounds 4 (17 Oct) and 14 (12 Dec) are Saturday anticipations per the club site, while some media list the default Sunday dates (18 Oct / 13 Dec). Sassari does not play the Supercoppa LNP 2026.",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Wegreenit Urania Milano",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-04",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "La T Tecnica Gema Montecatini",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Gemini Mestre",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-17",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Sella Cento",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-21",
+              "time_local": "20:30",
+              "home": true,
+              "opponent": "Dole Basket Rimini",
+              "round": "5"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Crifo Wines Ruvo di Puglia",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Paperdi Juvecaserta 2021",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "UEB Gesteco Cividale",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-11",
+              "time_local": "20:30",
+              "home": true,
+              "opponent": "Victoria Libertas Pesaro",
+              "round": "9"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Halley Campania Avellino Basket",
+              "round": "10"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Libertas Livorno 1947",
+              "round": "11"
+            },
+            {
+              "date": "2026-11-29",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Unieuro Forli",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Ferraroni Juvi Cremona 1952",
+              "round": "13"
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": "20:30",
+              "home": true,
+              "opponent": "RSR Sebastiani Rieti",
+              "round": "14"
+            },
+            {
+              "date": "2026-12-16",
+              "time_local": "20:30",
+              "home": true,
+              "opponent": "Valtur Brindisi",
+              "round": "15"
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Reale Mutua Torino",
+              "round": "16"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "Lumos Pistoia Basket",
+              "round": "17"
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": "20:30",
+              "home": true,
+              "opponent": "Flats Service Fortitudo Bologna",
+              "round": "18"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "ELAchem Vigevano 1955",
+              "round": "19"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Libertas Livorno 1947",
+              "round": "20"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "La T Tecnica Gema Montecatini",
+              "round": "21"
+            },
+            {
+              "date": "2027-01-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Paperdi Juvecaserta 2021",
+              "round": "22"
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": null,
+              "home": true,
+              "opponent": "UEB Gesteco Cividale",
+              "round": "23"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": false,
+              "opponent": "Victoria Libertas Pesaro",
+              "round": "24"
+            },
+            {
+              "date": "2027-02-03",
+              "time_local": null,
+              "home": true,
+              "opponent": "Lumos Pistoia Basket",
+              "round": "25"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Unieuro Forli",
+              "round": "26"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Valtur Brindisi",
+              "round": "27"
+            },
+            {
+              "date": "2027-02-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "Ferraroni Juvi Cremona 1952",
+              "round": "28"
+            },
+            {
+              "date": "2027-02-28",
+              "time_local": null,
+              "home": false,
+              "opponent": "Flats Service Fortitudo Bologna",
+              "round": "29"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Crifo Wines Ruvo di Puglia",
+              "round": "30"
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dole Basket Rimini",
+              "round": "31"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "Wegreenit Urania Milano",
+              "round": "32"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Sella Cento",
+              "round": "33"
+            },
+            {
+              "date": "2027-04-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Gemini Mestre",
+              "round": "34"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Halley Campania Avellino Basket",
+              "round": "35"
+            },
+            {
+              "date": "2027-04-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Reale Mutua Torino",
+              "round": "36"
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "RSR Sebastiani Rieti",
+              "round": "37"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "ELAchem Vigevano 1955",
+              "round": "38"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Victoria Libertas Pesaro",
+      "country": "Itaalia",
+      "players": [
+        "Mikk Jurkatamm"
+      ],
+      "competitions": [
+        {
+          "name": "Serie A2",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.victorialibertas.it/da-cento-a-cento-tutto-il-calendario-della-vl-nella-serie-a2-2026-2027/",
+            "https://www.centropagina.it/sport/basket-serie-a2-ufficiale-calendario-della-vl-pesaro/",
+            "https://www.sportal.it/basket/basket-serie-a2/serie-a2-2026-2027-il-calendario-completo-della-regular-season.html",
+            "https://www.newsrimini.it/icaro-sport/dole-basket-rimini-ecco-il-calendario-della-stagione-2026-27",
+            "https://www.dinamobasket.com/calendar-results"
+          ],
+          "notes": "Full 38-round Serie A2 Old Wild West calendar. Round-by-round list transcribed from sportal.it's complete league calendar; home/away cross-verified for 10 of 19 opponents against club sources (victorialibertas.it, centropagina.it, newsrimini.it, dinamobasket.com, tuttoudinese.it, newbasketbrindisi.it). Tip-off times not yet confirmed by the club, so left null. Round 24 vs Sassari: sportal.it lists Sat 30 Jan, Sassari's official site the default Sun 31 Jan - 31 Jan used here.",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Sella Cento",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Ferraroni Juvi Cremona 1952",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "Paperdi Juvecaserta 2021",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Crifo Wines Ruvo di Puglia",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "UEB Gesteco Cividale",
+              "round": "5"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Reale Mutua Torino",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "Halley Campania Avellino Basket",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Gemini Mestre",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dinamo Sassari",
+              "round": "9"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "ELAchem Vigevano 1955",
+              "round": "10"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": true,
+              "opponent": "La T Tecnica Gema Montecatini",
+              "round": "11"
+            },
+            {
+              "date": "2026-11-29",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dole Basket Rimini",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "Valtur Brindisi",
+              "round": "13"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Unieuro Forli",
+              "round": "14"
+            },
+            {
+              "date": "2026-12-16",
+              "time_local": null,
+              "home": false,
+              "opponent": "Flats Service Fortitudo Bologna",
+              "round": "15"
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "RSR Sebastiani Rieti",
+              "round": "16"
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "Libertas Livorno 1947",
+              "round": "17"
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "Lumos Pistoia Basket",
+              "round": "18"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "Wegreenit Urania Milano",
+              "round": "19"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Crifo Wines Ruvo di Puglia",
+              "round": "20"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Ferraroni Juvi Cremona 1952",
+              "round": "21"
+            },
+            {
+              "date": "2027-01-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Flats Service Fortitudo Bologna",
+              "round": "22"
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": null,
+              "home": false,
+              "opponent": "Reale Mutua Torino",
+              "round": "23"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dinamo Sassari",
+              "round": "24"
+            },
+            {
+              "date": "2027-02-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "Valtur Brindisi",
+              "round": "25"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Wegreenit Urania Milano",
+              "round": "26"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "La T Tecnica Gema Montecatini",
+              "round": "27"
+            },
+            {
+              "date": "2027-02-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "Halley Campania Avellino Basket",
+              "round": "28"
+            },
+            {
+              "date": "2027-02-28",
+              "time_local": null,
+              "home": false,
+              "opponent": "RSR Sebastiani Rieti",
+              "round": "29"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Libertas Livorno 1947",
+              "round": "30"
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "ELAchem Vigevano 1955",
+              "round": "31"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Paperdi Juvecaserta 2021",
+              "round": "32"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dole Basket Rimini",
+              "round": "33"
+            },
+            {
+              "date": "2027-04-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "UEB Gesteco Cividale",
+              "round": "34"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Lumos Pistoia Basket",
+              "round": "35"
+            },
+            {
+              "date": "2027-04-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Unieuro Forli",
+              "round": "36"
+            },
+            {
+              "date": "2027-04-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Gemini Mestre",
+              "round": "37"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Sella Cento",
+              "round": "38"
+            }
+          ]
+        },
+        {
+          "name": "Supercoppa LNP 2026",
+          "schedule_status": "full",
+          "sources": [
+            "https://sportando.basketball/supercoppa-lnp-2026-date-squadre-qualificate-e-accoppiamenti/",
+            "https://www.legapallacanestro.com/cambia-la-sede-la-supercoppa-lnp-2026-old-wild-west-si-gioca-ravenna-dal-18-al-20-settembre",
+            "https://www.newsrimini.it/icaro-sport/supercoppa-lnp-il-18-settembre-la-semifinale-dole-rimini-vl-pesaro"
+          ],
+          "notes": "Supercoppa LNP Final Four at a neutral venue in Ravenna, 18-20 Sep 2026. Pesaro plays the semifinal vs Dole Rimini on Fri 18 Sep (tip-off time not yet published); the final is Sun 20 Sep vs the winner of Cividale - Fortitudo Bologna if Pesaro advances (not listed as a fixture).",
+          "games": [
+            {
+              "date": "2026-09-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dole Basket Rimini",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "UCAM Murcia",
+      "country": "Hispaania",
+      "players": [
+        "Sander Raieste"
+      ],
+      "competitions": [
+        {
+          "name": "Liga ACB",
+          "schedule_status": "full",
+          "sources": [
+            "https://acb.com/es/liga/calendario",
+            "https://www.acb.com/club/partidos/id/12",
+            "https://www.ucamdeportes.com/ucamcb/noticias/el-ucam-murcia-cb-ya-conoce-su-calendario-para-la-liga-endesa-2627",
+            "https://www.la7tv.es/articulo/baloncesto/ucam-murcia-cb-conoce-calendario-liga-endesa-2026-27/20260812122302072149.html"
+          ],
+          "notes": "All 34 jornadas from the official acb.com 2026-27 calendar. acb.com still shows tip-off times as placeholders (XX:XX) for every round; the dates given are the specific day each game is listed under on acb.com. Times for J1 (27.09 17:00 at Girona), J2 (04.10 19:00 vs Barca) and J20 (31.01 19:00 vs Real Madrid) come from the club's calendar announcement (ucamdeportes.com/la7tv); all other times unset.",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "FIATC Girona",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-04",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Barça",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "La Laguna Tenerife",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Valencia Basket",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": null,
+              "home": true,
+              "opponent": "Leyma Coruña",
+              "round": "5"
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "iLERNA Lleida",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": null,
+              "home": false,
+              "opponent": "Real Madrid",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": null,
+              "home": false,
+              "opponent": "Surne Bilbao",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "Casademont Zaragoza",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Kosner Baskonia",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Unicaja",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "MoraBanc Andorra",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": null,
+              "home": true,
+              "opponent": "Recoletas Salud San Pablo Burgos",
+              "round": "13"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Monbus Obradoiro",
+              "round": "14"
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "Asisa Joventut",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "Río Breogán",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Kids&Us Manresa",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Leyma Coruña",
+              "round": "18"
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "iLERNA Lleida",
+              "round": "19"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Real Madrid",
+              "round": "20"
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "MoraBanc Andorra",
+              "round": "21"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Unicaja",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Recoletas Salud San Pablo Burgos",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Kosner Baskonia",
+              "round": "24"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Kids&Us Manresa",
+              "round": "25"
+            },
+            {
+              "date": "2027-03-28",
+              "time_local": null,
+              "home": true,
+              "opponent": "Surne Bilbao",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Casademont Zaragoza",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "FIATC Girona",
+              "round": "28"
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Barça",
+              "round": "29"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Río Breogán",
+              "round": "30"
+            },
+            {
+              "date": "2027-05-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "La Laguna Tenerife",
+              "round": "31"
+            },
+            {
+              "date": "2027-05-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Monbus Obradoiro",
+              "round": "32"
+            },
+            {
+              "date": "2027-05-16",
+              "time_local": null,
+              "home": false,
+              "opponent": "Asisa Joventut",
+              "round": "33"
+            },
+            {
+              "date": "2027-05-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "Valencia Basket",
+              "round": "34"
+            }
+          ]
+        },
+        {
+          "name": "Basketball Champions League (grupifaas, grupp G)",
+          "schedule_status": "full",
+          "sources": [
+            "https://basketnews.com/teams/401-ucam-murcia.html",
+            "https://www.ucamdeportes.com/ucamcb/noticias/el-ucam-murcia-cb-ya-conoce-sus-rivales-para-la-fase-de-grupos-de-bcl",
+            "https://www.championsleague.basketball/en/games"
+          ],
+          "notes": "All 6 published Group G (UCAM Murcia, Openjobmetis Varese, Brose Bamberg, Peristeri) group-stage games; dates match the official BCL gameday windows. Fixture dates/times transcribed from basketnews.com (times may not be arena-local; official BCL site does not expose times in static form). Round = gameday number inferred from chronological order. Knockout rounds (Play-ins/Round of 16 onwards, Jan-May 2027) depend on group results and have no fixtures yet.",
+          "games": [
+            {
+              "date": "2026-10-07",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Openjobmetis Varese",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-14",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Brose Bamberg",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-27",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Peristeri",
+              "round": "3"
+            },
+            {
+              "date": "2026-11-11",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Brose Bamberg",
+              "round": "4"
+            },
+            {
+              "date": "2026-12-08",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Peristeri",
+              "round": "5"
+            },
+            {
+              "date": "2026-12-22",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Openjobmetis Varese",
+              "round": "6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Movistar Estudiantes",
+      "country": "Hispaania",
+      "players": [
+        "Kaspar Treier"
+      ],
+      "competitions": [
+        {
+          "name": "Primera FEB",
+          "schedule_status": "full",
+          "sources": [
+            "https://baloncestoenvivo.feb.es/calendario/primerafeb/1/2027",
+            "https://basketball.realgm.com/international/league/55/Spanish-Primera-FEB/team/32/Movistar-Estudiantes/schedule",
+            "https://www.proballers.com/basketball/team/147/movistar-estudiantes/schedule",
+            "https://oviedobaloncesto.com/calendario-primera-feb-26-27-comienzo-y-final-de-liga-de-campanillas-para-el-alimerka-ocb/"
+          ],
+          "notes": "All 34 jornadas (18-team league, 25.09.2026-07.05.2027). Jornadas 1-15 incl. dates and times transcribed from the official FEB live calendar (baloncestoenvivo.feb.es); J14 at Menorca shows a 0:00 placeholder time there, so time left unset. Jornadas 16-34 dates from RealGM/Proballers (same FEB feed), with jornada numbers and key dates (J16 12.01, J24 09.03, J34 07.05, midweek rounds) corroborated by Alimerka Oviedo's calendar article; times for J16-34 not yet published. Midweek jornadas: J16 (Tue 12.01), J20 (Tue 09.02), J24 (Tue 09.03), J31 (Tue 20.04). movistarestudiantes.com calendar page was unreachable from this environment.",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": "12:00",
+              "home": true,
+              "opponent": "Insolac Caja 87",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Caja Rural CB Zamora",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-11",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Inveready Askatuak Gipuzkoa",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Iberolea Palencia",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Fibwi Mallorca Basquet Palma",
+              "round": "5"
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Gran Canaria",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Grupo Alega Cantabria",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-14",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Coviran Granada",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": "12:00",
+              "home": true,
+              "opponent": "Club Ourense Baloncesto",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Bueno Arenas Albacete Basket",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Palmer Basket Mallorca Palma",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-18",
+              "time_local": "20:45",
+              "home": false,
+              "opponent": "Grupo Ureta Tizona Burgos",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "12:00",
+              "home": true,
+              "opponent": "Flexicar Fuenlabrada",
+              "round": "13"
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "Bàsquet Menorca",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "HLA Alicante",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Alimerka Oviedo Baloncesto",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": null,
+              "home": true,
+              "opponent": "Cajasol Coto Córdoba",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "Palmer Basket Mallorca Palma",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Gran Canaria",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-09",
+              "time_local": null,
+              "home": true,
+              "opponent": "Bàsquet Menorca",
+              "round": "20"
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Insolac Caja 87",
+              "round": "21"
+            },
+            {
+              "date": "2027-02-19",
+              "time_local": null,
+              "home": false,
+              "opponent": "Iberolea Palencia",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Caja Rural CB Zamora",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "HLA Alicante",
+              "round": "24"
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Coviran Granada",
+              "round": "25"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Bueno Arenas Albacete Basket",
+              "round": "26"
+            },
+            {
+              "date": "2027-03-28",
+              "time_local": null,
+              "home": true,
+              "opponent": "Grupo Alega Cantabria",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "Flexicar Fuenlabrada",
+              "round": "28"
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Inveready Askatuak Gipuzkoa",
+              "round": "29"
+            },
+            {
+              "date": "2027-04-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Grupo Ureta Tizona Burgos",
+              "round": "30"
+            },
+            {
+              "date": "2027-04-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Fibwi Mallorca Basquet Palma",
+              "round": "31"
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": false,
+              "opponent": "Club Ourense Baloncesto",
+              "round": "32"
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Alimerka Oviedo Baloncesto",
+              "round": "33"
+            },
+            {
+              "date": "2027-05-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Cajasol Coto Córdoba",
+              "round": "34"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "JDA Dijon",
+      "country": "Prantsusmaa",
+      "players": [
+        "Kregor Hermet"
+      ],
+      "competitions": [
+        {
+          "name": "Betclic Elite",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.bebasket.fr/equipe/dijon/calendrier",
+            "https://www.proballers.com/basketball/team/11/dijon/schedule",
+            "https://www.bebasket.fr/le-calendrier-complet-de-la-saison-2026-27-de-betclic-elite-enfin-revele"
+          ],
+          "notes": "All 30 journees of the 16-team 2026-27 Betclic Elite regular season (opener J1 Dijon-Strasbourg Fri 25.09.2026, confirmed by BeBasket). Journee numbers, dates and the times shown for J1-J14 transcribed from BeBasket's Dijon calendar page; J15-J30 times not yet published. Where BeBasket and Proballers dates differed by one day within the same weekend (J3, J4, J5), the BeBasket date (with confirmed time) was used. lnb.fr and jdadijon.com were unreachable from this environment (403/503). Proballers additionally lists Aug/early-Sep 2026 preseason friendlies (Vichy, Roanne, Chalon, Nancy) - excluded as non-league games.",
+          "games": [
+            {
+              "date": "2026-09-25",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "SIG Strasbourg",
+              "round": "1"
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": "18:30",
+              "home": false,
+              "opponent": "Pau-Lacq-Orthez",
+              "round": "2"
+            },
+            {
+              "date": "2026-10-09",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Limoges CSP",
+              "round": "3"
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": "16:00",
+              "home": false,
+              "opponent": "Gravelines-Dunkerque",
+              "round": "4"
+            },
+            {
+              "date": "2026-10-23",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Saint-Quentin",
+              "round": "5"
+            },
+            {
+              "date": "2026-10-30",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "SLUC Nancy",
+              "round": "6"
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Cholet Basket",
+              "round": "7"
+            },
+            {
+              "date": "2026-11-14",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Nanterre 92",
+              "round": "8"
+            },
+            {
+              "date": "2026-11-21",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Le Mans",
+              "round": "9"
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "JL Bourg-en-Bresse",
+              "round": "10"
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Boulazac",
+              "round": "11"
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Paris Basketball",
+              "round": "12"
+            },
+            {
+              "date": "2026-12-22",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Chorale Roanne",
+              "round": "13"
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "ASVEL",
+              "round": "14"
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": null,
+              "home": true,
+              "opponent": "Elan Chalon",
+              "round": "15"
+            },
+            {
+              "date": "2027-01-16",
+              "time_local": null,
+              "home": false,
+              "opponent": "Limoges CSP",
+              "round": "16"
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "Paris Basketball",
+              "round": "17"
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": null,
+              "home": false,
+              "opponent": "Chorale Roanne",
+              "round": "18"
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "Pau-Lacq-Orthez",
+              "round": "19"
+            },
+            {
+              "date": "2027-02-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Elan Chalon",
+              "round": "20"
+            },
+            {
+              "date": "2027-03-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "JL Bourg-en-Bresse",
+              "round": "21"
+            },
+            {
+              "date": "2027-03-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "SLUC Nancy",
+              "round": "22"
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Gravelines-Dunkerque",
+              "round": "23"
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Le Mans",
+              "round": "24"
+            },
+            {
+              "date": "2027-04-03",
+              "time_local": null,
+              "home": true,
+              "opponent": "ASVEL",
+              "round": "25"
+            },
+            {
+              "date": "2027-04-10",
+              "time_local": null,
+              "home": false,
+              "opponent": "Boulazac",
+              "round": "26"
+            },
+            {
+              "date": "2027-04-17",
+              "time_local": null,
+              "home": true,
+              "opponent": "Saint-Quentin",
+              "round": "27"
+            },
+            {
+              "date": "2027-04-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "Cholet Basket",
+              "round": "28"
+            },
+            {
+              "date": "2027-05-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "Nanterre 92",
+              "round": "29"
+            },
+            {
+              "date": "2027-05-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "SIG Strasbourg",
+              "round": "30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Bigbank/Kalev",
+      "country": "Eesti",
+      "players": [
+        "Hugo Toom"
+      ],
+      "competitions": [
+        {
+          "name": "Eesti-Läti liiga",
+          "schedule_status": "partial",
+          "sources": [
+            "https://bckalev.ee/ajakava/"
+          ],
+          "notes": "All 22 league games published on the club schedule page as of 2026-09-07 (verified twice). Away fixtures in Latvia vs BK Ventspils, Rigas Ekselences Juniori, Rigas Zelli, BK Liepaja, VEF Riga and Latvijas Universitate are not yet listed on the page, so the full double round-robin is not yet published there. Home venue mostly Nord Spordihoone, Tallinn.",
+          "games": [
+            {
+              "date": "2026-09-24",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Tartu Ülikool Maks & Moorits",
+              "round": null
+            },
+            {
+              "date": "2026-09-27",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "Viimsi",
+              "round": null
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "BC Pärnu",
+              "round": null
+            },
+            {
+              "date": "2026-10-10",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "BK Ventspils",
+              "round": null
+            },
+            {
+              "date": "2026-10-17",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Rigas Ekselences Juniori",
+              "round": null
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Keila Basket",
+              "round": null
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Rigas Zelli",
+              "round": null
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "BK Ogre",
+              "round": null
+            },
+            {
+              "date": "2026-12-02",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Keila KK",
+              "round": null
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "BK Liepaja",
+              "round": null
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Valmiera Glass VIA",
+              "round": null
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "TalTech/Alexela",
+              "round": null
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "BC Pärnu",
+              "round": null
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "VEF Riga",
+              "round": null
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Tartu Ülikool Maks & Moorits",
+              "round": null
+            },
+            {
+              "date": "2027-01-17",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Keila Basket",
+              "round": null
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Viimsi",
+              "round": null
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Keila KK",
+              "round": null
+            },
+            {
+              "date": "2027-02-02",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "BK Ogre",
+              "round": null
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Latvijas Universitate",
+              "round": null
+            },
+            {
+              "date": "2027-02-12",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Valmiera Glass VIA",
+              "round": null
+            },
+            {
+              "date": "2027-03-08",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "TalTech/Alexela",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "FIBA Europe Cup",
+          "schedule_status": "partial",
+          "sources": [
+            "https://bckalev.ee/ajakava/"
+          ],
+          "notes": "9 group-stage games published; the home game vs Manchester Basketball is not listed on the page yet. Group opponents: Glint Manisa Basket, Valmiera Glass VIA, BC Baskhimi, Manchester Basketball, Elan Chalon.",
+          "games": [
+            {
+              "date": "2026-10-07",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Glint Manisa Basket",
+              "round": null
+            },
+            {
+              "date": "2026-10-14",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Valmiera Glass VIA",
+              "round": null
+            },
+            {
+              "date": "2026-10-21",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "BC Baskhimi",
+              "round": null
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Manchester Basketball",
+              "round": null
+            },
+            {
+              "date": "2026-11-04",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Elan Chalon",
+              "round": null
+            },
+            {
+              "date": "2026-11-11",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Glint Manisa Basket",
+              "round": null
+            },
+            {
+              "date": "2026-11-17",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Valmiera Glass VIA",
+              "round": null
+            },
+            {
+              "date": "2026-12-09",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "BC Baskhimi",
+              "round": null
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Elan Chalon",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Tartu Ülikool Maks & Moorits",
+      "country": "Eesti",
+      "players": [
+        "Martin Paasoja",
+        "Märt Rosenthal"
+      ],
+      "competitions": [
+        {
+          "name": "Eesti-Läti liiga",
+          "schedule_status": "partial",
+          "sources": [
+            "https://basket.ut.ee/kalender-26-27/",
+            "https://bckalev.ee/ajakava/"
+          ],
+          "notes": "Club calendar page (basket.ut.ee/kalender-26-27) had only September and October 2026 populated as of 2026-09-07; November-May sections were empty. The 2027-01-09 away game vs Bigbank/Kalev is transcribed from the opponent's published schedule (bckalev.ee/ajakava). Remaining fixtures live on basket.ut.ee/kalender-26-27 once published, and on estlatbl.com (robots-blocked for automated fetching).",
+          "games": [
+            {
+              "date": "2026-09-24",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            },
+            {
+              "date": "2026-09-30",
+              "time_local": null,
+              "home": false,
+              "opponent": "BK Liepaja",
+              "round": null
+            },
+            {
+              "date": "2026-10-02",
+              "time_local": null,
+              "home": false,
+              "opponent": "BK Ventspils",
+              "round": null
+            },
+            {
+              "date": "2026-10-09",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Rigas Zelli",
+              "round": null
+            },
+            {
+              "date": "2026-10-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Keila KK",
+              "round": null
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "TalTech/Alexela",
+              "round": null
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": null,
+              "home": false,
+              "opponent": "VEF Riga",
+              "round": null
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "FIBA Europe Cup",
+          "schedule_status": "partial",
+          "sources": [
+            "https://basket.ut.ee/kalender-26-27/"
+          ],
+          "notes": "Only the four October 2026 group games were published on the club calendar; later group rounds (November onward) not yet listed.",
+          "games": [
+            {
+              "date": "2026-10-06",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Dziki Warsaw",
+              "round": null
+            },
+            {
+              "date": "2026-10-14",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "KK MZT Skopje Aerodrom",
+              "round": null
+            },
+            {
+              "date": "2026-10-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "Petrolina AEK Larnaca",
+              "round": null
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Iraklis BC",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "BC Pärnu",
+      "country": "Eesti",
+      "players": [
+        "Mihkel Kirves"
+      ],
+      "competitions": [
+        {
+          "name": "Eesti-Läti liiga",
+          "schedule_status": "partial",
+          "sources": [
+            "https://bckalev.ee/ajakava/"
+          ],
+          "notes": "Only the two fixtures vs Bigbank/Kalev could be transcribed, taken from the opponent's published schedule. The club's own calendar (bcparnu.ee/calendar/kalender/) renders via JavaScript and returned no fixture data to automated fetching; the league sites estlatbl.com and basket.ee are robots-blocked. Full fixture list lives at https://bcparnu.ee/calendar/kalender/ and https://www.estlatbl.com/et/ajakava.",
+          "games": [
+            {
+              "date": "2026-10-03",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "TalTech/Alexela",
+      "country": "Eesti",
+      "players": [
+        "Siim-Markus Post"
+      ],
+      "competitions": [
+        {
+          "name": "Eesti-Läti liiga",
+          "schedule_status": "partial",
+          "sources": [
+            "https://basket.ut.ee/kalender-26-27/",
+            "https://bckalev.ee/ajakava/"
+          ],
+          "notes": "Only three fixtures could be transcribed, all from opponents' published schedules (Tartu Ülikool and Bigbank/Kalev club pages). The club site taltechbasketball.ee loads its game calendar dynamically and exposed no fixture rows; its schedule link points to https://www.estlatbl.com/en/results?tid=9033 (robots-blocked). Full fixture list lives on estlatbl.com.",
+          "games": [
+            {
+              "date": "2026-10-24",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Tartu Ülikool Maks & Moorits",
+              "round": null
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            },
+            {
+              "date": "2027-03-08",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Bigbank/Kalev",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "ENBL",
+          "schedule_status": "partial",
+          "sources": [
+            "https://taltechbasketball.ee/"
+          ],
+          "notes": "Club homepage shows an upcoming ENBL home game vs Fyllingen Lions but without an extractable date/time; the ENBL schedule page (enbleague.eu/schedule) is JavaScript-rendered and returned no fixture data. No dated ENBL fixtures could be transcribed.",
+          "games": []
+        }
+      ]
+    },
+    {
+      "club": "Atlanta Hawks",
+      "country": "USA",
+      "players": [
+        "Henri Veesaar"
+      ],
+      "competitions": [
+        {
+          "name": "NBA",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.basketball-reference.com/teams/ATL/2027_games.html",
+            "https://basketball.realgm.com/nba/teams/Atlanta-Hawks/1/schedule"
+          ],
+          "notes": "2026-27 regular season schedule released 2026-08-13. 80 of 82 games have fixed dates; the remaining 2 games (for teams not reaching the NBA Cup knockout rounds) will be slotted into the open mid-December window (Dec 4-11) after NBA Cup group play resolves, so both sources list 80 dated games. All times are US Eastern (local for home games shown as listed by Basketball-Reference).",
+          "games": [
+            {
+              "date": "2026-10-21",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Orlando Magic",
+              "round": null
+            },
+            {
+              "date": "2026-10-23",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Charlotte Hornets",
+              "round": null
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Houston Rockets",
+              "round": null
+            },
+            {
+              "date": "2026-10-26",
+              "time_local": "20:30",
+              "home": false,
+              "opponent": "Houston Rockets",
+              "round": null
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Miami Heat",
+              "round": null
+            },
+            {
+              "date": "2026-10-29",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Cleveland Cavaliers",
+              "round": null
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "New Orleans Pelicans",
+              "round": null
+            },
+            {
+              "date": "2026-11-02",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Indiana Pacers",
+              "round": null
+            },
+            {
+              "date": "2026-11-04",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Washington Wizards",
+              "round": null
+            },
+            {
+              "date": "2026-11-06",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Washington Wizards",
+              "round": null
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Brooklyn Nets",
+              "round": null
+            },
+            {
+              "date": "2026-11-09",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Los Angeles Lakers",
+              "round": null
+            },
+            {
+              "date": "2026-11-13",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Chicago Bulls",
+              "round": null
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Milwaukee Bucks",
+              "round": null
+            },
+            {
+              "date": "2026-11-18",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Oklahoma City Thunder",
+              "round": null
+            },
+            {
+              "date": "2026-11-20",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Charlotte Hornets",
+              "round": null
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": "15:30",
+              "home": true,
+              "opponent": "Detroit Pistons",
+              "round": null
+            },
+            {
+              "date": "2026-11-27",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Boston Celtics",
+              "round": null
+            },
+            {
+              "date": "2026-11-29",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "New York Knicks",
+              "round": null
+            },
+            {
+              "date": "2026-12-01",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Miami Heat",
+              "round": null
+            },
+            {
+              "date": "2026-12-03",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Indiana Pacers",
+              "round": null
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": "22:00",
+              "home": false,
+              "opponent": "Portland Trail Blazers",
+              "round": null
+            },
+            {
+              "date": "2026-12-14",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Phoenix Suns",
+              "round": null
+            },
+            {
+              "date": "2026-12-17",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Denver Nuggets",
+              "round": null
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Orlando Magic",
+              "round": null
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Oklahoma City Thunder",
+              "round": null
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Detroit Pistons",
+              "round": null
+            },
+            {
+              "date": "2026-12-26",
+              "time_local": "15:30",
+              "home": true,
+              "opponent": "Charlotte Hornets",
+              "round": null
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "San Antonio Spurs",
+              "round": null
+            },
+            {
+              "date": "2026-12-29",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Chicago Bulls",
+              "round": null
+            },
+            {
+              "date": "2026-12-31",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Milwaukee Bucks",
+              "round": null
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Dallas Mavericks",
+              "round": null
+            },
+            {
+              "date": "2027-01-04",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Philadelphia 76ers",
+              "round": null
+            },
+            {
+              "date": "2027-01-05",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Charlotte Hornets",
+              "round": null
+            },
+            {
+              "date": "2027-01-07",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Indiana Pacers",
+              "round": null
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "San Antonio Spurs",
+              "round": null
+            },
+            {
+              "date": "2027-01-11",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Washington Wizards",
+              "round": null
+            },
+            {
+              "date": "2027-01-13",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Cleveland Cavaliers",
+              "round": null
+            },
+            {
+              "date": "2027-01-15",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Golden State Warriors",
+              "round": null
+            },
+            {
+              "date": "2027-01-18",
+              "time_local": "14:30",
+              "home": true,
+              "opponent": "Philadelphia 76ers",
+              "round": null
+            },
+            {
+              "date": "2027-01-20",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Portland Trail Blazers",
+              "round": null
+            },
+            {
+              "date": "2027-01-22",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "New York Knicks",
+              "round": null
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Miami Heat",
+              "round": null
+            },
+            {
+              "date": "2027-01-26",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Detroit Pistons",
+              "round": null
+            },
+            {
+              "date": "2027-01-28",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "New York Knicks",
+              "round": null
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Milwaukee Bucks",
+              "round": null
+            },
+            {
+              "date": "2027-02-01",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Washington Wizards",
+              "round": null
+            },
+            {
+              "date": "2027-02-03",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Indiana Pacers",
+              "round": null
+            },
+            {
+              "date": "2027-02-05",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Boston Celtics",
+              "round": null
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Denver Nuggets",
+              "round": null
+            },
+            {
+              "date": "2027-02-08",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Miami Heat",
+              "round": null
+            },
+            {
+              "date": "2027-02-10",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "New Orleans Pelicans",
+              "round": null
+            },
+            {
+              "date": "2027-02-12",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Phoenix Suns",
+              "round": null
+            },
+            {
+              "date": "2027-02-14",
+              "time_local": "13:00",
+              "home": true,
+              "opponent": "Sacramento Kings",
+              "round": null
+            },
+            {
+              "date": "2027-02-16",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Toronto Raptors",
+              "round": null
+            },
+            {
+              "date": "2027-02-17",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Brooklyn Nets",
+              "round": null
+            },
+            {
+              "date": "2027-02-25",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Chicago Bulls",
+              "round": null
+            },
+            {
+              "date": "2027-02-26",
+              "time_local": "19:30",
+              "home": false,
+              "opponent": "Toronto Raptors",
+              "round": null
+            },
+            {
+              "date": "2027-02-28",
+              "time_local": "16:30",
+              "home": false,
+              "opponent": "Orlando Magic",
+              "round": null
+            },
+            {
+              "date": "2027-03-03",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Chicago Bulls",
+              "round": null
+            },
+            {
+              "date": "2027-03-04",
+              "time_local": "19:30",
+              "home": true,
+              "opponent": "Memphis Grizzlies",
+              "round": null
+            },
+            {
+              "date": "2027-03-06",
+              "time_local": "17:30",
+              "home": false,
+              "opponent": "Cleveland Cavaliers",
+              "round": null
+            },
+            {
+              "date": "2027-03-08",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Memphis Grizzlies",
+              "round": null
+            },
+            {
+              "date": "2027-03-10",
+              "time_local": "21:30",
+              "home": false,
+              "opponent": "Minnesota Timberwolves",
+              "round": null
+            },
+            {
+              "date": "2027-03-11",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "Brooklyn Nets",
+              "round": null
+            },
+            {
+              "date": "2027-03-13",
+              "time_local": "15:00",
+              "home": true,
+              "opponent": "Orlando Magic",
+              "round": null
+            },
+            {
+              "date": "2027-03-15",
+              "time_local": "21:30",
+              "home": false,
+              "opponent": "Dallas Mavericks",
+              "round": null
+            },
+            {
+              "date": "2027-03-17",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Utah Jazz",
+              "round": null
+            },
+            {
+              "date": "2027-03-19",
+              "time_local": "22:00",
+              "home": false,
+              "opponent": "Los Angeles Lakers",
+              "round": null
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": "22:30",
+              "home": false,
+              "opponent": "Los Angeles Clippers",
+              "round": null
+            },
+            {
+              "date": "2027-03-22",
+              "time_local": "22:00",
+              "home": false,
+              "opponent": "Golden State Warriors",
+              "round": null
+            },
+            {
+              "date": "2027-03-24",
+              "time_local": "22:00",
+              "home": false,
+              "opponent": "Sacramento Kings",
+              "round": null
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Utah Jazz",
+              "round": null
+            },
+            {
+              "date": "2027-03-29",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Minnesota Timberwolves",
+              "round": null
+            },
+            {
+              "date": "2027-03-31",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Los Angeles Clippers",
+              "round": null
+            },
+            {
+              "date": "2027-04-02",
+              "time_local": "20:30",
+              "home": false,
+              "opponent": "Toronto Raptors",
+              "round": null
+            },
+            {
+              "date": "2027-04-04",
+              "time_local": "13:00",
+              "home": false,
+              "opponent": "Philadelphia 76ers",
+              "round": null
+            },
+            {
+              "date": "2027-04-06",
+              "time_local": "20:00",
+              "home": true,
+              "opponent": "New York Knicks",
+              "round": null
+            },
+            {
+              "date": "2027-04-09",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Boston Celtics",
+              "round": null
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": "18:00",
+              "home": false,
+              "opponent": "Cleveland Cavaliers",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Stephen F. Austin Lumberjacks",
+      "country": "USA",
+      "players": [
+        "Erik Makke"
+      ],
+      "competitions": [
+        {
+          "name": "NCAA Division I (Southland Conference)",
+          "schedule_status": "full",
+          "sources": [
+            "https://sfajacks.com/sports/mens-basketball/schedule"
+          ],
+          "notes": "Full 2026-27 schedule as posted: 33 entries = 1 exhibition (Oct 23 vs Sam Houston) + 32 games, of which 2 Paradise Jam games have bracket-dependent TBD opponents (31 games with known opponents). Times are local Central time as listed (Paradise Jam games local USVI/listed time); null = TBA. Home games at Johnson Coliseum, Nacogdoches, Texas; Paradise Jam games (Nov 20-23) are neutral site in Charlotte Amalie, St. Thomas, USVI.",
+          "games": [
+            {
+              "date": "2026-10-23",
+              "time_local": "18:00",
+              "home": true,
+              "opponent": "Sam Houston",
+              "round": "Exhibition",
+              "note": "Exhibition game"
+            },
+            {
+              "date": "2026-11-02",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Lyon College (Ark.)",
+              "round": null
+            },
+            {
+              "date": "2026-11-06",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Texas Lutheran",
+              "round": null
+            },
+            {
+              "date": "2026-11-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Abilene Christian",
+              "round": null
+            },
+            {
+              "date": "2026-11-14",
+              "time_local": "13:00",
+              "home": true,
+              "opponent": "Rice",
+              "round": null
+            },
+            {
+              "date": "2026-11-20",
+              "time_local": "14:00",
+              "home": false,
+              "opponent": "Indiana State",
+              "round": "Paradise Jam",
+              "note": "Neutral site: Charlotte Amalie, St. Thomas, U.S. Virgin Islands (Paradise Jam)"
+            },
+            {
+              "date": "2026-11-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "TBD (Temple or Middle Tennessee)",
+              "round": "Paradise Jam",
+              "note": "Neutral site: Charlotte Amalie, USVI; opponent bracket-dependent"
+            },
+            {
+              "date": "2026-11-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "TBD (Paradise Jam bracket)",
+              "round": "Paradise Jam",
+              "note": "Neutral site: Charlotte Amalie, USVI; opponent bracket-dependent"
+            },
+            {
+              "date": "2026-12-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "Southern Methodist",
+              "round": null
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "East Texas A&M",
+              "round": null
+            },
+            {
+              "date": "2026-12-09",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "UT Arlington",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Louisiana Tech",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2026-12-19",
+              "time_local": null,
+              "home": false,
+              "opponent": "UTRGV",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2026-12-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "Texas A&M-Corpus Christi",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2026-12-29",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Northwestern State",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "Southeastern Louisiana",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "McNeese State",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "Houston Christian",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Incarnate Word",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-16",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "LSU New Orleans",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-18",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Nicholls",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "McNeese State",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-26",
+              "time_local": null,
+              "home": false,
+              "opponent": "Southeastern Louisiana",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "Lamar",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "Northwestern State",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Lamar",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-08",
+              "time_local": null,
+              "home": false,
+              "opponent": "East Texas A&M",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-13",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "UTRGV",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-15",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Texas A&M-Corpus Christi",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Nicholls",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-22",
+              "time_local": null,
+              "home": false,
+              "opponent": "LSU New Orleans",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-02-27",
+              "time_local": "16:30",
+              "home": true,
+              "opponent": "Houston Christian",
+              "round": "Southland Conference"
+            },
+            {
+              "date": "2027-03-01",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Incarnate Word",
+              "round": "Southland Conference"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Illinois Fighting Illini",
+      "country": "USA",
+      "players": [
+        "Stefan Vaaks"
+      ],
+      "competitions": [
+        {
+          "name": "NCAA Division I (Big Ten)",
+          "schedule_status": "partial",
+          "sources": [
+            "https://fightingillini.com/sports/mens-basketball/schedule",
+            "https://fightingillini.com/news/2026/8/21/illinois-unveils-mens-basketball-non-conference-schedule"
+          ],
+          "notes": "Only the non-conference schedule has been announced (released 2026-08-21): 3 exhibitions + 12 regular-season non-conference games. Big Ten conference game dates are NOT yet released (Big Ten Tournament: Mar 9-14, 2027, Indianapolis). All game times TBA. Season opener Nov 2 vs Fairleigh Dickinson.",
+          "games": [
+            {
+              "date": "2026-10-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Cincinnati",
+              "round": "Exhibition",
+              "note": "Exhibition game (away)"
+            },
+            {
+              "date": "2026-10-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "Baylor",
+              "round": "Exhibition",
+              "note": "Exhibition game"
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": null,
+              "home": true,
+              "opponent": "UIC",
+              "round": "Exhibition",
+              "note": "Exhibition game"
+            },
+            {
+              "date": "2026-11-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Fairleigh Dickinson",
+              "round": null,
+              "note": "Season opener"
+            },
+            {
+              "date": "2026-11-05",
+              "time_local": null,
+              "home": true,
+              "opponent": "Penn",
+              "round": null
+            },
+            {
+              "date": "2026-11-10",
+              "time_local": null,
+              "home": false,
+              "opponent": "Texas Tech",
+              "round": null
+            },
+            {
+              "date": "2026-11-13",
+              "time_local": null,
+              "home": true,
+              "opponent": "Sam Houston",
+              "round": null
+            },
+            {
+              "date": "2026-11-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Duke",
+              "round": null
+            },
+            {
+              "date": "2026-11-20",
+              "time_local": null,
+              "home": true,
+              "opponent": "Eastern Illinois",
+              "round": null
+            },
+            {
+              "date": "2026-11-23",
+              "time_local": null,
+              "home": true,
+              "opponent": "Winthrop",
+              "round": null
+            },
+            {
+              "date": "2026-11-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "Western Kentucky",
+              "round": null
+            },
+            {
+              "date": "2026-12-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "UConn",
+              "round": null,
+              "note": "Neutral site: United Center, Chicago, Ill."
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Missouri",
+              "round": "Braggin' Rights",
+              "note": "Neutral site: Enterprise Center, St. Louis, Mo. (McBride Homes Braggin' Rights)"
+            },
+            {
+              "date": "2026-12-29",
+              "time_local": null,
+              "home": true,
+              "opponent": "Seattle",
+              "round": null
+            },
+            {
+              "date": "2027-01-30",
+              "time_local": null,
+              "home": false,
+              "opponent": "North Carolina",
+              "round": "Nashville Hoops Showdown",
+              "note": "Neutral site: Bridgestone Arena, Nashville, Tenn."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "BC Neptūnas",
+      "country": "Leedu",
+      "players": [
+        "Henri Drell"
+      ],
+      "competitions": [
+        {
+          "name": "LKL",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.basketnews.lt/komandos/286-klaipedos-neptunas/tvarkarastis.html",
+            "https://www.lkl.lt/tvarkarastis"
+          ],
+          "notes": "Kõik 36 põhiturniiri mängu (10 meeskonda, 4 ringi; hooaeg 2026-09-17 kuni 2027-05-16). Iga vastasega 2 kodu- ja 2 võõrsilmängu — kontrollitud. Ajad on Leedu kohalikud (basketnews.lt); lkl.lt näitas avamänguks 16:30, basketnews 16:50 — ajad võivad TV-graafiku tõttu nihkuda. Play-off algab 2027-05-19.",
+          "games": [
+            {
+              "date": "2026-09-20",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Kauno Žalgiris",
+              "round": null
+            },
+            {
+              "date": "2026-09-23",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Utenos Juventus",
+              "round": null
+            },
+            {
+              "date": "2026-09-26",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Gargždai",
+              "round": null
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Kėdainių Nevėžis",
+              "round": null
+            },
+            {
+              "date": "2026-10-10",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Vilniaus Rytas",
+              "round": null
+            },
+            {
+              "date": "2026-10-17",
+              "time_local": "17:00",
+              "home": false,
+              "opponent": "Jonavos Hipocredit",
+              "round": null
+            },
+            {
+              "date": "2026-10-25",
+              "time_local": "19:10",
+              "home": true,
+              "opponent": "Šiauliai",
+              "round": null
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Panevėžio Lietkabelis",
+              "round": null
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": "19:10",
+              "home": true,
+              "opponent": "Tauragė",
+              "round": null
+            },
+            {
+              "date": "2026-11-15",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Kauno Žalgiris",
+              "round": null
+            },
+            {
+              "date": "2026-11-21",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Jonavos Hipocredit",
+              "round": null
+            },
+            {
+              "date": "2026-12-05",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Šiauliai",
+              "round": null
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Utenos Juventus",
+              "round": null
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Tauragė",
+              "round": null
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Kėdainių Nevėžis",
+              "round": null
+            },
+            {
+              "date": "2027-01-16",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Vilniaus Rytas",
+              "round": null
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": "19:10",
+              "home": true,
+              "opponent": "Panevėžio Lietkabelis",
+              "round": null
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Gargždai",
+              "round": null
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Gargždai",
+              "round": null
+            },
+            {
+              "date": "2027-02-13",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Utenos Juventus",
+              "round": null
+            },
+            {
+              "date": "2027-02-17",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Panevėžio Lietkabelis",
+              "round": null
+            },
+            {
+              "date": "2027-03-06",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Kėdainių Nevėžis",
+              "round": null
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Kauno Žalgiris",
+              "round": null
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": "17:00",
+              "home": true,
+              "opponent": "Jonavos Hipocredit",
+              "round": null
+            },
+            {
+              "date": "2027-03-27",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Tauragė",
+              "round": null
+            },
+            {
+              "date": "2027-04-03",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Šiauliai",
+              "round": null
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Vilniaus Rytas",
+              "round": null
+            },
+            {
+              "date": "2027-04-17",
+              "time_local": "16:50",
+              "home": true,
+              "opponent": "Kėdainių Nevėžis",
+              "round": null
+            },
+            {
+              "date": "2027-04-21",
+              "time_local": "18:50",
+              "home": false,
+              "opponent": "Panevėžio Lietkabelis",
+              "round": null
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": "16:50",
+              "home": false,
+              "opponent": "Kauno Žalgiris",
+              "round": null
+            },
+            {
+              "date": "2027-04-29",
+              "time_local": "18:50",
+              "home": false,
+              "opponent": "Šiauliai",
+              "round": null
+            },
+            {
+              "date": "2027-05-02",
+              "time_local": "19:10",
+              "home": true,
+              "opponent": "Gargždai",
+              "round": null
+            },
+            {
+              "date": "2027-05-05",
+              "time_local": "18:50",
+              "home": true,
+              "opponent": "Vilniaus Rytas",
+              "round": null
+            },
+            {
+              "date": "2027-05-08",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Jonavos Hipocredit",
+              "round": null
+            },
+            {
+              "date": "2027-05-12",
+              "time_local": "18:30",
+              "home": true,
+              "opponent": "Utenos Juventus",
+              "round": null
+            },
+            {
+              "date": "2027-05-15",
+              "time_local": "19:10",
+              "home": false,
+              "opponent": "Tauragė",
+              "round": null
+            }
+          ]
+        },
+        {
+          "name": "BKT EuroCup (C-grupp)",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.basketnews.lt/komandos/286-klaipedos-neptunas/tvarkarastis.html",
+            "https://en.wikipedia.org/wiki/2026%E2%80%9327_EuroCup_Basketball"
+          ],
+          "notes": "Neptūnas mängib 2026-27 BKT EuroCupi C-grupis (32 meeskonda, 4 gruppi 8-ga, 14 mängu). Kellaajad on Leedu aja järgi (ka võõrsilmängudel). Basketnews näitas ka 2026-09-12 mängu Sabah Bakuu vastu 'Eurocupi' sildiga, kuid Sabah ei ole ametlikus 32 meeskonna loosis — tõenäoliselt kontrollmäng, välja jäetud.",
+          "games": [
+            {
+              "date": "2026-09-29",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Dolomiti Energia Trento",
+              "round": 1
+            },
+            {
+              "date": "2026-10-07",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Niners Chemnitz",
+              "round": 2
+            },
+            {
+              "date": "2026-10-13",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Cosea JL Bourg",
+              "round": 3
+            },
+            {
+              "date": "2026-10-20",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Budućnost VOLI",
+              "round": 4
+            },
+            {
+              "date": "2026-10-28",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Napoli Basketball",
+              "round": 5
+            },
+            {
+              "date": "2026-11-03",
+              "time_local": "19:00",
+              "home": false,
+              "opponent": "Tofaş",
+              "round": 6
+            },
+            {
+              "date": "2026-11-10",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Śląsk Wrocław",
+              "round": 7
+            },
+            {
+              "date": "2026-11-18",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Dolomiti Energia Trento",
+              "round": 8
+            },
+            {
+              "date": "2026-12-08",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Niners Chemnitz",
+              "round": 9
+            },
+            {
+              "date": "2026-12-16",
+              "time_local": "20:30",
+              "home": false,
+              "opponent": "Cosea JL Bourg",
+              "round": 10
+            },
+            {
+              "date": "2026-12-22",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Budućnost VOLI",
+              "round": 11
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": "21:00",
+              "home": false,
+              "opponent": "Napoli Basketball",
+              "round": 12
+            },
+            {
+              "date": "2027-01-05",
+              "time_local": "19:00",
+              "home": true,
+              "opponent": "Tofaş",
+              "round": 13
+            },
+            {
+              "date": "2027-01-12",
+              "time_local": "20:00",
+              "home": false,
+              "opponent": "Śląsk Wrocław",
+              "round": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "Yokohama B-Corsairs",
+      "country": "Jaapan",
+      "players": [
+        "Maik-Kalev Kotsar"
+      ],
+      "competitions": [
+        {
+          "name": "B.LEAGUE PREMIER",
+          "schedule_status": "partial",
+          "sources": [
+            "https://basketball.realgm.com/international/league/105/Japanese-BLeague/team/1775/Yokohama-B-Corsairs/schedule",
+            "https://b-corsairs.com/game/"
+          ],
+          "notes": "RealGM-i tabelis on 59 mängu (2026-09-26 kuni 2027-05-01, Jaapani kohalikud kuupäevad); liiga on teatanud 60-mängulisest hooajast, seega üks mäng võib loendist puududa (b-corsairs.com ametlik graafik on JS/PDF-põhine ega olnud loetav). Kellaajad RealGM-is olid vaid USA aja teisendused — jäetud tühjaks.",
+          "games": [
+            {
+              "date": "2026-09-26",
+              "time_local": null,
+              "home": false,
+              "opponent": "Link Tochigi Brex",
+              "round": null
+            },
+            {
+              "date": "2026-09-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Link Tochigi Brex",
+              "round": null
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": null,
+              "home": true,
+              "opponent": "Shinshu Brave Warriors",
+              "round": null
+            },
+            {
+              "date": "2026-10-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Shinshu Brave Warriors",
+              "round": null
+            },
+            {
+              "date": "2026-10-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Osaka Evessa",
+              "round": null
+            },
+            {
+              "date": "2026-10-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "Kyoto Hannaryz",
+              "round": null
+            },
+            {
+              "date": "2026-10-12",
+              "time_local": null,
+              "home": true,
+              "opponent": "Chiba Jets",
+              "round": null
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Levanga Hokkaido",
+              "round": null
+            },
+            {
+              "date": "2026-10-22",
+              "time_local": null,
+              "home": false,
+              "opponent": "Sendai 89ers",
+              "round": null
+            },
+            {
+              "date": "2026-10-24",
+              "time_local": null,
+              "home": false,
+              "opponent": "Akita Northern Happinets",
+              "round": null
+            },
+            {
+              "date": "2026-10-26",
+              "time_local": null,
+              "home": true,
+              "opponent": "Hiroshima Dragonflies",
+              "round": null
+            },
+            {
+              "date": "2026-10-31",
+              "time_local": null,
+              "home": false,
+              "opponent": "Kawasaki Brave Thunders",
+              "round": null
+            },
+            {
+              "date": "2026-11-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "Kawasaki Brave Thunders",
+              "round": null
+            },
+            {
+              "date": "2026-11-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Kobe Storks",
+              "round": null
+            },
+            {
+              "date": "2026-11-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Altiri Chiba",
+              "round": null
+            },
+            {
+              "date": "2026-11-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Shiga Lakestars",
+              "round": null
+            },
+            {
+              "date": "2026-11-16",
+              "time_local": null,
+              "home": true,
+              "opponent": "Kawasaki Brave Thunders",
+              "round": null
+            },
+            {
+              "date": "2026-11-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Saga Ballooners",
+              "round": null
+            },
+            {
+              "date": "2026-12-04",
+              "time_local": null,
+              "home": true,
+              "opponent": "Shimane Susanoo Magic",
+              "round": null
+            },
+            {
+              "date": "2026-12-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Kyoto Hannaryz",
+              "round": null
+            },
+            {
+              "date": "2026-12-12",
+              "time_local": null,
+              "home": false,
+              "opponent": "Toyama Grouses",
+              "round": null
+            },
+            {
+              "date": "2026-12-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Toyama Grouses",
+              "round": null
+            },
+            {
+              "date": "2026-12-16",
+              "time_local": null,
+              "home": true,
+              "opponent": "Hiroshima Dragonflies",
+              "round": null
+            },
+            {
+              "date": "2026-12-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Chiba Jets",
+              "round": null
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Chiba Jets",
+              "round": null
+            },
+            {
+              "date": "2026-12-26",
+              "time_local": null,
+              "home": true,
+              "opponent": "Sendai 89ers",
+              "round": null
+            },
+            {
+              "date": "2026-12-27",
+              "time_local": null,
+              "home": true,
+              "opponent": "Sendai 89ers",
+              "round": null
+            },
+            {
+              "date": "2027-01-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Altiri Chiba",
+              "round": null
+            },
+            {
+              "date": "2027-01-03",
+              "time_local": null,
+              "home": true,
+              "opponent": "Altiri Chiba",
+              "round": null
+            },
+            {
+              "date": "2027-01-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "Shimane Susanoo Magic",
+              "round": null
+            },
+            {
+              "date": "2027-01-25",
+              "time_local": null,
+              "home": false,
+              "opponent": "San-en NeoPhoenix",
+              "round": null
+            },
+            {
+              "date": "2027-01-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Osaka Evessa",
+              "round": null
+            },
+            {
+              "date": "2027-01-29",
+              "time_local": null,
+              "home": false,
+              "opponent": "Sun Rockers Shibuya",
+              "round": null
+            },
+            {
+              "date": "2027-01-31",
+              "time_local": null,
+              "home": false,
+              "opponent": "Sun Rockers Shibuya",
+              "round": null
+            },
+            {
+              "date": "2027-02-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Levanga Hokkaido",
+              "round": null
+            },
+            {
+              "date": "2027-02-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "Levanga Hokkaido",
+              "round": null
+            },
+            {
+              "date": "2027-02-11",
+              "time_local": null,
+              "home": false,
+              "opponent": "Shiga Lakestars",
+              "round": null
+            },
+            {
+              "date": "2027-02-15",
+              "time_local": null,
+              "home": true,
+              "opponent": "Nagasaki Velca",
+              "round": null
+            },
+            {
+              "date": "2027-02-17",
+              "time_local": null,
+              "home": false,
+              "opponent": "Gunma Crane Thunders",
+              "round": null
+            },
+            {
+              "date": "2027-03-05",
+              "time_local": null,
+              "home": true,
+              "opponent": "Alvark Tokyo",
+              "round": null
+            },
+            {
+              "date": "2027-03-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Alvark Tokyo",
+              "round": null
+            },
+            {
+              "date": "2027-03-10",
+              "time_local": null,
+              "home": false,
+              "opponent": "Ibaraki Robots",
+              "round": null
+            },
+            {
+              "date": "2027-03-12",
+              "time_local": null,
+              "home": true,
+              "opponent": "Akita Northern Happinets",
+              "round": null
+            },
+            {
+              "date": "2027-03-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Akita Northern Happinets",
+              "round": null
+            },
+            {
+              "date": "2027-03-17",
+              "time_local": null,
+              "home": true,
+              "opponent": "Sun Rockers Shibuya",
+              "round": null
+            },
+            {
+              "date": "2027-03-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Nagoya Diamond Dolphins",
+              "round": null
+            },
+            {
+              "date": "2027-03-21",
+              "time_local": null,
+              "home": false,
+              "opponent": "Nagoya Diamond Dolphins",
+              "round": null
+            },
+            {
+              "date": "2027-03-31",
+              "time_local": null,
+              "home": true,
+              "opponent": "Ryukyu Golden Kings",
+              "round": null
+            },
+            {
+              "date": "2027-04-02",
+              "time_local": null,
+              "home": true,
+              "opponent": "Toyama Grouses",
+              "round": null
+            },
+            {
+              "date": "2027-04-05",
+              "time_local": null,
+              "home": false,
+              "opponent": "Saga Ballooners",
+              "round": null
+            },
+            {
+              "date": "2027-04-07",
+              "time_local": null,
+              "home": false,
+              "opponent": "SeaHorses Mikawa",
+              "round": null
+            },
+            {
+              "date": "2027-04-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Ibaraki Robots",
+              "round": null
+            },
+            {
+              "date": "2027-04-11",
+              "time_local": null,
+              "home": true,
+              "opponent": "Ibaraki Robots",
+              "round": null
+            },
+            {
+              "date": "2027-04-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Link Tochigi Brex",
+              "round": null
+            },
+            {
+              "date": "2027-04-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Alvark Tokyo",
+              "round": null
+            },
+            {
+              "date": "2027-04-24",
+              "time_local": null,
+              "home": true,
+              "opponent": "Gunma Crane Thunders",
+              "round": null
+            },
+            {
+              "date": "2027-04-25",
+              "time_local": null,
+              "home": true,
+              "opponent": "Gunma Crane Thunders",
+              "round": null
+            },
+            {
+              "date": "2027-04-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "SeaHorses Mikawa",
+              "round": null
+            },
+            {
+              "date": "2027-05-01",
+              "time_local": null,
+              "home": false,
+              "opponent": "San-en NeoPhoenix",
+              "round": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "club": "U-BT Cluj-Napoca",
+      "country": "Rumeenia",
+      "players": [
+        "Kristian Kullamäe"
+      ],
+      "competitions": [
+        {
+          "name": "Liga Națională",
+          "schedule_status": "none",
+          "sources": [],
+          "notes": "U-BT Cluj jätab koduse Rumeenia liiga põhihooaja vahele ja liitub alles play-off'is — põhiturniiri mänge klubil ei ole, seetõttu graafik puudub.",
+          "games": []
+        },
+        {
+          "name": "BKT EuroCup (B-grupp)",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.stiridecluj.ro/sport/u-bt-cluj-si-a-aflat-programul-din-eurocup-cand-se-joaca-primul-meci-tare-in-bt-arena-si-ce-meci-se-joaca-la-turda",
+            "https://actualdecluj.ro/toamna-si-iarna-de-foc-la-bt-arena-u-bt-cluj-napoca-si-a-aflat-programul-meciurilor-de-pe-teren-propriu-din-eurocup/",
+            "https://en.wikipedia.org/wiki/2026%E2%80%9327_EuroCup_Basketball"
+          ],
+          "notes": "2026-27 EuroCupi formaat on 4 gruppi 8 meeskonnaga ehk 14 põhiturniiri mängu (mitte 18). Kellaajad pole veel avaldatud. Šiauliai kodumäng (2026-12-16) toimub tõenäoliselt Turdas, kuna BT Arena on hõivatud käsipalli EM-iga.",
+          "games": [
+            {
+              "date": "2026-09-30",
+              "time_local": null,
+              "home": false,
+              "opponent": "Maxima Roma",
+              "round": 1
+            },
+            {
+              "date": "2026-10-07",
+              "time_local": null,
+              "home": true,
+              "opponent": "Umana Reyer Venezia",
+              "round": 2
+            },
+            {
+              "date": "2026-10-14",
+              "time_local": null,
+              "home": false,
+              "opponent": "Šiauliai",
+              "round": 3
+            },
+            {
+              "date": "2026-10-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "London Lions",
+              "round": 4
+            },
+            {
+              "date": "2026-10-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Skyliners Frankfurt",
+              "round": 5
+            },
+            {
+              "date": "2026-11-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "La Laguna Tenerife",
+              "round": 6
+            },
+            {
+              "date": "2026-11-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Türk Telekom",
+              "round": 7
+            },
+            {
+              "date": "2026-11-18",
+              "time_local": null,
+              "home": true,
+              "opponent": "Maxima Roma",
+              "round": 8
+            },
+            {
+              "date": "2026-12-09",
+              "time_local": null,
+              "home": false,
+              "opponent": "Umana Reyer Venezia",
+              "round": 9
+            },
+            {
+              "date": "2026-12-16",
+              "time_local": null,
+              "home": true,
+              "opponent": "Šiauliai",
+              "round": 10
+            },
+            {
+              "date": "2026-12-23",
+              "time_local": null,
+              "home": false,
+              "opponent": "London Lions",
+              "round": 11
+            },
+            {
+              "date": "2026-12-30",
+              "time_local": null,
+              "home": true,
+              "opponent": "Skyliners Frankfurt",
+              "round": 12
+            },
+            {
+              "date": "2027-01-06",
+              "time_local": null,
+              "home": true,
+              "opponent": "La Laguna Tenerife",
+              "round": 13
+            },
+            {
+              "date": "2027-01-13",
+              "time_local": null,
+              "home": false,
+              "opponent": "Türk Telekom",
+              "round": 14
+            }
+          ]
+        },
+        {
+          "name": "ABA League (esimene faas)",
+          "schedule_status": "full",
+          "sources": [
+            "https://www.monitorulcj.ro/sport/139933-u-bt-inaintea-sezonului-din-liga-adriatica-programul-complet-pentru-echipa-lui-mihai-silvasan",
+            "https://cluj24.ro/u-bt-cluj-napoca-incepe-un-nou-sezon-in-liga-adriatica-alb-negrii-debuteaza-la-belgrad-calendarul-complet-302620.html",
+            "https://sportincluj.ro/2026/08/u-bt-cluj-napoca-gata-de-un-nou-sezon-in-liga-adriatica-vezi-programul-complet-si-adversarii-din-aba-league-2026-2027/"
+          ],
+          "notes": "Esimese faasi 18 vooru; kaks sõltumatut allikat andsid identse kalendri. NB! 11. voor (SC Derby kodus) on tõstetud 2027-01-21 peale, seetõttu pole kuupäevad vooru numbri järgi kronoloogilised. Kellaajad pole veel avaldatud. Top 8 faas algab 2027-02-06.",
+          "games": [
+            {
+              "date": "2026-09-27",
+              "time_local": null,
+              "home": false,
+              "opponent": "Mega Superbet",
+              "round": 1
+            },
+            {
+              "date": "2026-10-03",
+              "time_local": null,
+              "home": false,
+              "opponent": "BC Vienna",
+              "round": 2
+            },
+            {
+              "date": "2026-10-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Dubai Basketball",
+              "round": 3
+            },
+            {
+              "date": "2026-10-18",
+              "time_local": null,
+              "home": false,
+              "opponent": "Spartak Office Shoes Subotica",
+              "round": 4
+            },
+            {
+              "date": "2026-10-26",
+              "time_local": null,
+              "home": false,
+              "opponent": "SC Derby",
+              "round": 5
+            },
+            {
+              "date": "2026-11-02",
+              "time_local": null,
+              "home": false,
+              "opponent": "Partizan Mozzart Bet",
+              "round": 6
+            },
+            {
+              "date": "2026-11-08",
+              "time_local": null,
+              "home": true,
+              "opponent": "Bosna BH Telecom",
+              "round": 7
+            },
+            {
+              "date": "2026-11-14",
+              "time_local": null,
+              "home": true,
+              "opponent": "Perspektiva Ilirija",
+              "round": 8
+            },
+            {
+              "date": "2026-11-22",
+              "time_local": null,
+              "home": true,
+              "opponent": "Zadar",
+              "round": 9
+            },
+            {
+              "date": "2026-12-06",
+              "time_local": null,
+              "home": false,
+              "opponent": "Bosna BH Telecom",
+              "round": 10
+            },
+            {
+              "date": "2027-01-21",
+              "time_local": null,
+              "home": true,
+              "opponent": "SC Derby",
+              "round": 11
+            },
+            {
+              "date": "2026-12-20",
+              "time_local": null,
+              "home": false,
+              "opponent": "Zadar",
+              "round": 12
+            },
+            {
+              "date": "2026-12-26",
+              "time_local": null,
+              "home": true,
+              "opponent": "Partizan Mozzart Bet",
+              "round": 13
+            },
+            {
+              "date": "2027-01-04",
+              "time_local": null,
+              "home": false,
+              "opponent": "Dubai Basketball",
+              "round": 14
+            },
+            {
+              "date": "2027-01-10",
+              "time_local": null,
+              "home": true,
+              "opponent": "Spartak Office Shoes Subotica",
+              "round": 15
+            },
+            {
+              "date": "2027-01-16",
+              "time_local": null,
+              "home": true,
+              "opponent": "Mega Superbet",
+              "round": 16
+            },
+            {
+              "date": "2027-01-24",
+              "time_local": null,
+              "home": true,
+              "opponent": "BC Vienna",
+              "round": 17
+            },
+            {
+              "date": "2027-01-28",
+              "time_local": null,
+              "home": false,
+              "opponent": "Perspektiva Ilirija",
+              "round": 18
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
