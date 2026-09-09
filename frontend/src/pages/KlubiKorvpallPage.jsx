@@ -328,7 +328,7 @@ function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index
   )
 }
 
-// ── Tulevase mängu kaart (graafik) ────────────────────────────────────────────
+// ── Tulevase mängu kaart (ajakava) ────────────────────────────────────────────
 // Erineb tulemuste kaardist tahtlikult: skoori asemel kellaaeg sinisel plaadil,
 // tablood pole. Sama paigutus töölaual ja mobiilis — plaat on kitsas ja
 // meeskonnanimed tohivad murduda.
@@ -414,7 +414,7 @@ export default function KlubiKorvpallPage() {
   const [error, setError] = useState(false)
   const { signalReady } = useLoading()
 
-  // Graafik sõltub kellast: arvutame alles pärast mount'i (eelrenderdus ja
+  // Ajakava sõltub kellast: arvutame alles pärast mount'i (eelrenderdus ja
   // klient peavad esimesel renderdusel kokku langema) ja uuendame iga minut,
   // et mäng kaoks nimekirjast täpselt algusajal ka ilma lehte värskendamata.
   const hydrated = useHydrated()
@@ -513,7 +513,7 @@ export default function KlubiKorvpallPage() {
   // Find today's date key to insert divider
   const todayKey = tallinDate(Date.now() / 1000)
 
-  // Graafik päevade kaupa (Eesti kuupäev), sama päisestiil mis tulemustel
+  // Ajakava päevade kaupa (Eesti kuupäev), sama päisestiil mis tulemustel
   const scheduleGrouped = useMemo(() => {
     const groups = []
     const byKey = {}
@@ -552,7 +552,7 @@ export default function KlubiKorvpallPage() {
 
       {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil */}
       <div role="tablist" aria-label="Vaade" className="flex gap-6 mb-6 border-b border-gray-200 text-left">
-        {[['tulemused', 'Tulemused'], ['graafik', 'Graafik']].map(([key, text]) => {
+        {[['tulemused', 'Tulemused'], ['ajakava', 'Ajakava']].map(([key, text]) => {
           const active = tab === key
           return (
             <button
@@ -575,7 +575,7 @@ export default function KlubiKorvpallPage() {
         })}
       </div>
 
-      {tab === 'graafik' && (
+      {tab === 'ajakava' && (
         <>
           {error && !players.length && (
             <p className="text-center py-16" style={{ fontFamily: FONT_BODY, color: '#9ca3af' }}>
@@ -597,7 +597,7 @@ export default function KlubiKorvpallPage() {
               <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
                 {nextAfterWindow
                   ? `Järgmise kahe nädala jooksul mänge ei ole. Järgmine mäng on ${formatDateHeader(nextAfterWindow.sortTimestamp)}: ${nextAfterWindow.club} vs ${nextAfterWindow.opponent}.`
-                  : 'Graafikus pole ühtki tulevast mängu.'}
+                  : 'Ajakavas pole ühtki tulevast mängu.'}
               </p>
             </div>
           )}

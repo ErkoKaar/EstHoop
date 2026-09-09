@@ -1,5 +1,5 @@
 // Klubide mängugraafik (src/data/klubide_graafikud_<hooaeg>.json) klubikorvpalli
-// lehe "Graafik" vaate jaoks. JSON-is on kuupäev ja kellaaeg klubi koduriigi
+// lehe "Ajakava" vaate jaoks. JSON-is on kuupäev ja kellaaeg klubi koduriigi
 // kohalikus ajas; siin teisendame need ajatempliks, et kuvada Eesti aeg ja
 // teada, millal mäng "kätte jõuab".
 
