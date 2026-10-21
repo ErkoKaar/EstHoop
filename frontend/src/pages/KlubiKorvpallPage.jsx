@@ -24,6 +24,10 @@ const LOSS = '#dc2626'
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const TWO_WEEKS = 14 * 86400
 
+// Mängijad, kelle mänge klubikorvpalli lehel ei näidata (tulemused ega ajakava).
+// Henri Veesaar: vigastus, 2026-27 hooaeg. Naasmisel eemalda siit.
+const HIDDEN_PLAYERS = new Set(['henri-veesaar'])
+
 function tallinDate(ts) {
   return new Date(ts * 1000).toLocaleDateString('sv-SE', { timeZone: 'Europe/Tallinn' })
 }
@@ -434,7 +438,8 @@ export default function KlubiKorvpallPage() {
   useEffect(() => {
     fetch(`${API}/players`)
       .then(r => r.json())
-      .then(players => {
+      .then(allPlayers => {
+        const players = allPlayers.filter(p => !HIDDEN_PLAYERS.has(p.slug))
         setPlayers(players)
         const active = players.filter(p => p.proballers_id)
         setTotalCount(active.length)
@@ -482,7 +487,7 @@ export default function KlubiKorvpallPage() {
 
         Promise.allSettled(promises).then(results => {
           const all = results.flatMap(r => r.status === 'fulfilled' ? r.value : [])
-          all.sort((a, b) => (a.event.startTimestamp || 0) - (b.event.startTimestamp || 0))
+          all.sort((a, b) => (b.event.startTimestamp || 0) - (a.event.startTimestamp || 0))
           setGames(all)
           setLoading(false)
           signalReady()
