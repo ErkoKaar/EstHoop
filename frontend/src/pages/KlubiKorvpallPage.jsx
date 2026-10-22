@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
@@ -433,12 +433,38 @@ function pickTopPerformances(games, count = 3) {
   return [...bestByPlayer.values()].sort(compareStatlines).slice(0, count)
 }
 
+const TOP_STAGGER = 0.08
+
+// EFF jookseb nullist lõppväärtuseni nagu tablool. MotionValue renderdatakse
+// otse, nii et React ei renderda iga kaadri peal uuesti. minWidth hoiab laiuse
+// lõppväärtuse järgi paigal, et kõrvalolev tekst numbri kasvades ei hüppaks.
+function CountUp({ value, delay, style }) {
+  const reduce = useReducedMotion()
+  const format = v => (Number.isInteger(value) ? String(Math.round(v)) : v.toFixed(1))
+  const mv = useMotionValue(reduce ? value : 0)
+  const text = useTransform(mv, format)
+
+  useEffect(() => {
+    if (reduce) { mv.set(value); return }
+    const controls = animate(mv, value, { duration: 0.9, delay, ease: EASE })
+    return () => controls.stop()
+  }, [mv, value, delay, reduce])
+
+  return (
+    <motion.span style={{ ...style, display: 'inline-block', textAlign: 'right', minWidth: `${format(value).length}ch` }}>
+      {text}
+    </motion.span>
+  )
+}
+
 // Üks tabloo-paneel nagu mängurea statistikariba: esimene koht sinisel nagu
-// PTS-lahter. Töölaual kolm veergu, mobiilis kolm kompaktset rida.
+// PTS-lahter ja suurem. Töölaual kolm veergu, mobiilis kolm kompaktset rida.
+// Kogu lahter viib mängija profiilile (nime link on üle lahtri venitatud).
 function TopPerformances({ entries, loading }) {
   const isMobile = useIsMobile()
   const reduce = useReducedMotion()
   const smallLabel = color => ({ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color, marginTop: 2 })
+  const columns = entries.map((_, i) => (i === 0 ? 'minmax(0, 1.25fr)' : 'minmax(0, 1fr)')).join(' ')
 
   return (
     <section aria-labelledby="parimad-sooritused" className="mb-8 text-left">
@@ -450,17 +476,14 @@ function TopPerformances({ entries, loading }) {
       </p>
 
       {loading ? (
-        <Skeleton className={isMobile ? 'h-72' : 'h-52'} />
+        <Skeleton className={isMobile ? 'h-[28rem]' : 'h-72'} />
       ) : (
-        <motion.ol
+        <ol
           role="list"
           className="rounded-2xl overflow-hidden"
-          style={{ background: DARK, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : `repeat(${entries.length}, minmax(0, 1fr))` }}
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: EASE }}
+          style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : columns }}
         >
-          {entries.map(({ game }, i) => {
+          {entries.map(({ game, eff }, i) => {
             const lead = i === 0
             const { player, event: ev, playerIsHome, stats } = game
             const ownScore = playerIsHome ? ev.homeScore?.current : ev.awayScore?.current
@@ -472,19 +495,23 @@ function TopPerformances({ entries, loading }) {
             const outcomeColor = lead ? '#fff' : won == null ? MUTED : won ? '#4ade80' : '#f87171'
             const muted = lead ? '#dbeafe' : MUTED
             const divider = '1px solid rgba(255,255,255,0.08)'
+            const avatarSize = isMobile ? (lead ? 'md' : 'sm') : (lead ? 'lg' : 'md')
 
             return (
-              <li
+              <motion.li
                 key={player.slug}
-                className="p-4"
+                className={`relative p-4 transition-colors duration-200 ${lead ? 'bg-[#0072ce] hover:bg-[#0065b8]' : 'bg-[#08060d] hover:bg-[#16131d]'}`}
                 style={{
-                  background: lead ? BLUE : undefined,
                   borderTop: i > 0 && isMobile ? divider : undefined,
                   borderLeft: i > 0 && !isMobile ? divider : undefined,
-                  display: 'grid', columnGap: 12, rowGap: 14, alignItems: 'start',
+                  display: 'grid', columnGap: 12, rowGap: isMobile ? 8 : 14, alignItems: 'start',
                   gridTemplateColumns: isMobile ? 'auto auto minmax(0, 1fr) auto' : 'auto auto minmax(0, 1fr)',
                   gridTemplateAreas: isMobile ? '"rank avatar info eff"' : '"rank avatar eff" "info info info"',
                 }}
+                // Kohtade kaupa 1, 2, 3; vähendatud liikumisega ainult hajumine.
+                initial={reduce ? { opacity: 0 } : { opacity: 0, transform: 'translateY(12px)' }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, transform: 'translateY(0px)' }}
+                transition={{ duration: reduce ? 0.2 : 0.45, ease: EASE, delay: i * TOP_STAGGER }}
               >
                 <span
                   aria-hidden="true"
@@ -493,21 +520,28 @@ function TopPerformances({ entries, loading }) {
                   {i + 1}
                 </span>
                 <div style={{ gridArea: 'avatar' }}>
-                  <PlayerAvatar slug={player.slug} name={player.name} size={isMobile ? 'sm' : 'md'} />
+                  <PlayerAvatar slug={player.slug} name={player.name} size={avatarSize} />
                 </div>
                 <div className="flex flex-col items-end" style={{ gridArea: 'eff' }}>
-                  <span style={{ fontFamily: FONT_HEADING, fontSize: isMobile ? '2.1rem' : '2.8rem', lineHeight: 0.9, color: '#fff', letterSpacing: '0.5px' }}>
-                    {statValue(stats.EFF)}
-                  </span>
+                  <CountUp
+                    value={eff}
+                    delay={i * TOP_STAGGER + 0.1}
+                    style={{
+                      fontFamily: FONT_HEADING, lineHeight: 0.9, color: '#fff', letterSpacing: '0.5px', fontVariantNumeric: 'tabular-nums',
+                      fontSize: isMobile ? (lead ? '2.4rem' : '2.1rem') : (lead ? '3.4rem' : '2.8rem'),
+                    }}
+                  />
                   <span style={smallLabel(muted)}>EFF</span>
                 </div>
 
-                <div className="min-w-0 flex flex-col gap-3" style={{ gridArea: 'info' }}>
+                <div className="min-w-0 flex flex-col" style={{ gridArea: 'info', gap: isMobile ? 8 : 12 }}>
                   <div className="min-w-0">
                     <Link
                       to={`/mangijad/${player.slug}`}
-                      className="text-white rounded decoration-2 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
-                      style={{ fontFamily: FONT_HEADING, fontSize: isMobile ? '1.3rem' : '1.45rem', letterSpacing: '0.5px', lineHeight: 1, overflowWrap: 'anywhere' }}
+                      className="text-white decoration-2 underline-offset-4 hover:underline focus-visible:outline-none
+                                 after:absolute after:inset-0 after:content-['']
+                                 focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-white focus-visible:after:-outline-offset-4"
+                      style={{ fontFamily: FONT_HEADING, fontSize: isMobile ? '1.3rem' : (lead ? '1.7rem' : '1.45rem'), letterSpacing: '0.5px', lineHeight: 1, overflowWrap: 'anywhere' }}
                     >
                       {player.name}
                     </Link>
@@ -525,15 +559,17 @@ function TopPerformances({ entries, loading }) {
                       </div>
                     ))}
                   </div>
-                  <div style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 600, color: muted, lineHeight: 1.2 }}>
-                    <span style={{ color: outcomeColor }}>{outcome} {ownScore}:{oppScore}</span>
-                    {' '}vs {opponent}, {formatShortDate(ev.startTimestamp)}
+                  <div style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 600, color: muted, lineHeight: 1.25 }}>
+                    <div>
+                      <span style={{ color: outcomeColor }}>{outcome} {ownScore}:{oppScore}</span> vs {opponent}
+                    </div>
+                    <div>{formatShortDate(ev.startTimestamp)}</div>
                   </div>
                 </div>
-              </li>
+              </motion.li>
             )
           })}
-        </motion.ol>
+        </ol>
       )}
     </section>
   )
