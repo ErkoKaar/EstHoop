@@ -39,6 +39,13 @@ function formatDateHeader(ts) {
   })
 }
 
+function formatShortDate(ts) {
+  return new Date(ts * 1000).toLocaleDateString('et-EE', {
+    day: 'numeric', month: 'short',
+    timeZone: 'Europe/Tallinn',
+  })
+}
+
 function formatTime(ts) {
   return new Date(ts * 1000).toLocaleTimeString('et-EE', {
     hour: '2-digit', minute: '2-digit',
@@ -65,12 +72,13 @@ function shortTournament(name) {
 
 // ── Game row ──────────────────────────────────────────────────────────────────
 // ProBallersi mängurea veerud tabloo ribal, vasakult paremale.
+// `alt`: ProBallersi vana veerunimi, mis on alles DB-s olevatel vanematel ridadel.
 const STAT_COLS = [
   { key: 'MIN', label: 'MIN' },
   { key: 'PTS', label: 'PTS' },
-  { key: '2M-2A', label: '2P' },
-  { key: '3M-3A', label: '3P' },
-  { key: '1M-1A', label: 'FT' },
+  { key: '2PM-2PA', alt: '2M-2A', label: '2P' },
+  { key: '3PM-3PA', alt: '3M-3A', label: '3P' },
+  { key: 'FTM-FTA', alt: '1M-1A', label: 'FT' },
   { key: 'FG%', label: 'FG%' },
   { key: 'REB', label: 'REB' },
   { key: 'AST', label: 'AST' },
@@ -208,7 +216,7 @@ function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index
               transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
             >
               <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.5px', lineHeight: 1, whiteSpace: 'nowrap' }}>
-                {statValue(stats[c.key])}
+                {statValue(stats[c.key] ?? stats[c.alt])}
               </span>
               <span style={{ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color: isPts ? '#dbeafe' : MUTED, marginTop: 2 }}>
                 {c.label}
@@ -303,7 +311,7 @@ function GameRow({ player, event: ev, isPast, stats, result, playerIsHome, index
                   transition={{ duration: 0.25, delay: enterDelay + 0.15 + i * 0.025 }}
                 >
                   <span style={{ fontFamily: FONT_HEADING, fontSize: 'clamp(0.95rem, 4.2vw, 1.3rem)', color: '#fff', lineHeight: 1, whiteSpace: 'nowrap' }}>
-                    {statValue(stats[c.key])}
+                    {statValue(stats[c.key] ?? stats[c.alt])}
                   </span>
                   <span style={{ fontFamily: FONT_BODY, fontSize: '0.58rem', fontWeight: 600, letterSpacing: '0.06em', color: isPts ? '#dbeafe' : MUTED, marginTop: 3 }}>
                     {c.label}
@@ -407,6 +415,130 @@ function UpcomingGameRow({ row }) {
   )
 }
 
+// ── Parimad sooritused ────────────────────────────────────────────────────────
+// Järjestus: EFF, siis punktid, siis uuem mäng. Igalt mängijalt üks (parim) mäng.
+function compareStatlines(a, b) {
+  return (b.eff - a.eff) || (b.pts - a.pts) || (b.ts - a.ts)
+}
+
+function pickTopPerformances(games, count = 3) {
+  const bestByPlayer = new Map()
+  for (const g of games) {
+    const eff = parseFloat(g.stats?.EFF)
+    if (!Number.isFinite(eff)) continue
+    const entry = { game: g, eff, pts: parseFloat(g.stats.PTS) || 0, ts: g.event.startTimestamp || 0 }
+    const current = bestByPlayer.get(g.player.slug)
+    if (!current || compareStatlines(entry, current) < 0) bestByPlayer.set(g.player.slug, entry)
+  }
+  return [...bestByPlayer.values()].sort(compareStatlines).slice(0, count)
+}
+
+// Üks tabloo-paneel nagu mängurea statistikariba: esimene koht sinisel nagu
+// PTS-lahter. Töölaual kolm veergu, mobiilis kolm kompaktset rida.
+function TopPerformances({ entries, loading }) {
+  const isMobile = useIsMobile()
+  const reduce = useReducedMotion()
+  const smallLabel = color => ({ fontFamily: FONT_BODY, fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.08em', color, marginTop: 2 })
+
+  return (
+    <section aria-labelledby="parimad-sooritused" className="mb-8 text-left">
+      <h2 id="parimad-sooritused" style={{ fontFamily: FONT_HEADING, fontSize: '1.6rem', letterSpacing: '1px', lineHeight: 1, color: DARK }}>
+        Parimad sooritused
+      </h2>
+      <p className="mt-1 mb-3" style={{ fontFamily: FONT_BODY, fontSize: '0.9rem', color: '#6b7280', fontWeight: 500 }}>
+        Viimase kahe nädala kõrgeim efektiivsus (EFF), igalt mängijalt parim mäng
+      </p>
+
+      {loading ? (
+        <Skeleton className={isMobile ? 'h-72' : 'h-52'} />
+      ) : (
+        <motion.ol
+          role="list"
+          className="rounded-2xl overflow-hidden"
+          style={{ background: DARK, display: 'grid', gridTemplateColumns: isMobile ? '1fr' : `repeat(${entries.length}, minmax(0, 1fr))` }}
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        >
+          {entries.map(({ game }, i) => {
+            const lead = i === 0
+            const { player, event: ev, playerIsHome, stats } = game
+            const ownScore = playerIsHome ? ev.homeScore?.current : ev.awayScore?.current
+            const oppScore = playerIsHome ? ev.awayScore?.current : ev.homeScore?.current
+            const club = playerIsHome ? ev.homeTeam?.name : ev.awayTeam?.name
+            const opponent = playerIsHome ? ev.awayTeam?.name : ev.homeTeam?.name
+            const won = game.result === 'W' ? true : game.result === 'L' ? false : ownScore !== oppScore ? ownScore > oppScore : null
+            const outcome = won == null ? 'Lõpp' : won ? 'Võit' : 'Kaotus'
+            const outcomeColor = lead ? '#fff' : won == null ? MUTED : won ? '#4ade80' : '#f87171'
+            const muted = lead ? '#dbeafe' : MUTED
+            const divider = '1px solid rgba(255,255,255,0.08)'
+
+            return (
+              <li
+                key={player.slug}
+                className="p-4"
+                style={{
+                  background: lead ? BLUE : undefined,
+                  borderTop: i > 0 && isMobile ? divider : undefined,
+                  borderLeft: i > 0 && !isMobile ? divider : undefined,
+                  display: 'grid', columnGap: 12, rowGap: 14, alignItems: 'start',
+                  gridTemplateColumns: isMobile ? 'auto auto minmax(0, 1fr) auto' : 'auto auto minmax(0, 1fr)',
+                  gridTemplateAreas: isMobile ? '"rank avatar info eff"' : '"rank avatar eff" "info info info"',
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{ gridArea: 'rank', fontFamily: FONT_HEADING, fontSize: isMobile ? '1.9rem' : '2.6rem', lineHeight: 0.85, color: lead ? '#fff' : MUTED, minWidth: '1ch' }}
+                >
+                  {i + 1}
+                </span>
+                <div style={{ gridArea: 'avatar' }}>
+                  <PlayerAvatar slug={player.slug} name={player.name} size={isMobile ? 'sm' : 'md'} />
+                </div>
+                <div className="flex flex-col items-end" style={{ gridArea: 'eff' }}>
+                  <span style={{ fontFamily: FONT_HEADING, fontSize: isMobile ? '2.1rem' : '2.8rem', lineHeight: 0.9, color: '#fff', letterSpacing: '0.5px' }}>
+                    {statValue(stats.EFF)}
+                  </span>
+                  <span style={smallLabel(muted)}>EFF</span>
+                </div>
+
+                <div className="min-w-0 flex flex-col gap-3" style={{ gridArea: 'info' }}>
+                  <div className="min-w-0">
+                    <Link
+                      to={`/mangijad/${player.slug}`}
+                      className="text-white rounded decoration-2 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                      style={{ fontFamily: FONT_HEADING, fontSize: isMobile ? '1.3rem' : '1.45rem', letterSpacing: '0.5px', lineHeight: 1, overflowWrap: 'anywhere' }}
+                    >
+                      {player.name}
+                    </Link>
+                    <div style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 600, color: muted, marginTop: 4, lineHeight: 1.2 }}>
+                      {club}
+                    </div>
+                  </div>
+                  <div className="flex gap-5">
+                    {['PTS', 'REB', 'AST'].map(k => (
+                      <div key={k} className="flex flex-col">
+                        <span style={{ fontFamily: FONT_HEADING, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.5px', lineHeight: 1 }}>
+                          {statValue(stats[k])}
+                        </span>
+                        <span style={smallLabel(muted)}>{k}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 600, color: muted, lineHeight: 1.2 }}>
+                    <span style={{ color: outcomeColor }}>{outcome} {ownScore}:{oppScore}</span>
+                    {' '}vs {opponent}, {formatShortDate(ev.startTimestamp)}
+                  </div>
+                </div>
+              </li>
+            )
+          })}
+        </motion.ol>
+      )}
+    </section>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function KlubiKorvpallPage() {
   const [tab, setTab] = useState('tulemused')
@@ -434,6 +566,7 @@ export default function KlubiKorvpallPage() {
   const scheduleRows = useMemo(() => buildScheduleRows(scheduleData, players), [players])
   const upcoming = useMemo(() => (now ? upcomingRows(scheduleRows, now) : []), [scheduleRows, now])
   const nextAfterWindow = useMemo(() => (now ? nextRowAfter(scheduleRows, now) : null), [scheduleRows, now])
+  const topPerformances = useMemo(() => pickTopPerformances(games), [games])
 
   useEffect(() => {
     fetch(`${API}/players`)
@@ -554,6 +687,10 @@ export default function KlubiKorvpallPage() {
           Eesti koondislaste mängud klubides üle maailma
         </p>
       </div>
+
+      {!error && (loading || topPerformances.length > 0) && (
+        <TopPerformances entries={topPerformances} loading={loading} />
+      )}
 
       {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil */}
       <div role="tablist" aria-label="Vaade" className="flex gap-6 mb-6 border-b border-gray-200 text-left">

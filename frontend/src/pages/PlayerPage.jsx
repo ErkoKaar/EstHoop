@@ -193,7 +193,7 @@ function ProfileChart({ season }) {
 // ── Klubi: hooaegade tabel ────────────────────────────────
 function SeasonsTable({ seasons }) {
   const lastSeason = getLastSeason(seasons)
-  const cols = ['SEASON', 'TEAM', 'LEAGUE', 'GP', 'MIN', 'PTS', 'FG%', '3%', '1%', 'REB', 'OR', 'DR', 'AST', 'STL', 'BLK', 'TO', 'FO', 'EFF']
+  const cols = ['SEASON', 'TEAM', 'LEAGUE', 'GP', 'MIN', 'PTS', 'FG%', '3P%', 'FT%', 'REB', 'OR', 'DR', 'AST', 'STL', 'BLK', 'TO', 'FO', 'EFF']
 
   return (
     <div>
@@ -228,6 +228,7 @@ function SeasonsTable({ seasons }) {
 }
 
 // ── Klubi: viimased mängud ────────────────────────────────
+// `alt`: ProBallersi vana veerunimi, mis on alles DB-s olevatel vanematel ridadel.
 const GAME_COLS = [
   { key: 'DATE', label: 'Kuupäev' },
   { key: 'OPPONENT', label: 'Vastane' },
@@ -236,11 +237,11 @@ const GAME_COLS = [
   { key: 'SCORE', label: 'Skoor' },
   { key: 'MIN', label: 'MIN' },
   { key: 'PTS', label: 'PTS' },
-  { key: '2M-2A', label: '2P' },
-  { key: '3M-3A', label: '3P' },
-  { key: '1M-1A', label: 'FT' },
+  { key: '2PM-2PA', alt: '2M-2A', label: '2P' },
+  { key: '3PM-3PA', alt: '3M-3A', label: '3P' },
+  { key: 'FTM-FTA', alt: '1M-1A', label: 'FT' },
   { key: 'FG%', label: 'FG%' },
-  { key: '1%', label: 'FT%' },
+  { key: 'FT%', alt: '1%', label: 'FT%' },
   { key: 'REB', label: 'REB' },
   { key: 'OR', label: 'OR' },
   { key: 'DR', label: 'DR' },
@@ -275,7 +276,7 @@ function GamesTable({ games }) {
               const loss = g.RESULT === 'L'
               return (
                 <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
-                  {GAME_COLS.map(({ key }) => (
+                  {GAME_COLS.map(({ key, alt }) => (
                     <td
                       key={key}
                       className={`px-3 py-2 whitespace-nowrap ${
@@ -300,7 +301,7 @@ function GamesTable({ games }) {
                           {g[key]}
                         </a>
                       ) : (
-                        g[key] ?? '—'
+                        g[key] ?? g[alt] ?? '—'
                       )}
                     </td>
                   ))}
