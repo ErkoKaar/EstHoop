@@ -6,6 +6,7 @@ name: Rebuild site
 #
 # Aeg on valitud nii, et kõik andmeuuendused oleksid läbi:
 #   02:00 UTC  refresh_club_stats
+#   03:00 UTC  refresh_league_stats (E, K, R)
 #   04:00 UTC  refresh_national_team (teine käik)
 #   05:00 UTC  see töövoog
 

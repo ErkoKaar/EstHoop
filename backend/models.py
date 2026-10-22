@@ -38,3 +38,11 @@ class NationalTeamCache(Base):
     key = Column(String, primary_key=True)
     data = Column(JSON, nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class LeagueStatsCache(Base):
+    __tablename__ = "league_stats_cache"
+
+    key = Column(String, primary_key=True)  # "<liiga id>:<hooaja algusaasta>", nt "170:2026"
+    data = Column(JSON, nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

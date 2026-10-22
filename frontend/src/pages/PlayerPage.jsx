@@ -227,6 +227,51 @@ function SeasonsTable({ seasons }) {
   )
 }
 
+// ── Klubi: võrdlus liiga mängijatega ──────────────────────
+// Protsentiilid arvutab backend (main.py league_percentiles). Võtmed on ProBallersi
+// veerunimed, tundmatu võti näidatakse sellisena, nagu ta on.
+const PERCENTILE_LABELS = {
+  PTS: 'Punktid',
+  REB: 'Lauapallid',
+  AST: 'Resultatiivsed söödud',
+  'FG%': 'Visketabavus',
+  '3P%': 'Kolmeste tabavus',
+  EFF: 'Efektiivsus',
+}
+
+function LeaguePercentiles({ data }) {
+  return (
+    <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+      <h3 className="text-lg text-[#08060d] mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+        Võrdlus liiga mängijatega ({data.season})
+      </h3>
+      <p className="text-gray-500 text-sm mb-5" style={{ fontFamily: FONT_BODY }}>
+        Võrdluses {data.sample} {data.league} mängijat, kellel on vähemalt {data.minGames} mängu
+        ja {data.minMinutes} minutit mängu kohta.
+      </p>
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5 text-left" style={{ fontFamily: FONT_BODY }}>
+        {data.metrics.map(m => (
+          <li key={m.key}>
+            <div className="flex items-baseline justify-between gap-3 mb-1.5">
+              <span className="font-semibold text-[#08060d]">{PERCENTILE_LABELS[m.key] ?? m.key}</span>
+              <span className="font-bold text-[#08060d] tabular-nums">
+                {m.value}{m.key.endsWith('%') ? '%' : ''}
+              </span>
+            </div>
+            {/* Lause all ütleb sama numbriga, riba on ainult visuaalne */}
+            <div className="h-2 rounded-full bg-gray-100 overflow-hidden" aria-hidden="true">
+              <div className="h-full rounded-full bg-[#0072ce]" style={{ width: `${m.percentile}%` }} />
+            </div>
+            <p className="text-gray-500 text-sm mt-1.5">
+              Parem kui <span className="font-bold text-[#08060d]">{m.percentile}%</span> {data.league} mängijatest
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 // ── Klubi: viimased mängud ────────────────────────────────
 // `alt`: ProBallersi vana veerunimi, mis on alles DB-s olevatel vanematel ridadel.
 const GAME_COLS = [
@@ -633,6 +678,14 @@ export default function PlayerPage() {
               <StatCard label="EFF" value={lastSeason.EFF} sub="efektiivsus" />
             </div>
           ) : null}
+
+          {/* Võrdlus liigas. Puudub, kui liiga andmeid pole või mängija ei
+              ületa mängude/minutite piiri. */}
+          {!statsLoading && !statsError && stats?.leaguePercentiles?.metrics?.length > 0 && (
+            <div className="mb-8">
+              <LeaguePercentiles data={stats.leaguePercentiles} />
+            </div>
+          )}
 
           {/* Graafikud */}
           {!statsLoading && !statsError && stats && (

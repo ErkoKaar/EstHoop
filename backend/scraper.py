@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime, timezone
 
 import requests
@@ -34,7 +35,7 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
     if len(tables) < 2:
         raise ValueError("Ei leidnud statistika tabeleid")
 
-    def parse_table(table, empty_header_name=None, with_game_url=False):
+    def parse_table(table, empty_header_name=None, with_game_url=False, with_league_url=False):
         # HTML kasutab mixed case, CSS teeb need uppercase — normaliseerime
         raw = [th.get_text(strip=True).upper() for th in table.select("thead th")]
         if empty_header_name is None:
@@ -62,6 +63,13 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
                 href = link.get("href") if link else None
                 if href:
                     row["GAME_URL"] = href if href.startswith("http") else PROBALLERS_BASE + href
+            if with_league_url:
+                # Liiga link annab liiga ID, mille järgi kraabitakse sama liiga
+                # teiste mängijate statistika (vt scrape_league_stats).
+                link = tr.select_one('a[href*="/basketball/league/"]')
+                href = link.get("href") if link else None
+                if href:
+                    row["LEAGUE_URL"] = href if href.startswith("http") else PROBALLERS_BASE + href
             rows.append(row)
         return rows
 
@@ -89,10 +97,132 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
     return {
         # Tühi TH (W/L veerg) nimetatakse RESULT-iks; duplikaatpäised saavad _1 suffiksi
         "games":     parse_table(tables[0], empty_header_name="RESULT", with_game_url=True),
-        "seasons":   parse_table(tables[1]),
+        "seasons":   parse_table(tables[1], with_league_url=True),
         "playoffs":  parse_table(tables[2]) if len(tables) > 2 else [],
         "birthDate": birth_date,
         "heightCm":  height_cm,
+    }
+
+
+LEAGUE_URL_RE = re.compile(r"/basketball/league/(\d+)/([^/?#]+)")
+
+
+def league_of_season(row: dict) -> tuple[int, str, int] | None:
+    """Hooaja reast (liiga ID, liiga slug, hooaja algusaasta), nt (170, "poland-plk", 2026).
+
+    Aasta tuleb SEASON väljast ("26-27"), sest jooksva hooaja lingil ?season puudub.
+    """
+    match = LEAGUE_URL_RE.search(row.get("LEAGUE_URL") or "")
+    season = re.fullmatch(r"(\d{2})-\d{2}", row.get("SEASON") or "")
+    if not match or not season:
+        return None
+    return int(match.group(1)), match.group(2), 2000 + int(season.group(1))
+
+
+def _number(text: str) -> float:
+    """'54', '12.5', '12,5' ja '54:30' (min:sek) arvuks; '-' ja tühi on 0."""
+    text = text.strip().replace(",", ".")
+    if ":" in text:
+        minutes, _, seconds = text.partition(":")
+        return _number(minutes) + _number(seconds) / 60
+    try:
+        return float(text)
+    except ValueError:
+        return 0.0
+
+
+def _made_attempted(text: str) -> tuple[int, int]:
+    """'23/84' -> (23, 84); '-' ja tühi -> (0, 0)."""
+    match = re.fullmatch(r"(\d+)/(\d+)", text.strip())
+    return (int(match.group(1)), int(match.group(2))) if match else (0, 0)
+
+
+def scrape_league_stats(league_id: int, league_slug: str, season: int,
+                        delay: float = 3.0, max_teams: int = 40) -> dict:
+    """Kraabib liiga kõigi mängijate hooaja kogusummad.
+
+    Liiga mängijate lehel on ainult nimed, seega käiakse läbi iga meeskonna leht.
+    Meeskonnalehel on iga sarja (liiga, karikas, eelhooaeg) kohta eraldi plokk ja
+    võetakse ainult selle liiga "Accumulated" plokk. Kogusummad, mitte keskmised,
+    et hooaja jooksul liiga sees klubi vahetanud mängija read liituksid täpselt.
+
+    Viskab erindi, kui mõni meeskonnaleht ei tule: poolik liiga moonutaks protsentiile.
+    """
+    def fetch(url: str) -> BeautifulSoup:
+        resp = requests.get(url, headers=HEADERS, timeout=15)
+        resp.raise_for_status()
+        return BeautifulSoup(resp.text, "html.parser")
+
+    teams_url = f"{PROBALLERS_BASE}/basketball/league/{league_id}/{league_slug}/teams?season={season}"
+    team_paths = []
+    for a in fetch(teams_url).select('a[href*="/basketball/team/"]'):
+        path = a.get("href", "").replace(PROBALLERS_BASE, "")
+        if re.fullmatch(rf"/basketball/team/\d+/[^/?#]+/{season}", path) and path not in team_paths:
+            team_paths.append(path)
+
+    if not team_paths:
+        raise ValueError(f"Liigal {league_slug} ({season}) ei leitud meeskondi")
+    # Kaitse NCAA-taoliste liigade vastu (üle 300 meeskonna): nii palju päringuid
+    # käivitaks ProBallersi Cloudflare'i blokeeringu ka ülejäänud kraapimisele.
+    if len(team_paths) > max_teams:
+        raise ValueError(f"Liigas {league_slug} on {len(team_paths)} meeskonda, piir on {max_teams}")
+
+    league_name = None
+    players: dict[int, dict] = {}
+    for path in team_paths:
+        time.sleep(delay)
+        soup = fetch(PROBALLERS_BASE + path)
+        block = soup.select_one(f".select-tab-accumulated-{league_id}")
+        if not block:
+            continue  # meeskond pole selles liigas veel mänginud
+
+        if league_name is None:
+            heading = block.find_parent("section")
+            label = heading.select_one(".stat-heading-label") if heading else None
+            if label:
+                league_name = label.get_text(strip=True).removesuffix(" Stats").strip()
+
+        # Päised korduvad (Pts, Reb, Ast on tabelis kaks korda), võtame esimese.
+        index = {}
+        for i, th in enumerate(block.select("thead th")):
+            index.setdefault(th.get_text(strip=True).upper(), i)
+        needed = ["GP", "MIN", "PTS", "REB", "AST", "EFF", "FG", "3P"]
+        if any(h not in index for h in needed):
+            raise ValueError(f"{path}: ootamatud veerud {list(index)}")
+
+        for tr in block.select("tbody tr"):
+            link = tr.select_one('a[href*="/basketball/player/"]')
+            player_id = re.search(r"/basketball/player/(\d+)", link.get("href", "")) if link else None
+            cells = [td.get_text(strip=True) for td in tr.find_all("td")]
+            if not player_id or len(cells) <= max(index[h] for h in needed):
+                continue
+            fgm, fga = _made_attempted(cells[index["FG"]])
+            tpm, tpa = _made_attempted(cells[index["3P"]])
+            row = {
+                "gp": int(_number(cells[index["GP"]])),
+                "min": _number(cells[index["MIN"]]),
+                "pts": _number(cells[index["PTS"]]),
+                "reb": _number(cells[index["REB"]]),
+                "ast": _number(cells[index["AST"]]),
+                "eff": _number(cells[index["EFF"]]),
+                "fgm": fgm, "fga": fga, "tpm": tpm, "tpa": tpa,
+            }
+            pid = int(player_id.group(1))
+            if pid in players:
+                for key, value in row.items():
+                    players[pid][key] += value
+            else:
+                players[pid] = {"id": pid, "name": cells[0], **row}
+
+    if not players:
+        raise ValueError(f"Liigas {league_slug} ({season}) ei leitud ühtegi mängija statistikat")
+
+    return {
+        "leagueId": league_id,
+        "leagueName": league_name or league_slug,
+        "season": season,
+        "teams": len(team_paths),
+        "players": list(players.values()),
     }
 
 
