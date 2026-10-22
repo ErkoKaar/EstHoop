@@ -574,6 +574,12 @@ function TopPerformances({ entries, loading }) {
                   animate={reduce ? { opacity: 1 } : { clipPath: 'inset(0% 0% 0% 0% round 16px)' }}
                   transition={{ duration: reduce ? 0.2 : 0.7, ease: EASE, delay }}
                 >
+                  {/* Kogu kaart on link profiilile; DOM-is esimene, et Tab jõuaks enne profiili, siis skoori */}
+                  <Link
+                    to={`/mangijad/${player.slug}`}
+                    aria-label={`${player.name}, EFF ${statValue(stats.EFF)}`}
+                    className="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:-outline-offset-4"
+                  />
                   <div className="relative flex flex-1 flex-col overflow-hidden" style={{ minHeight: s.poster }}>
                     {/* Foto paremas servas, ruut poster'i kõrgusest; hover suumib aeglaselt */}
                     <div
@@ -655,18 +661,28 @@ function TopPerformances({ entries, loading }) {
                       style={{ fontFamily: FONT_BODY, fontSize: compact ? '0.72rem' : '0.8rem', fontWeight: 600, color: MUTED, lineHeight: 1.25 }}
                     >
                       <div>
-                        <span style={{ color: outcomeColor }}>{outcome} {ownScore}:{oppScore}</span> vs {opponent}
+                        <span style={{ color: outcomeColor }}>{outcome}</span>{' '}
+                        {/* Skoor viib ProBallersi mängu lehele ja on kaardi profiililingist kõrgemal */}
+                        {ev.gameUrl ? (
+                          <a
+                            href={ev.gameUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Vaata mängu statistikat ProBallersis"
+                            className="relative z-20 inline-block -my-2 py-2 rounded text-white underline decoration-white/40 decoration-2 underline-offset-4
+                                       transition-colors duration-150 hover:decoration-white
+                                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+                          >
+                            {ownScore}:{oppScore}
+                          </a>
+                        ) : (
+                          <span style={{ color: outcomeColor }}>{ownScore}:{oppScore}</span>
+                        )}
+                        {' '}vs {opponent}
                       </div>
                       <div>{formatShortDate(ev.startTimestamp)}</div>
                     </div>
                   </div>
-
-                  {/* Kogu kaart on link profiilile */}
-                  <Link
-                    to={`/mangijad/${player.slug}`}
-                    aria-label={`${player.name}, EFF ${statValue(stats.EFF)}`}
-                    className="absolute inset-0 z-10 rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:-outline-offset-4"
-                  />
                 </motion.li>
               )
             })}
