@@ -3,7 +3,7 @@ import { useState } from 'react'
 const FONT_HEADING = "'Bebas Neue', cursive"
 const BLUE = '#0072ce'
 // Fotod on WebP-s. jpg ja png jäävad varuks, kui mõni pilt hiljem muus vormingus lisatakse.
-const EXTENSIONS = ['webp', 'jpg', 'png']
+export const EXTENSIONS = ['webp', 'jpg', 'png']
 const PX = { lg: 96, md: 64, sm: 40 }
 const FONT_SIZE = { lg: '1.5rem', md: '1.1rem', sm: '0.75rem' }
 
