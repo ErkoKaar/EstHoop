@@ -1,8 +1,15 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo, { SITE_URL } from '../components/Seo'
+import TopPerformances from '../components/TopPerformances'
+import useHydrated from '../hooks/useHydrated'
+import { getPreloadedClubHighlights, getPreloadedPlayers } from '../preload'
+import scheduleData from '../data/klubide_graafikud_2026-27.json'
+import { buildScheduleRows, clubGameDay, HIDDEN_PLAYERS } from '../utils/clubSchedule'
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 // Kaardid animeeruvad lingil endal, et grid-lapse venitus jääks samaks
 const MotionLink = motion.create(Link)
@@ -274,6 +281,106 @@ function SecondaryRow({ to, label, text, Icon: RowIcon }) {
   )
 }
 
+function lastName(name) {
+  return name.split(' ').at(-1)
+}
+
+// "Kotsar, Kullamäe ja Drell"; üle nelja nime lõpus "ja veel N"
+function nameList(names) {
+  const shown = names.slice(0, 4)
+  const rest = names.length - shown.length
+  if (rest > 0) return `${shown.join(', ')} ja veel ${rest}`
+  return shown.length > 1 ? `${shown.slice(0, -1).join(', ')} ja ${shown.at(-1)}` : shown[0]
+}
+
+// Klubiplokk: plakatid (eelrenderdatud, kliendis ainult varuks laaditud) ja rida
+// tänaste klubimängudega, mis sõltub kellast ja arvutatakse alles pärast mount'i.
+function ClubSpotlight({ reveal }) {
+  const pre = getPreloadedClubHighlights()
+  const [highlights, setHighlights] = useState(pre ?? [])
+  const [loading, setLoading] = useState(!pre)
+  const [players, setPlayers] = useState(() => getPreloadedPlayers() ?? [])
+  const hydrated = useHydrated()
+  const [now, setNow] = useState(null)
+
+  useEffect(() => {
+    if (!hydrated) return
+    const tick = () => setNow(Math.floor(Date.now() / 1000))
+    tick()
+  }, [hydrated])
+
+  // Eelrenderdusel on andmed HTML-is; kliendis laetakse ainult see, mis puudu on
+  useEffect(() => {
+    let cancelled = false
+    if (!getPreloadedClubHighlights()) {
+      fetch(`${API}/club/highlights`)
+        .then(r => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then(list => { if (!cancelled && Array.isArray(list)) setHighlights(list) })
+        .catch(() => {})
+        .finally(() => { if (!cancelled) setLoading(false) })
+    }
+    if (!getPreloadedPlayers()) {
+      fetch(`${API}/players`)
+        .then(r => (r.ok ? r.json() : []))
+        .then(list => { if (!cancelled && Array.isArray(list)) setPlayers(list) })
+        .catch(() => {})
+    }
+    return () => { cancelled = true }
+  }, [])
+
+  const top = useMemo(
+    () => highlights.filter(h => !HIDDEN_PLAYERS.has(h.player?.slug)).slice(0, 3),
+    [highlights],
+  )
+  const gameDay = useMemo(() => {
+    if (!now || !players.length) return null
+    const visible = players.filter(p => !HIDDEN_PLAYERS.has(p.slug))
+    return clubGameDay(buildScheduleRows(scheduleData, visible), now)
+  }, [players, now])
+
+  const dayNames = gameDay
+    ? [...new Map(gameDay.rows.flatMap(r => r.players).map(p => [p.slug, lastName(p.name)])).values()]
+    : []
+  const firstGame = gameDay?.rows[0]
+  const dayLabel = firstGame && new Date(firstGame.sortTimestamp * 1000).toLocaleDateString('et-EE', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Tallinn',
+  })
+
+  // Ilma plakatite ja mängudeta pole plokil midagi näidata
+  if (!loading && !top.length && !gameDay) return null
+
+  return (
+    <div className="mx-auto w-full max-w-[1120px] px-6 pt-14">
+      {(loading || top.length > 0) && (
+        <TopPerformances
+          entries={top}
+          loading={loading}
+          title="Eestlased klubides"
+          subtitle="Viimase kahe nädala parimad sooritused (EFF), igalt mängijalt parim mäng"
+          headingId="eestlased-klubides"
+          className="mb-4"
+        />
+      )}
+      <motion.div {...reveal(0.1)} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+        {/* Rida on kuni mount'ini tühi: kuupäev sõltub kellast (vt useHydrated) */}
+        <p className="m-0 min-h-[1.5em] text-left" style={{ fontFamily: FONT_BODY, fontSize: '1.08rem', fontWeight: 600, color: '#374151' }}>
+          {dayNames.length > 0 && (gameDay.today
+            ? <>Täna mängib klubides {dayNames.length} {dayNames.length === 1 ? 'eestlane' : 'eestlast'}: <strong style={{ color: DARK }}>{nameList(dayNames)}</strong>.</>
+            : <>Järgmine klubimängupäev on {dayLabel}: <strong style={{ color: DARK }}>{nameList(dayNames)}</strong>.</>)}
+        </p>
+        <Link
+          to="/klubikorvpall"
+          className="inline-flex min-h-[48px] items-center rounded-lg px-5 text-white transition-[background-color,transform] duration-150 hover:bg-[#005fae] active:scale-[0.98]
+                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]"
+          style={{ background: BLUE, fontFamily: FONT_BODY, fontSize: '1.05rem', fontWeight: 700 }}
+        >
+          Kõik klubimängud
+        </Link>
+      </motion.div>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const { signalReady } = useLoading()
   const reducedMotion = useReducedMotion()
@@ -434,6 +541,9 @@ export default function HomePage() {
 
         <FlagStripes />
       </div>
+
+      {/* ── Eestlased klubides ─────────────────────────────── */}
+      <ClubSpotlight reveal={reveal} />
 
       {/* ── Sisukord ──────────────────────────────────────── */}
       <div className="mx-auto w-full max-w-[1120px] px-6 pt-14 pb-4">

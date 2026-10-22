@@ -3,6 +3,7 @@
 export const NAV_LINKS = [
   { label: 'Avaleht', href: '/' },
   { label: 'Koondis', href: '/koondis' },
+  { label: 'Ajalugu', href: '/koondis/ajalugu' },
   { label: 'Mängijad', href: '/mangijad' },
   { label: 'Statistika', href: '/statistika' },
   { label: 'Piletid', href: '/piletid' },

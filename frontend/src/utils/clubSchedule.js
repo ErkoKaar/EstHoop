@@ -5,6 +5,11 @@
 
 const TALLINN = 'Europe/Tallinn'
 
+// Mängijad, kelle mänge klubikorvpalli lehel, avalehel ja menüüs ei näidata
+// (tulemused, ajakava ega parimad sooritused).
+// Henri Veesaar: vigastus, 2026-27 hooaeg. Naasmisel eemalda siit.
+export const HIDDEN_PLAYERS = new Set(['henri-veesaar'])
+
 // JSON-i riiginimi -> IANA ajavöönd. USA klubidel on see koduareeni vöönd;
 // võõrsilmängud teises vööndis võivad olla kuni 3 tundi paigast.
 const COUNTRY_TZ = {
@@ -107,6 +112,22 @@ export function buildScheduleRows(data, players) {
 export function upcomingRows(rows, nowSeconds, days = 14) {
   const until = nowSeconds + days * DAY
   return rows.filter(r => r.visibleUntil > nowSeconds && r.sortTimestamp <= until)
+}
+
+function tallinnDay(ts) {
+  return new Date(ts * 1000).toLocaleDateString('sv-SE', { timeZone: TALLINN })
+}
+
+// Avalehe ja menüü "täna klubides": tänased mängud (ka juba alanud), kui täna
+// mänge pole, siis järgmise mängupäeva omad. null, kui hooajal mänge enam pole.
+export function clubGameDay(rows, nowSeconds) {
+  const today = tallinnDay(nowSeconds)
+  const todays = rows.filter(r => tallinnDay(r.sortTimestamp) === today)
+  if (todays.length) return { today: true, rows: todays }
+  const next = rows.find(r => r.visibleUntil > nowSeconds)
+  if (!next) return null
+  const day = tallinnDay(next.sortTimestamp)
+  return { today: false, rows: rows.filter(r => tallinnDay(r.sortTimestamp) === day) }
 }
 
 // Esimene mäng pärast akent, et tühi vaade saaks öelda, millal midagi tuleb.

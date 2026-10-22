@@ -1,0 +1,2181 @@
+{
+ "allikas": "sport24.ee koondise andmebaas, ametlikud mängud (valik- ja finaalturniirid)",
+ "seisuga": "2026-08-30",
+ "players": [
+  {
+   "name": "Gert Kullamäe",
+   "games": 82,
+   "points": 909
+  },
+  {
+   "name": "Rauno Pehka",
+   "games": 78,
+   "points": 884
+  },
+  {
+   "name": "Janar Talts",
+   "games": 72,
+   "points": 565
+  },
+  {
+   "name": "Margus Metstak",
+   "games": 69,
+   "points": 770
+  },
+  {
+   "name": "Kristjan Kangur",
+   "games": 68,
+   "points": 613
+  },
+  {
+   "name": "Valmo Kriisa",
+   "games": 68,
+   "points": 331
+  },
+  {
+   "name": "Marek Noormets",
+   "games": 64,
+   "points": 289
+  },
+  {
+   "name": "Indrek Rumma",
+   "games": 60,
+   "points": 191
+  },
+  {
+   "name": "Gregor Arbet",
+   "games": 59,
+   "points": 479
+  },
+  {
+   "name": "Siim-Sander Vene",
+   "games": 57,
+   "points": 518
+  },
+  {
+   "name": "Sten Sokk",
+   "games": 54,
+   "points": 338
+  },
+  {
+   "name": "Tanel Tein",
+   "games": 53,
+   "points": 450
+  },
+  {
+   "name": "Tanel Sokk",
+   "games": 52,
+   "points": 307
+  },
+  {
+   "name": "Kristian Kullamäe",
+   "games": 51,
+   "points": 568
+  },
+  {
+   "name": "Martin Müürsepp",
+   "games": 51,
+   "points": 855
+  },
+  {
+   "name": "Aivar Kuusmaa",
+   "games": 48,
+   "points": 669
+  },
+  {
+   "name": "Gert Dorbek",
+   "games": 48,
+   "points": 209
+  },
+  {
+   "name": "Martin Dorbek",
+   "games": 45,
+   "points": 67
+  },
+  {
+   "name": "Rain Veideman",
+   "games": 44,
+   "points": 451
+  },
+  {
+   "name": "Janari Jõesaar",
+   "games": 43,
+   "points": 327
+  },
+  {
+   "name": "Kregor Hermet",
+   "games": 42,
+   "points": 143
+  },
+  {
+   "name": "Kaspar Treier",
+   "games": 41,
+   "points": 306
+  },
+  {
+   "name": "Kristjan Kitsing",
+   "games": 41,
+   "points": 315
+  },
+  {
+   "name": "Erki Kivinukk",
+   "games": 40,
+   "points": 40
+  },
+  {
+   "name": "Sergei Babenko",
+   "games": 40,
+   "points": 530
+  },
+  {
+   "name": "Andre Pärn",
+   "games": 38,
+   "points": 270
+  },
+  {
+   "name": "Andrus Nagel",
+   "games": 35,
+   "points": 269
+  },
+  {
+   "name": "Sander Raieste",
+   "games": 35,
+   "points": 179
+  },
+  {
+   "name": "Tarmo Kikerpill",
+   "games": 35,
+   "points": 219
+  },
+  {
+   "name": "Reinar Hallik",
+   "games": 33,
+   "points": 227
+  },
+  {
+   "name": "Henri Drell",
+   "games": 32,
+   "points": 298
+  },
+  {
+   "name": "Matthias Tass",
+   "games": 32,
+   "points": 162
+  },
+  {
+   "name": "Ivo Saksakulm",
+   "games": 31,
+   "points": 65
+  },
+  {
+   "name": "Joonas Riismaa",
+   "games": 29,
+   "points": 100
+  },
+  {
+   "name": "Aleksandr Karavajev",
+   "games": 27,
+   "points": 87
+  },
+  {
+   "name": "Artur Konontšuk",
+   "games": 27,
+   "points": 254
+  },
+  {
+   "name": "Kristjan Makke",
+   "games": 26,
+   "points": 42
+  },
+  {
+   "name": "Maik-Kalev Kotsar",
+   "games": 26,
+   "points": 347
+  },
+  {
+   "name": "Martin Paasoja",
+   "games": 25,
+   "points": 104
+  },
+  {
+   "name": "Rauno Nurger",
+   "games": 24,
+   "points": 84
+  },
+  {
+   "name": "Kristo Saage",
+   "games": 21,
+   "points": 46
+  },
+  {
+   "name": "Mikk Jurkatamm",
+   "games": 21,
+   "points": 82
+  },
+  {
+   "name": "Tanel Kurbas",
+   "games": 21,
+   "points": 100
+  },
+  {
+   "name": "Vallo Allingu",
+   "games": 21,
+   "points": 105
+  },
+  {
+   "name": "Erik Keedus",
+   "games": 20,
+   "points": 108
+  },
+  {
+   "name": "Rain Raadik",
+   "games": 20,
+   "points": 7
+  },
+  {
+   "name": "Rait-Riivo Laane",
+   "games": 19,
+   "points": 21
+  },
+  {
+   "name": "Märt Rosenthal",
+   "games": 18,
+   "points": 50
+  },
+  {
+   "name": "Timo Eichfuss",
+   "games": 18,
+   "points": 2
+  },
+  {
+   "name": "Toomas Kandimaa",
+   "games": 18,
+   "points": 4
+  },
+  {
+   "name": "Joosep Toome",
+   "games": 17,
+   "points": 64
+  },
+  {
+   "name": "Mihkel Kirves",
+   "games": 17,
+   "points": 45
+  },
+  {
+   "name": "Ardo Ärmpalu",
+   "games": 15,
+   "points": 34
+  },
+  {
+   "name": "Evald Mahl",
+   "games": 15,
+   "points": 41
+  },
+  {
+   "name": "Heino Veiber (Veskila)",
+   "games": 15,
+   "points": 214
+  },
+  {
+   "name": "Indrek Kajupank",
+   "games": 15,
+   "points": 66
+  },
+  {
+   "name": "Kasper Suurorg",
+   "games": 15,
+   "points": 75
+  },
+  {
+   "name": "Hugo Toom",
+   "games": 12,
+   "points": 56
+  },
+  {
+   "name": "Oskar Erikson",
+   "games": 12,
+   "points": 29
+  },
+  {
+   "name": "Ralf Viksten",
+   "games": 12,
+   "points": 56
+  },
+  {
+   "name": "Valdo Lips",
+   "games": 12,
+   "points": 8
+  },
+  {
+   "name": "Viljar Veski",
+   "games": 12,
+   "points": 9
+  },
+  {
+   "name": "Artur Amon",
+   "games": 10,
+   "points": 7
+  },
+  {
+   "name": "Erich Altosaar",
+   "games": 10,
+   "points": 38
+  },
+  {
+   "name": "Georg Vinogradov",
+   "games": 10,
+   "points": 16
+  },
+  {
+   "name": "Jaanus Liivak",
+   "games": 10,
+   "points": 34
+  },
+  {
+   "name": "Kerr Kriisa",
+   "games": 10,
+   "points": 81
+  },
+  {
+   "name": "Martin Viiask",
+   "games": 10,
+   "points": 4
+  },
+  {
+   "name": "Tiit Sokk",
+   "games": 10,
+   "points": 165
+  },
+  {
+   "name": "Veljo Vares",
+   "games": 10,
+   "points": 9
+  },
+  {
+   "name": "Jaan Puidet",
+   "games": 9,
+   "points": 8
+  },
+  {
+   "name": "Kert Kesküla",
+   "games": 9,
+   "points": 11
+  },
+  {
+   "name": "Rait Keerles",
+   "games": 9,
+   "points": 64
+  },
+  {
+   "name": "Aleksander Illi",
+   "games": 8,
+   "points": 13
+  },
+  {
+   "name": "Robert Keres",
+   "games": 8,
+   "points": 18
+  },
+  {
+   "name": "Robert Valge",
+   "games": 8,
+   "points": 9
+  },
+  {
+   "name": "Vladimir Kärk",
+   "games": 8,
+   "points": 24
+  },
+  {
+   "name": "Hans Juurup",
+   "games": 7,
+   "points": 7
+  },
+  {
+   "name": "Herbert Tillemann",
+   "games": 7,
+   "points": 19
+  },
+  {
+   "name": "Marek Doronin",
+   "games": 7,
+   "points": 5
+  },
+  {
+   "name": "Siim-Markus Post",
+   "games": 7,
+   "points": 8
+  },
+  {
+   "name": "Silver Leppik",
+   "games": 7,
+   "points": 22
+  },
+  {
+   "name": "Valdeko Valdmäe",
+   "games": 7,
+   "points": 16
+  },
+  {
+   "name": "Erik Dorbek",
+   "games": 6,
+   "points": 0
+  },
+  {
+   "name": "Kaido Saks",
+   "games": 6,
+   "points": 7
+  },
+  {
+   "name": "Leho Kraav",
+   "games": 6,
+   "points": 5
+  },
+  {
+   "name": "Markus Ilver",
+   "games": 6,
+   "points": 21
+  },
+  {
+   "name": "Toomas Raadik",
+   "games": 6,
+   "points": 7
+  },
+  {
+   "name": "Albert (Alo) Schultz (Suurna)",
+   "games": 5,
+   "points": 2
+  },
+  {
+   "name": "Alfred Zimmermann",
+   "games": 5,
+   "points": 10
+  },
+  {
+   "name": "Andrus Renter",
+   "games": 5,
+   "points": 0
+  },
+  {
+   "name": "Heino Enden",
+   "games": 5,
+   "points": 0
+  },
+  {
+   "name": "Leemet Böckler (Loik)",
+   "games": 5,
+   "points": 11
+  },
+  {
+   "name": "Henri Veesaar",
+   "games": 4,
+   "points": 0
+  },
+  {
+   "name": "Karl-Johan Lips",
+   "games": 4,
+   "points": 9
+  },
+  {
+   "name": "Saimon Sutt",
+   "games": 4,
+   "points": 11
+  },
+  {
+   "name": "Stefan Vaaks",
+   "games": 4,
+   "points": 48
+  },
+  {
+   "name": "Sten Olmre",
+   "games": 4,
+   "points": 27
+  },
+  {
+   "name": "Aleksander Margevic (Margiste)",
+   "games": 3,
+   "points": 10
+  },
+  {
+   "name": "Bernhard Noony (Nooni)",
+   "games": 3,
+   "points": 0
+  },
+  {
+   "name": "Indrek Varblane",
+   "games": 3,
+   "points": 12
+  },
+  {
+   "name": "Leonid Saar",
+   "games": 3,
+   "points": 0
+  },
+  {
+   "name": "Marko Riis",
+   "games": 3,
+   "points": 0
+  },
+  {
+   "name": "Reimo Tamm",
+   "games": 3,
+   "points": 6
+  },
+  {
+   "name": "Toomas Liivak",
+   "games": 3,
+   "points": 3
+  },
+  {
+   "name": "Ando Tagamets",
+   "games": 2,
+   "points": 0
+  },
+  {
+   "name": "Gregor Ilves",
+   "games": 2,
+   "points": 0
+  },
+  {
+   "name": "Heiko Rannula",
+   "games": 2,
+   "points": 0
+  },
+  {
+   "name": "Margus Nurja",
+   "games": 2,
+   "points": 2
+  },
+  {
+   "name": "Priit Ilver",
+   "games": 2,
+   "points": 9
+  },
+  {
+   "name": "Taavi Jurkatamm",
+   "games": 2,
+   "points": 0
+  },
+  {
+   "name": "Gregor Kuuba",
+   "games": 1,
+   "points": 0
+  },
+  {
+   "name": "Priit Lokutšievski",
+   "games": 1,
+   "points": 5
+  },
+  {
+   "name": "Raoul Suurorg",
+   "games": 1,
+   "points": 0
+  }
+ ],
+ "single_game_points": [
+  {
+   "name": "Martin Müürsepp",
+   "points": 41,
+   "date": "1998-11-28",
+   "opponent": "Island"
+  },
+  {
+   "name": "Aivar Kuusmaa",
+   "points": 40,
+   "date": "1993-07-02",
+   "opponent": "Bosnia ja Hertsegoviina"
+  },
+  {
+   "name": "Sergei Babenko",
+   "points": 36,
+   "date": "1993-06-06",
+   "opponent": "Läti"
+  },
+  {
+   "name": "Margus Metstak",
+   "points": 36,
+   "date": "1994-11-12",
+   "opponent": "Läti"
+  },
+  {
+   "name": "Margus Metstak",
+   "points": 33,
+   "date": "1992-06-26",
+   "opponent": "Ungari"
+  },
+  {
+   "name": "Maik-Kalev Kotsar",
+   "points": 32,
+   "date": "2021-02-19",
+   "opponent": "Itaalia"
+  },
+  {
+   "name": "Rain Veideman",
+   "points": 32,
+   "date": "2016-08-31",
+   "opponent": "Valgevene"
+  },
+  {
+   "name": "Gert Kullamäe",
+   "points": 32,
+   "date": "1994-11-09",
+   "opponent": "Leedu"
+  },
+  {
+   "name": "Heino Veiber (Veskila)",
+   "points": 32,
+   "date": "1939-05-24",
+   "opponent": "Ungari"
+  },
+  {
+   "name": "Kristian Kullamäe",
+   "points": 31,
+   "date": "2020-02-20",
+   "opponent": "Põhja-Makedoonia"
+  },
+  {
+   "name": "Martin Müürsepp",
+   "points": 31,
+   "date": "1999-11-27",
+   "opponent": "Austria"
+  },
+  {
+   "name": "Martin Müürsepp",
+   "points": 31,
+   "date": "2001-01-24",
+   "opponent": "Valgevene"
+  },
+  {
+   "name": "Aivar Kuusmaa",
+   "points": 30,
+   "date": "1993-06-22",
+   "opponent": "Saksamaa"
+  },
+  {
+   "name": "Andrus Nagel",
+   "points": 29,
+   "date": "1993-06-01",
+   "opponent": "Rumeenia"
+  },
+  {
+   "name": "Gert Kullamäe",
+   "points": 29,
+   "date": "2000-02-26",
+   "opponent": "Tšehhi"
+  }
+ ],
+ "biggest_wins": [
+  {
+   "date": "1939-05-25",
+   "opponent": "Soome",
+   "score": [
+    91,
+    1
+   ],
+   "place": "Leedu, Kaunas, finaalturniir"
+  },
+  {
+   "date": "1939-05-24",
+   "opponent": "Ungari",
+   "score": [
+    64,
+    18
+   ],
+   "place": "Leedu, Kaunas, finaalturniir"
+  },
+  {
+   "date": "2022-09-06",
+   "opponent": "Suurbritannia",
+   "score": [
+    94,
+    62
+   ],
+   "place": "Itaalia, Assago, finaalturniir"
+  },
+  {
+   "date": "1992-06-24",
+   "opponent": "Holland",
+   "score": [
+    106,
+    74
+   ],
+   "place": "Hispaania, Badajoz, valikturniir"
+  },
+  {
+   "date": "2026-07-03",
+   "opponent": "Sloveenia",
+   "score": [
+    93,
+    62
+   ],
+   "place": "Eesti, Tallinn, valikturniir"
+  },
+  {
+   "date": "2005-09-04",
+   "opponent": "Poola",
+   "score": [
+    74,
+    45
+   ],
+   "place": "Eesti, Tallinn, valikturniir"
+  }
+ ],
+ "biggest_losses": [
+  {
+   "date": "2001-09-01",
+   "opponent": "Jugoslaavia",
+   "score": [
+    58,
+    113
+   ],
+   "place": "Türgi, Antalya, finaalturniir"
+  },
+  {
+   "date": "2007-08-22",
+   "opponent": "Põhja-Makedoonia",
+   "score": [
+    50,
+    95
+   ],
+   "place": "Makedoonia, Skopje, valikturniir"
+  },
+  {
+   "date": "2018-09-13",
+   "opponent": "Saksamaa",
+   "score": [
+    43,
+    86
+   ],
+   "place": "Eesti, Tallinn, valikturniir"
+  },
+  {
+   "date": "1993-07-03",
+   "opponent": "Hispaania",
+   "score": [
+    80,
+    119
+   ],
+   "place": "Saksamaa, München, finaalturniir"
+  },
+  {
+   "date": "2025-08-27",
+   "opponent": "Serbia",
+   "score": [
+    64,
+    98
+   ],
+   "place": "Läti, Riia, finaalturniir"
+  },
+  {
+   "date": "1993-11-17",
+   "opponent": "Sloveenia",
+   "score": [
+    72,
+    105
+   ],
+   "place": "Sloveenia, Maribor, valikturniir"
+  }
+ ],
+ "most_points": [
+  {
+   "date": "1993-06-22",
+   "opponent": "Saksamaa",
+   "score": [
+    113,
+    103
+   ],
+   "place": "Saksamaa, Berliin, finaalturniir"
+  },
+  {
+   "date": "1993-06-01",
+   "opponent": "Rumeenia",
+   "score": [
+    109,
+    84
+   ],
+   "place": "Poola, Wroclaw, valikturniir"
+  },
+  {
+   "date": "1993-06-04",
+   "opponent": "Poola",
+   "score": [
+    106,
+    90
+   ],
+   "place": "Poola, Wroclaw, valikturniir"
+  },
+  {
+   "date": "1992-06-24",
+   "opponent": "Holland",
+   "score": [
+    106,
+    74
+   ],
+   "place": "Hispaania, Badajoz, valikturniir"
+  },
+  {
+   "date": "2021-02-19",
+   "opponent": "Itaalia",
+   "score": [
+    105,
+    101
+   ],
+   "place": "Venemaa, Perm, valikturniir"
+  },
+  {
+   "date": "2011-08-21",
+   "opponent": "Luksemburg",
+   "score": [
+    105,
+    79
+   ],
+   "place": "Luksemburg, Luxembourg, valikturniir"
+  }
+ ],
+ "koik": {
+  "kirjeldus": "Kõik mängud sport24.ee järgi: ka sõprusmängud ja Eesti NSV koondise mängud. Uued ametlikud mängud lisanduvad automaatselt, sõprusmängud on seisuga 30.08.2026.",
+  "players": [
+   {
+    "name": "Janar Talts",
+    "games": 168
+   },
+   {
+    "name": "Kristjan Kangur",
+    "games": 164
+   },
+   {
+    "name": "Gregor Arbet",
+    "games": 160
+   },
+   {
+    "name": "Valmo Kriisa",
+    "games": 148
+   },
+   {
+    "name": "Jaan Lentsius",
+    "games": 146
+   },
+   {
+    "name": "Rauno Pehka",
+    "games": 146
+   },
+   {
+    "name": "Gert Kullamäe",
+    "games": 143
+   },
+   {
+    "name": "Gert Dorbek",
+    "games": 136
+   },
+   {
+    "name": "Margus Metstak",
+    "games": 132
+   },
+   {
+    "name": "Tanel Sokk",
+    "games": 127
+   },
+   {
+    "name": "Tõnno Lepmets",
+    "games": 127
+   },
+   {
+    "name": "Aleksei Tammiste",
+    "games": 125
+   },
+   {
+    "name": "Tanel Tein",
+    "games": 115
+   },
+   {
+    "name": "Sten Sokk",
+    "games": 113
+   },
+   {
+    "name": "Anatoli Krikun",
+    "games": 111
+   },
+   {
+    "name": "Vjatšeslav Filatov",
+    "games": 111
+   },
+   {
+    "name": "Peeter Metsar",
+    "games": 106
+   },
+   {
+    "name": "Indrek Rumma",
+    "games": 105
+   },
+   {
+    "name": "Priit Tomson",
+    "games": 105
+   },
+   {
+    "name": "Tarmo Kikerpill",
+    "games": 104
+   },
+   {
+    "name": "Siim-Sander Vene",
+    "games": 103
+   },
+   {
+    "name": "Rain Veideman",
+    "games": 102
+   },
+   {
+    "name": "Marek Noormets",
+    "games": 101
+   },
+   {
+    "name": "Martin Dorbek",
+    "games": 93
+   },
+   {
+    "name": "Kalle Ilves",
+    "games": 91
+   },
+   {
+    "name": "Kristjan Kitsing",
+    "games": 91
+   },
+   {
+    "name": "Tõnis Randala",
+    "games": 91
+   },
+   {
+    "name": "Ülo Laumets",
+    "games": 90
+   },
+   {
+    "name": "Avo Jans",
+    "games": 89
+   },
+   {
+    "name": "Jaak Salumets",
+    "games": 88
+   },
+   {
+    "name": "Martin Müürsepp",
+    "games": 86
+   },
+   {
+    "name": "Heino Lill",
+    "games": 85
+   },
+   {
+    "name": "Aivar Kuusmaa",
+    "games": 83
+   },
+   {
+    "name": "Kristjan Makke",
+    "games": 83
+   },
+   {
+    "name": "Andre Pärn",
+    "games": 81
+   },
+   {
+    "name": "Reinar Hallik",
+    "games": 80
+   },
+   {
+    "name": "Valdu Suurkask",
+    "games": 78
+   },
+   {
+    "name": "Enn Parbo",
+    "games": 76
+   },
+   {
+    "name": "Erki Kivinukk",
+    "games": 76
+   },
+   {
+    "name": "Kregor Hermet",
+    "games": 75
+   },
+   {
+    "name": "Rain Raadik",
+    "games": 74
+   },
+   {
+    "name": "Andrus Nagel",
+    "games": 73
+   },
+   {
+    "name": "Kristian Kullamäe",
+    "games": 72
+   },
+   {
+    "name": "Janari Jõesaar",
+    "games": 70
+   },
+   {
+    "name": "Mihkel Tiks",
+    "games": 70
+   },
+   {
+    "name": "Ernst Ehaveer",
+    "games": 68
+   },
+   {
+    "name": "Vallo Allingu",
+    "games": 68
+   },
+   {
+    "name": "Ivo Saksakulm",
+    "games": 67
+   },
+   {
+    "name": "Erik Keedus",
+    "games": 66
+   },
+   {
+    "name": "Märt Sepik",
+    "games": 66
+   },
+   {
+    "name": "Tanel Kurbas",
+    "games": 65
+   },
+   {
+    "name": "August Sokk",
+    "games": 64
+   },
+   {
+    "name": "Ilmar Kullam",
+    "games": 64
+   },
+   {
+    "name": "Heino Muttikas",
+    "games": 62
+   },
+   {
+    "name": "Raoul Roodas",
+    "games": 61
+   },
+   {
+    "name": "Viktor Viktorov",
+    "games": 60
+   },
+   {
+    "name": "Jaak Lipso",
+    "games": 59
+   },
+   {
+    "name": "Sergei Babenko",
+    "games": 59
+   },
+   {
+    "name": "Heino Kruus",
+    "games": 57
+   },
+   {
+    "name": "Rait-Riivo Laane",
+    "games": 56
+   },
+   {
+    "name": "Eldor Vare",
+    "games": 55
+   },
+   {
+    "name": "Jaan Orav",
+    "games": 55
+   },
+   {
+    "name": "Kaspar Treier",
+    "games": 55
+   },
+   {
+    "name": "Peeter Kokk",
+    "games": 55
+   },
+   {
+    "name": "Peep Teder",
+    "games": 54
+   },
+   {
+    "name": "Sander Raieste",
+    "games": 53
+   },
+   {
+    "name": "Martin Paasoja",
+    "games": 52
+   },
+   {
+    "name": "Teet Laur",
+    "games": 52
+   },
+   {
+    "name": "Andres Sõber",
+    "games": 49
+   },
+   {
+    "name": "Heino Enden",
+    "games": 49
+   },
+   {
+    "name": "Heldur Jaanson",
+    "games": 49
+   },
+   {
+    "name": "Henri Drell",
+    "games": 49
+   },
+   {
+    "name": "Joosep Toome",
+    "games": 48
+   },
+   {
+    "name": "Matthias Tass",
+    "games": 48
+   },
+   {
+    "name": "Aleksandr Karavajev",
+    "games": 47
+   },
+   {
+    "name": "Joann Lõssov",
+    "games": 46
+   },
+   {
+    "name": "Kristo Saage",
+    "games": 46
+   },
+   {
+    "name": "Pärtel Mettig",
+    "games": 45
+   },
+   {
+    "name": "Rašid Abeljanov",
+    "games": 45
+   },
+   {
+    "name": "Joonas Riismaa",
+    "games": 44
+   },
+   {
+    "name": "Ardo Ärmpalu",
+    "games": 43
+   },
+   {
+    "name": "Timo Eichfuss",
+    "games": 43
+   },
+   {
+    "name": "Toomas Kandimaa",
+    "games": 40
+   },
+   {
+    "name": "Artur Konontšuk",
+    "games": 39
+   },
+   {
+    "name": "Mart Laga",
+    "games": 39
+   },
+   {
+    "name": "Mikk Jurkatamm",
+    "games": 39
+   },
+   {
+    "name": "Viljar Veski",
+    "games": 39
+   },
+   {
+    "name": "Ülo Varul",
+    "games": 39
+   },
+   {
+    "name": "Maik-Kalev Kotsar",
+    "games": 38
+   },
+   {
+    "name": "Rein Pokla",
+    "games": 38
+   },
+   {
+    "name": "Arvo Lill",
+    "games": 37
+   },
+   {
+    "name": "Armand Brosman",
+    "games": 36
+   },
+   {
+    "name": "Mihhail Žulanov",
+    "games": 36
+   },
+   {
+    "name": "Heino Krevald",
+    "games": 35
+   },
+   {
+    "name": "Indrek Kajupank",
+    "games": 35
+   },
+   {
+    "name": "Jüri Metsalu",
+    "games": 34
+   },
+   {
+    "name": "Rauno Nurger",
+    "games": 34
+   },
+   {
+    "name": "Marek Doronin",
+    "games": 32
+   },
+   {
+    "name": "Oskar Erikson",
+    "games": 32
+   },
+   {
+    "name": "Heino Villemson",
+    "games": 31
+   },
+   {
+    "name": "Rait Keerles",
+    "games": 31
+   },
+   {
+    "name": "Silver Leppik",
+    "games": 31
+   },
+   {
+    "name": "Jaan Puidet",
+    "games": 30
+   },
+   {
+    "name": "Toomas Raadik",
+    "games": 30
+   },
+   {
+    "name": "Erich Altosaar",
+    "games": 29
+   },
+   {
+    "name": "Heino Veiber (Veskila)",
+    "games": 29
+   },
+   {
+    "name": "Leho Kraav",
+    "games": 29
+   },
+   {
+    "name": "Tiit Sokk",
+    "games": 29
+   },
+   {
+    "name": "Erik Dorbek",
+    "games": 28
+   },
+   {
+    "name": "Martin Viiask",
+    "games": 28
+   },
+   {
+    "name": "Märt Rosenthal",
+    "games": 28
+   },
+   {
+    "name": "Uno Kiivet",
+    "games": 28
+   },
+   {
+    "name": "Harri Russak",
+    "games": 27
+   },
+   {
+    "name": "Veljo Vares",
+    "games": 27
+   },
+   {
+    "name": "Kasper Suurorg",
+    "games": 26
+   },
+   {
+    "name": "Arno Tamm",
+    "games": 25
+   },
+   {
+    "name": "Mihkel Kirves",
+    "games": 25
+   },
+   {
+    "name": "Boris Koop",
+    "games": 23
+   },
+   {
+    "name": "Hugo Toom",
+    "games": 23
+   },
+   {
+    "name": "Viktor Laats",
+    "games": 23
+   },
+   {
+    "name": "Evald Mahl",
+    "games": 22
+   },
+   {
+    "name": "Raivo Aljaste",
+    "games": 22
+   },
+   {
+    "name": "Artur Amon",
+    "games": 21
+   },
+   {
+    "name": "Jaanus Liivak",
+    "games": 21
+   },
+   {
+    "name": "Lembit Rebane",
+    "games": 21
+   },
+   {
+    "name": "Taavi Reigam",
+    "games": 21
+   },
+   {
+    "name": "Frits Suurkask",
+    "games": 20
+   },
+   {
+    "name": "Kert Kesküla",
+    "games": 20
+   },
+   {
+    "name": "Ralf Viksten",
+    "games": 20
+   },
+   {
+    "name": "Tõnu Selke",
+    "games": 20
+   },
+   {
+    "name": "Agur Lunden",
+    "games": 19
+   },
+   {
+    "name": "Antti Metsmaa",
+    "games": 19
+   },
+   {
+    "name": "Heiko Rannula",
+    "games": 19
+   },
+   {
+    "name": "Kaido Saks",
+    "games": 19
+   },
+   {
+    "name": "Robert Valge",
+    "games": 19
+   },
+   {
+    "name": "Atko Viru",
+    "games": 18
+   },
+   {
+    "name": "Valdo Lips",
+    "games": 18
+   },
+   {
+    "name": "Heiko Niidas",
+    "games": 17
+   },
+   {
+    "name": "Kerr Kriisa",
+    "games": 17
+   },
+   {
+    "name": "Siim-Markus Post",
+    "games": 17
+   },
+   {
+    "name": "Valeri Tilgor",
+    "games": 17
+   },
+   {
+    "name": "Arvo Putmaker",
+    "games": 16
+   },
+   {
+    "name": "Uino Urb",
+    "games": 16
+   },
+   {
+    "name": "Aleksander Illi",
+    "games": 15
+   },
+   {
+    "name": "Georg Vinogradov",
+    "games": 15
+   },
+   {
+    "name": "Heino Raudsik",
+    "games": 15
+   },
+   {
+    "name": "Markus Ilver",
+    "games": 15
+   },
+   {
+    "name": "Robert Keres",
+    "games": 15
+   },
+   {
+    "name": "Aivar Toomiste",
+    "games": 14
+   },
+   {
+    "name": "Bernhard Noony (Nooni)",
+    "games": 14
+   },
+   {
+    "name": "Georg (Rene) Press (Prees)",
+    "games": 14
+   },
+   {
+    "name": "Peep Jõgi",
+    "games": 14
+   },
+   {
+    "name": "Vladimir Kärk",
+    "games": 14
+   },
+   {
+    "name": "Ago Kliimson",
+    "games": 13
+   },
+   {
+    "name": "Hannes Koik",
+    "games": 13
+   },
+   {
+    "name": "Harri Drell",
+    "games": 13
+   },
+   {
+    "name": "Leemet Böckler (Loik)",
+    "games": 13
+   },
+   {
+    "name": "Olaf Õun",
+    "games": 13
+   },
+   {
+    "name": "Ain Kipper",
+    "games": 12
+   },
+   {
+    "name": "Indrek Varblane",
+    "games": 12
+   },
+   {
+    "name": "Margus Nurja",
+    "games": 12
+   },
+   {
+    "name": "Marko Riis",
+    "games": 12
+   },
+   {
+    "name": "Jaak Lass",
+    "games": 11
+   },
+   {
+    "name": "Raoul Suurorg",
+    "games": 11
+   },
+   {
+    "name": "Reinut Kuljus",
+    "games": 11
+   },
+   {
+    "name": "Saimon Sutt",
+    "games": 11
+   },
+   {
+    "name": "Taavi Jurkatamm",
+    "games": 11
+   },
+   {
+    "name": "Aleksander Margevic (Margiste)",
+    "games": 10
+   },
+   {
+    "name": "Hans Juurup",
+    "games": 10
+   },
+   {
+    "name": "Henri Veesaar",
+    "games": 10
+   },
+   {
+    "name": "Herbert Tillemann",
+    "games": 10
+   },
+   {
+    "name": "Albert (Alo) Schultz (Suurna)",
+    "games": 9
+   },
+   {
+    "name": "Asko Paade",
+    "games": 9
+   },
+   {
+    "name": "Eduard Raamat",
+    "games": 9
+   },
+   {
+    "name": "Eugen Tilling",
+    "games": 9
+   },
+   {
+    "name": "Reimo Tamm",
+    "games": 9
+   },
+   {
+    "name": "Toomas Liivak",
+    "games": 9
+   },
+   {
+    "name": "Valdeko Valdmäe",
+    "games": 9
+   },
+   {
+    "name": "Alfred Zimmermann",
+    "games": 8
+   },
+   {
+    "name": "Andrus Renter",
+    "games": 8
+   },
+   {
+    "name": "Arne Laos",
+    "games": 8
+   },
+   {
+    "name": "Priit Ilver",
+    "games": 8
+   },
+   {
+    "name": "Andrus Toom",
+    "games": 7
+   },
+   {
+    "name": "August Kaasik",
+    "games": 7
+   },
+   {
+    "name": "Enno Tisler",
+    "games": 7
+   },
+   {
+    "name": "Gregor Kuuba",
+    "games": 7
+   },
+   {
+    "name": "Sven Kaldre",
+    "games": 7
+   },
+   {
+    "name": "Taras Timcenko",
+    "games": 7
+   },
+   {
+    "name": "Valdek Rohtmets",
+    "games": 7
+   },
+   {
+    "name": "Aleksander Uš",
+    "games": 6
+   },
+   {
+    "name": "Georg Rekker",
+    "games": 6
+   },
+   {
+    "name": "Jüri Viigipuu",
+    "games": 6
+   },
+   {
+    "name": "Kalev Pihelgas",
+    "games": 6
+   },
+   {
+    "name": "Karl-Johan Lips",
+    "games": 6
+   },
+   {
+    "name": "Priit Lokutšievski",
+    "games": 6
+   },
+   {
+    "name": "Robert Ratnik",
+    "games": 6
+   },
+   {
+    "name": "Adolf Voolaid",
+    "games": 5
+   },
+   {
+    "name": "Aleksei Poljakov",
+    "games": 5
+   },
+   {
+    "name": "Anatoli Morozov",
+    "games": 5
+   },
+   {
+    "name": "Carlos Jürgens",
+    "games": 5
+   },
+   {
+    "name": "Egon Parbo",
+    "games": 5
+   },
+   {
+    "name": "Hugo Kalberg",
+    "games": 5
+   },
+   {
+    "name": "Leonid Saar",
+    "games": 5
+   },
+   {
+    "name": "Stefan Vaaks",
+    "games": 5
+   },
+   {
+    "name": "Tair Tenno",
+    "games": 5
+   },
+   {
+    "name": "Tõnu Lont",
+    "games": 5
+   },
+   {
+    "name": "Valentin Klõšeiko",
+    "games": 5
+   },
+   {
+    "name": "Voldemar Erikson",
+    "games": 5
+   },
+   {
+    "name": "Andres Metsar",
+    "games": 4
+   },
+   {
+    "name": "Gunnar Dudkin",
+    "games": 4
+   },
+   {
+    "name": "Heino Larka",
+    "games": 4
+   },
+   {
+    "name": "Jaroslav Dudkin",
+    "games": 4
+   },
+   {
+    "name": "Johannes Kirsipuu",
+    "games": 4
+   },
+   {
+    "name": "Joonas Järveläinen",
+    "games": 4
+   },
+   {
+    "name": "Kalev Pius",
+    "games": 4
+   },
+   {
+    "name": "Peter Carey",
+    "games": 4
+   },
+   {
+    "name": "Priit Silland",
+    "games": 4
+   },
+   {
+    "name": "Ran Andre Pehka",
+    "games": 4
+   },
+   {
+    "name": "Sten Olmre",
+    "games": 4
+   },
+   {
+    "name": "Sverre Aav",
+    "games": 4
+   },
+   {
+    "name": "Toomas Tamula",
+    "games": 4
+   },
+   {
+    "name": "Tõnu Tomson",
+    "games": 4
+   },
+   {
+    "name": "Veiko Jurkatamm",
+    "games": 4
+   },
+   {
+    "name": "Ando Tagamets",
+    "games": 3
+   },
+   {
+    "name": "Andres Ader",
+    "games": 3
+   },
+   {
+    "name": "Artur Pihlak",
+    "games": 3
+   },
+   {
+    "name": "Harald Särg",
+    "games": 3
+   },
+   {
+    "name": "Heino Uuli",
+    "games": 3
+   },
+   {
+    "name": "Ivo Jurno",
+    "games": 3
+   },
+   {
+    "name": "Jaan Põldre",
+    "games": 3
+   },
+   {
+    "name": "Johannes Roes",
+    "games": 3
+   },
+   {
+    "name": "Kaido Seil",
+    "games": 3
+   },
+   {
+    "name": "Karl Vene",
+    "games": 3
+   },
+   {
+    "name": "Mait Käbin",
+    "games": 3
+   },
+   {
+    "name": "Mait Peterson",
+    "games": 3
+   },
+   {
+    "name": "Paul Klõšeiko",
+    "games": 3
+   },
+   {
+    "name": "Peep Päro",
+    "games": 3
+   },
+   {
+    "name": "Robert Silvester",
+    "games": 3
+   },
+   {
+    "name": "Roman Ugam",
+    "games": 3
+   },
+   {
+    "name": "Viktor Ivanov",
+    "games": 3
+   },
+   {
+    "name": "Viktor Kofanov",
+    "games": 3
+   },
+   {
+    "name": "Aleksander Ivanov",
+    "games": 2
+   },
+   {
+    "name": "Alfred Kruus",
+    "games": 2
+   },
+   {
+    "name": "Arnold Matiisen",
+    "games": 2
+   },
+   {
+    "name": "August Veinmann",
+    "games": 2
+   },
+   {
+    "name": "Bogdan Konontšuk",
+    "games": 2
+   },
+   {
+    "name": "Edgar Naarits",
+    "games": 2
+   },
+   {
+    "name": "Gregor Ilves",
+    "games": 2
+   },
+   {
+    "name": "Ib Lamp",
+    "games": 2
+   },
+   {
+    "name": "Indrek Reinbok",
+    "games": 2
+   },
+   {
+    "name": "Ivo Van Tamm",
+    "games": 2
+   },
+   {
+    "name": "Jaan Montgomery",
+    "games": 2
+   },
+   {
+    "name": "Janar Soo",
+    "games": 2
+   },
+   {
+    "name": "Janis Leja",
+    "games": 2
+   },
+   {
+    "name": "Jüri Metsaorg",
+    "games": 2
+   },
+   {
+    "name": "Karl-Martin Kask",
+    "games": 2
+   },
+   {
+    "name": "Karmo Allikas",
+    "games": 2
+   },
+   {
+    "name": "Kristen Kasemets",
+    "games": 2
+   },
+   {
+    "name": "Oleg Reile",
+    "games": 2
+   },
+   {
+    "name": "Oleg Reinas",
+    "games": 2
+   },
+   {
+    "name": "Olev Arens",
+    "games": 2
+   },
+   {
+    "name": "Paul Ressar",
+    "games": 2
+   },
+   {
+    "name": "Peep Aaviksoo",
+    "games": 2
+   },
+   {
+    "name": "Priit Pihela",
+    "games": 2
+   },
+   {
+    "name": "Raido Roos",
+    "games": 2
+   },
+   {
+    "name": "Ralf Uuetoa",
+    "games": 2
+   },
+   {
+    "name": "Roman Karro",
+    "games": 2
+   },
+   {
+    "name": "Vladimir Žigili",
+    "games": 2
+   },
+   {
+    "name": "Aleksander Vinogradov",
+    "games": 1
+   },
+   {
+    "name": "Aleksei Bulatov",
+    "games": 1
+   },
+   {
+    "name": "Alfred Ratnik",
+    "games": 1
+   },
+   {
+    "name": "Alfred Sikstus",
+    "games": 1
+   },
+   {
+    "name": "Anatoli Lavrov",
+    "games": 1
+   },
+   {
+    "name": "Appolinari Budzius",
+    "games": 1
+   },
+   {
+    "name": "Arno Hallik",
+    "games": 1
+   },
+   {
+    "name": "Arnold Eisenschmidt (Ellermets)",
+    "games": 1
+   },
+   {
+    "name": "Arnold Laasner",
+    "games": 1
+   },
+   {
+    "name": "Arnold Sahva",
+    "games": 1
+   },
+   {
+    "name": "Artur Kiisel",
+    "games": 1
+   },
+   {
+    "name": "Artur Vikat",
+    "games": 1
+   },
+   {
+    "name": "Avo Väärsi",
+    "games": 1
+   },
+   {
+    "name": "Bernhard Leidla",
+    "games": 1
+   },
+   {
+    "name": "Boris Koch (Koha)",
+    "games": 1
+   },
+   {
+    "name": "Bronislav Gerulaitis",
+    "games": 1
+   },
+   {
+    "name": "Erik Makke",
+    "games": 1
+   },
+   {
+    "name": "Ernst Glass",
+    "games": 1
+   },
+   {
+    "name": "Eugen Gaikovitš",
+    "games": 1
+   },
+   {
+    "name": "Evald Pressraud",
+    "games": 1
+   },
+   {
+    "name": "Friedrich Issak",
+    "games": 1
+   },
+   {
+    "name": "Gunnar Mikk",
+    "games": 1
+   },
+   {
+    "name": "Harald Unter",
+    "games": 1
+   },
+   {
+    "name": "Harri Roo",
+    "games": 1
+   },
+   {
+    "name": "Heino Lindpere",
+    "games": 1
+   },
+   {
+    "name": "Heinrich Simtmann",
+    "games": 1
+   },
+   {
+    "name": "Herbert Brachman (Rachman)",
+    "games": 1
+   },
+   {
+    "name": "Herman Saarmann",
+    "games": 1
+   },
+   {
+    "name": "Igor Pototsky",
+    "games": 1
+   },
+   {
+    "name": "Indrek Ruut",
+    "games": 1
+   },
+   {
+    "name": "Isi Trapido",
+    "games": 1
+   },
+   {
+    "name": "Jesper Parve",
+    "games": 1
+   },
+   {
+    "name": "Joosep Pokla",
+    "games": 1
+   },
+   {
+    "name": "Kaljo Einard",
+    "games": 1
+   },
+   {
+    "name": "Karl Jürgens",
+    "games": 1
+   },
+   {
+    "name": "Kirill Käsper",
+    "games": 1
+   },
+   {
+    "name": "Kristo Reinumäe",
+    "games": 1
+   },
+   {
+    "name": "Paavo Russak",
+    "games": 1
+   },
+   {
+    "name": "Richard Mast",
+    "games": 1
+   },
+   {
+    "name": "Robert Riiberg",
+    "games": 1
+   },
+   {
+    "name": "Rünno Käsik",
+    "games": 1
+   },
+   {
+    "name": "Tiit Ilver",
+    "games": 1
+   },
+   {
+    "name": "Viktor Piilberg",
+    "games": 1
+   },
+   {
+    "name": "Vladimir Tšerepatkin",
+    "games": 1
+   }
+  ],
+  "single_game_points": [
+   {
+    "name": "Siim-Sander Vene",
+    "points": 41,
+    "date": "2012-07-31",
+    "opponent": "USA (üliõpilaskoondis)"
+   },
+   {
+    "name": "Martin Müürsepp",
+    "points": 41,
+    "date": "1998-11-28",
+    "opponent": "Island"
+   },
+   {
+    "name": "Aivar Kuusmaa",
+    "points": 40,
+    "date": "1993-07-02",
+    "opponent": "Bosnia ja Hertsegoviina"
+   },
+   {
+    "name": "Aleksei Tammiste",
+    "points": 38,
+    "date": "1974-08-18",
+    "opponent": "Jugoslaavia (Ljubljana Olimpija)"
+   },
+   {
+    "name": "Aleksei Tammiste",
+    "points": 37,
+    "date": "1969-09-20",
+    "opponent": "Soome"
+   },
+   {
+    "name": "Heino Enden",
+    "points": 37,
+    "date": "1981-09-26",
+    "opponent": "Läti"
+   },
+   {
+    "name": "Aivar Kuusmaa",
+    "points": 36,
+    "date": "1992-05-10",
+    "opponent": "Soome"
+   },
+   {
+    "name": "Sergei Babenko",
+    "points": 36,
+    "date": "1993-06-06",
+    "opponent": "Läti"
+   },
+   {
+    "name": "Margus Metstak",
+    "points": 36,
+    "date": "1994-11-12",
+    "opponent": "Läti"
+   },
+   {
+    "name": "Aivar Kuusmaa",
+    "points": 35,
+    "date": "1993-05-18",
+    "opponent": "Leedu"
+   },
+   {
+    "name": "Gert Kullamäe",
+    "points": 35,
+    "date": "1998-02-18",
+    "opponent": "Läti"
+   },
+   {
+    "name": "Heino Muttikas",
+    "points": 35,
+    "date": "1954-03-28",
+    "opponent": "Kõrgõstan"
+   },
+   {
+    "name": "Reinar Hallik",
+    "points": 34,
+    "date": "2016-08-26",
+    "opponent": "Albaania"
+   },
+   {
+    "name": "Aivar Kuusmaa",
+    "points": 33,
+    "date": "1992-06-03",
+    "opponent": "USA (Dayton Wings"
+   },
+   {
+    "name": "Margus Metstak",
+    "points": 33,
+    "date": "1992-06-26",
+    "opponent": "Ungari"
+   }
+  ]
+ }
+}

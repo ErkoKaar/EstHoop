@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useLoading } from '../contexts/LoadingContext'
 import { motion, useReducedMotion } from 'framer-motion'
 import TeamFlag from '../components/TeamFlag'
@@ -6,6 +7,7 @@ import Seo, { SITE_URL } from '../components/Seo'
 import useIsMobile from '../hooks/useIsMobile'
 import useHydrated from '../hooks/useHydrated'
 import { getPreloadedNationalTeam } from '../preload'
+import { teamNameEt } from '../utils/teamNames'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -163,6 +165,7 @@ function MatchupHero({ upcoming, recent, standings, loading, reducedMotion, isMo
 
   const home = ev ? isHome(ev) : true
   const opponent = ev ? (home ? ev.awayTeam?.name : ev.homeTeam?.name) : null
+  const opponentEt = teamNameEt(opponent)
   const estScore = ev && (home ? ev.homeScore?.current : ev.awayScore?.current)
   const oppScore = ev && (home ? ev.awayScore?.current : ev.homeScore?.current)
 
@@ -170,11 +173,14 @@ function MatchupHero({ upcoming, recent, standings, loading, reducedMotion, isMo
     ? [shortTournament(ev.tournament?.name), groupLabel].filter(Boolean).join(' · ')
     : 'Eesti Korvpallikoondis'
 
-  // pikk vastasenimi (nt "North Macedonia") peab mahtuma — skaleeri fonti nime pikkuse järgi
-  const longName = (opponent?.length ?? 0) > 12
+  // pikk vastasenimi (nt "Põhja-Makedoonia", "Bosnia ja Hertsegoviina") peab mahtuma —
+  // skaleeri fonti kuvatava eestikeelse nime pikkuse järgi
+  const nameLength = opponentEt?.length ?? 0
   const nameStyle = {
     fontFamily: FONT_HEADING, lineHeight: 0.95, letterSpacing: 2,
-    fontSize: longName ? 'clamp(1.9rem, 5vw, 3.4rem)' : 'clamp(2.6rem, 8vw, 5.5rem)',
+    fontSize: nameLength > 18 ? 'clamp(1.6rem, 4.2vw, 2.8rem)'
+      : nameLength > 12 ? 'clamp(1.9rem, 5vw, 3.4rem)'
+      : 'clamp(2.6rem, 8vw, 5.5rem)',
     textTransform: 'uppercase', whiteSpace: 'nowrap',
   }
   const heroFlagStyle = {
@@ -274,7 +280,7 @@ function MatchupHero({ upcoming, recent, standings, loading, reducedMotion, isMo
                   color: 'rgba(240,244,250,0.08)',
                   WebkitTextStroke: '1.5px rgba(240,244,250,0.55)',
                 }}>
-                  {opponent}
+                  {opponentEt}
                 </div>
               </motion.div>
             </div>
@@ -407,6 +413,7 @@ function TimelineNode({ type, result, reducedMotion }) {
 function PastGameCard({ event, stats, isOpen, onToggle }) {
   const home = isHome(event)
   const opponent = home ? event.awayTeam?.name : event.homeTeam?.name
+  const opponentEt = teamNameEt(opponent)
   const estScore = home ? event.homeScore?.current : event.awayScore?.current
   const oppScore = home ? event.awayScore?.current : event.homeScore?.current
   const b = resultBadge(getResult(event))
@@ -426,7 +433,7 @@ function PastGameCard({ event, stats, isOpen, onToggle }) {
         <div style={{ minWidth: 0, textAlign: 'left' }}>
           <div style={{ fontFamily: FONT_HEADING, fontSize: '1.3rem', color: DARK, letterSpacing: 0.5 }}>
             vs <TeamFlag name={opponent} size={22} style={{ verticalAlign: -2, margin: '0 3px', border: '1px solid rgba(8,6,13,0.12)' }} />
-            {opponent}
+            {opponentEt}
             <span style={{ fontSize: '1.55rem', color: b.color, letterSpacing: 1, marginLeft: 12 }}>
               {estScore}–{oppScore}
             </span>
@@ -458,11 +465,12 @@ function PastGameCard({ event, stats, isOpen, onToggle }) {
                 ))}
               </div>
               {[
-                { label: home ? 'Eesti' : opponent, key: 'home' },
-                { label: home ? opponent : 'Eesti', key: 'away' },
+                { label: home ? 'Eesti' : opponentEt, key: 'home' },
+                { label: home ? opponentEt : 'Eesti', key: 'away' },
               ].map(row => (
                 <div key={row.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 68, flexShrink: 0, fontFamily: FONT_BODY, fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)', fontWeight: 700 }}>
+                  {/* Kitsas silt: pikk nimi ("Põhja-Makedoonia") lõigatakse, täisnimi on title'is */}
+                  <span title={row.label} style={{ width: 68, flexShrink: 0, fontFamily: FONT_BODY, fontSize: '0.72rem', color: 'rgba(255,255,255,0.6)', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {row.label}
                   </span>
                   {stats.quarters.map((q, qi) => (
@@ -477,8 +485,8 @@ function PastGameCard({ event, stats, isOpen, onToggle }) {
               ))}
             </div>
           )}
-          <PlayerStatsTable teamLabel={home ? 'Eesti' : opponent} players={stats.homePlayers} accent={home ? BLUE : '#d1d5db'} />
-          <PlayerStatsTable teamLabel={home ? opponent : 'Eesti'} players={stats.awayPlayers} accent={home ? '#d1d5db' : BLUE} />
+          <PlayerStatsTable teamLabel={home ? 'Eesti' : opponentEt} players={stats.homePlayers} accent={home ? BLUE : '#d1d5db'} />
+          <PlayerStatsTable teamLabel={home ? opponentEt : 'Eesti'} players={stats.awayPlayers} accent={home ? '#d1d5db' : BLUE} />
         </div>
       )}
     </div>
@@ -494,7 +502,7 @@ function FutureGameCard({ event }) {
     <div style={{ background: CARD_BG, border: CARD_BORDER, borderRadius: 14, boxShadow: CARD_SHADOW, padding: '14px 18px', textAlign: 'left' }}>
       <div style={{ fontFamily: FONT_HEADING, fontSize: '1.3rem', color: DARK, letterSpacing: 0.5 }}>
         vs <TeamFlag name={opponent} size={22} style={{ verticalAlign: -2, margin: '0 3px', border: '1px solid rgba(8,6,13,0.12)' }} />
-        {opponent}
+        {teamNameEt(opponent)}
       </div>
       <div style={{ fontFamily: FONT_BODY, fontSize: '0.7rem', color: GRAY, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
         {formatShortDate(event.startTimestamp)}
@@ -758,7 +766,7 @@ function GroupStandings({ standings, loading, isMobile }) {
                 color: est ? BLUE : DARK, fontSize: '0.875rem',
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
               }}>
-                {est ? 'Eesti' : row.team?.name}
+                {est ? 'Eesti' : teamNameEt(row.team?.name)}
               </span>
               <span style={{ fontFamily: FONT_BODY, fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
                 {row.wins}
@@ -876,6 +884,13 @@ export default function KoondisPage() {
           <p style={{ fontFamily: FONT_BODY, fontSize: '1.05rem', color: GRAY, fontWeight: 500, marginTop: 6 }}>
             Mängud, tulemused ja alagrupi seis MM 2027 Euroopa valiksarjas
           </p>
+          <Link
+            to="/koondis/ajalugu"
+            className="inline-block mt-2 underline decoration-2 underline-offset-4 decoration-[#0072ce]/40 hover:decoration-[#0072ce] transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded"
+            style={{ fontFamily: FONT_BODY, fontSize: '1rem', fontWeight: 700, color: BLUE }}
+          >
+            Koondise ajalugu ja rekordid
+          </Link>
         </div>
 
         {error && (

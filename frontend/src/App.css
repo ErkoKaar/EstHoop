@@ -13,3 +13,278 @@
 @media (prefers-reduced-motion: reduce) {
   .logo-heartbeat { animation: none; }
 }
+
+/* ── Peamenüü (Navbar.jsx) ─────────────────────────────────────────────────
+   karlrobertsaaremae.com eeskujul: paneel laskub ribalt alla ja katab kogu
+   ekraani, sõnad tõusevad ükshaaval. Hover on "tablookuma": valge plaat pühib
+   sõna alt läbi ja sõna muutub siniseks, nagu esile tõstetud rida tablool.
+   Kõverad: 0.23,1,0.32,1 sisenemiseks, 0.77,0,0.175,1 ekraanil liikumiseks. */
+
+/* menüünupp: kaks triipu, lahti olles rist; silt Menüü/Sulge samas lahtris,
+   et nupu laius ei hüppaks */
+.menuu-nupp {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.menuu-nupp:active {
+  transform: scale(0.96);
+}
+.menuu-nupp__triibud {
+  display: grid;
+  place-items: center;
+}
+.menuu-nupp__triibud span {
+  grid-area: 1 / 1;
+  width: 1.6rem;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transform: translateY(-5px);
+  transition: transform 250ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+.menuu-nupp__triibud span + span {
+  transform: translateY(5px);
+}
+.menuu-nupp[data-open] .menuu-nupp__triibud span {
+  transform: rotate(45deg);
+}
+.menuu-nupp[data-open] .menuu-nupp__triibud span + span {
+  transform: rotate(-45deg);
+}
+.menuu-nupp__silt > span {
+  grid-area: 1 / 1;
+  transition: opacity 150ms ease-out;
+}
+.menuu-nupp__silt > span + span,
+.menuu-nupp[data-open] .menuu-nupp__silt > span:first-child {
+  opacity: 0;
+}
+.menuu-nupp[data-open] .menuu-nupp__silt > span + span {
+  opacity: 1;
+}
+
+/* Paneel: avanemine 420 ms, sulgemine 240 ms (väljumine kiirem) */
+.menuu {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition: clip-path 240ms cubic-bezier(0.77, 0, 0.175, 1), visibility 0s 240ms;
+}
+.menuu[data-open] {
+  clip-path: inset(0);
+  visibility: visible;
+  transition: clip-path 420ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+/* Telefonis veerg: sõnad, all ikoonid. Laual kaks veergu: sõnad ja järgmise mängu kaart. */
+.menuu__sisu {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1126px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 84px max(24px, env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .menuu__sisu {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 48px;
+    padding-top: 116px;
+    padding-bottom: 40px;
+  }
+}
+
+.menuu__lista {
+  gap: clamp(2px, 0.9svh, 10px);
+}
+
+/* Sõna mask on link ise. Plaadi sisemine vahe (0.12em) paneb tähed sama kaugele
+   kui logo pildi läbipaistev serv, seega joonduvad need logoga ilma nihketa.
+   Suurus mahutab kaheksa sõna ka iPhone SE ekraanile. */
+.menuu__link {
+  position: relative;
+  display: block;
+  width: fit-content;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  color: #fff;
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2.3rem, min(14vw, 7svh), 6rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+@media (min-width: 768px) {
+  .menuu__link {
+    font-size: clamp(2.75rem, 8svh, 6.5rem);
+  }
+}
+/* Sulgemisel jäävad sõnad paigale ja lähevad alla alles siis, kui paneel on kinni */
+.menuu__sona {
+  position: relative;
+  display: block;
+  padding: 0.06em 0.12em 0;
+  transform: translateY(115%);
+  transition: transform 0s 240ms;
+}
+.menuu[data-open] .menuu__sona {
+  transform: none;
+  transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1) calc(120ms + var(--i) * 40ms);
+}
+.menuu__plaat {
+  position: absolute;
+  inset: 0;
+  padding: inherit;
+  border-radius: 4px;
+  background: #fff;
+  color: #0072ce;
+  clip-path: inset(0 100% 0 0 round 4px);
+  transition: clip-path 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .menuu__link:hover .menuu__plaat {
+    clip-path: inset(0 0 0 0 round 4px);
+    transition-duration: 200ms;
+  }
+}
+.menuu__link:focus-visible .menuu__plaat {
+  clip-path: inset(0 0 0 0 round 4px);
+  transition-duration: 200ms;
+}
+/* Puuteekraanil sama kuma vajutusel, tagasiside alla 100 ms */
+@media (hover: none) {
+  .menuu__link:active .menuu__plaat {
+    clip-path: inset(0 0 0 0 round 4px);
+    transition-duration: 100ms;
+  }
+}
+/* Aktiivse lehe joon tõmbub pärast sõna tõusu */
+.menuu__joon {
+  position: absolute;
+  left: 0.12em;
+  right: 0.12em;
+  bottom: 0;
+  height: 3px;
+  border-radius: 2px;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0s 240ms;
+}
+.menuu[data-open] .menuu__joon {
+  transform: scaleX(1);
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1) calc(420ms + var(--i) * 40ms);
+}
+
+/* Järgmise mängu kaart (ainult laual): tablookast nagu koondise lehe loenduril.
+   Tuleb pärast sõnu; kui andmed saabuvad lahtise menüü ajal, toob @starting-style
+   sama sisenemise. */
+.menuu__kaart {
+  display: none;
+}
+@media (min-width: 768px) {
+  .menuu__kaart {
+    display: block;
+    width: 320px;
+    margin-top: 8px;
+    padding: 24px;
+    border: 1px solid rgba(127, 196, 255, 0.35);
+    border-radius: 16px;
+    background: rgba(4, 9, 22, 0.32);
+    font-family: 'Rajdhani', sans-serif;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 150ms ease-out, transform 0s 240ms;
+  }
+  .menuu[data-open] .menuu__kaart {
+    opacity: 1;
+    transform: none;
+    transition: opacity 400ms ease-out 360ms, transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 360ms;
+  }
+  @starting-style {
+    .menuu[data-open] .menuu__kaart {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+}
+.menuu__nupp {
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease;
+}
+.menuu__nupp:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .menuu__nupp:hover {
+    background-color: #dbeafe;
+  }
+}
+
+/* Ikoonid ainult telefonis: laual on need ribal */
+.menuu__lisad {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+.menuu[data-open] .menuu__lisad {
+  opacity: 1;
+  transition: opacity 300ms ease-out 300ms;
+}
+@media (min-width: 768px) {
+  .menuu__lisad {
+    display: none;
+  }
+}
+
+/* Vähendatud liikumine: paneel ja kuma ainult hajuvad, miski ei liigu */
+@media (prefers-reduced-motion: reduce) {
+  .menuu,
+  .menuu[data-open] {
+    clip-path: none;
+  }
+  .menuu {
+    opacity: 0;
+    transition: opacity 150ms ease-out, visibility 0s 150ms;
+  }
+  .menuu[data-open] {
+    opacity: 1;
+    transition: opacity 150ms ease-out;
+  }
+  .menuu__sona,
+  .menuu[data-open] .menuu__sona,
+  .menuu__joon,
+  .menuu[data-open] .menuu__joon,
+  .menuu__kaart,
+  .menuu[data-open] .menuu__kaart {
+    transform: none;
+    transition: none;
+  }
+  .menuu__plaat,
+  .menuu__link:is(:hover, :focus-visible, :active) .menuu__plaat {
+    clip-path: inset(0 0 0 0 round 4px);
+  }
+  .menuu__plaat {
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+  .menuu__link:is(:hover, :focus-visible, :active) .menuu__plaat {
+    opacity: 1;
+  }
+  .menuu-nupp,
+  .menuu-nupp__triibud span,
+  .menuu__nupp {
+    transition: none;
+  }
+}

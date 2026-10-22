@@ -38,6 +38,18 @@ export function getPreloadedNationalTeam() {
   return preload()?.nationalTeam ?? null
 }
 
+// Avalehe klubiplokk: /club/highlights tulemus (tühi massiiv on ka kehtiv vastus)
+export function getPreloadedClubHighlights() {
+  const data = preload()?.clubHighlights
+  return Array.isArray(data) ? data : null
+}
+
+// Ajaloo lehe rekordid: ametlike mängude edetabelid ja meeskonna rekordid
+export function getPreloadedRecords() {
+  const data = preload()?.records
+  return Array.isArray(data?.games) && Array.isArray(data?.points) ? data : null
+}
+
 // Statistika leht tegi ilma selleta ~45 päringut: /players ja iga mängija
 // kohta eraldi stats ja fiba-stats. Kaardid arvutatakse ehituse ajal valmis,
 // samadest andmetest, mida mängijate lehed niikuinii vajavad.

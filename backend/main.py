@@ -7,6 +7,8 @@ import time
 import unicodedata
 from database import Base, engine, SessionLocal
 import models
+import records
+import club_highlights
 from scraper import scrape_player, scrape_fiba_national_team, split_games_by_type, league_of_season
 
 load_dotenv()
@@ -241,3 +243,23 @@ def get_national_team_standings(db: Session = Depends(get_db)):
 def get_national_team_game_stats(db: Session = Depends(get_db)):
     row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "game_box_scores").first()
     return row.data if row else []
+
+# Arvutatakse iga kord algseisust + box score'idest (odav): nii on vastus alati sama kujuga
+# kui records.py praegune versioon. Salvestatud seisu kasutab ainult check_records.py teavitusteks.
+@app.get("/national-team/records")
+def get_national_team_records(db: Session = Depends(get_db)):
+    row = db.query(models.NationalTeamCache).filter(models.NationalTeamCache.key == "game_box_scores").first()
+    baseline = records.load_baseline()
+    games, _ = records.new_games(baseline, row.data if row else [])
+    return records.public_view(records.compute(baseline, games))
+
+
+# ── Klubikorvpall ─────────────────────────────────────────────────────────────
+
+# Kuus, mitte kolm: frontend peidab osa mängijaid (clubSchedule.js HIDDEN_PLAYERS)
+# ja näitab ülejäänutest kolme parimat
+@app.get("/club/highlights")
+def get_club_highlights(db: Session = Depends(get_db)):
+    players = db.query(models.Player).all()
+    stats = {row.slug: row.data for row in db.query(models.PlayerClubStats).all()}
+    return club_highlights.top_performances(players, stats, count=6)

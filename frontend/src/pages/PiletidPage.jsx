@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import TeamFlag from '../components/TeamFlag'
 import Seo from '../components/Seo'
 import useIsMobile from '../hooks/useIsMobile'
+import { teamNameEt } from '../utils/teamNames'
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -71,15 +72,18 @@ function RowSkeleton() {
 // ── Esimese kodumängu hero — "Mängupäeva" vastasseis ──────────────────────────
 function HeroGame({ ev, reducedMotion, isMobile }) {
   const opponent = getOpponent(ev)
+  const opponentEt = teamNameEt(opponent)
   const tournament = shortTournament(ev.tournament?.name)
   const venue = ev.venue?.name || ev.venue?.city?.name
   const daysTo = Math.max(0, Math.ceil((ev.startTimestamp * 1000 - Date.now()) / 86400000))
 
-  // pikk vastasenimi peab mahtuma — skaleeri fonti nime pikkuse järgi
-  const longName = (opponent?.length ?? 0) > 12
+  // pikk vastasenimi peab mahtuma — skaleeri fonti kuvatava eestikeelse nime pikkuse järgi
+  const nameLength = opponentEt?.length ?? 0
   const nameStyle = {
     fontFamily: FONT_HEADING, lineHeight: 0.95, letterSpacing: 2,
-    fontSize: longName ? 'clamp(1.9rem, 5vw, 3.2rem)' : 'clamp(2.4rem, 7vw, 5rem)',
+    fontSize: nameLength > 18 ? 'clamp(1.6rem, 4.2vw, 2.6rem)'
+      : nameLength > 12 ? 'clamp(1.9rem, 5vw, 3.2rem)'
+      : 'clamp(2.4rem, 7vw, 5rem)',
     textTransform: 'uppercase', whiteSpace: 'nowrap',
   }
   const heroFlagStyle = {
@@ -168,7 +172,7 @@ function HeroGame({ ev, reducedMotion, isMobile }) {
               color: 'rgba(240,244,250,0.08)',
               WebkitTextStroke: '1.5px rgba(240,244,250,0.55)',
             }}>
-              {opponent}
+              {opponentEt}
             </div>
           </motion.div>
         </div>
@@ -249,7 +253,7 @@ function MatchRow({ ev }) {
       <div className="min-w-0 text-left">
         <div style={{ fontFamily: FONT_HEADING, fontSize: '1.3rem', color: DARK, letterSpacing: 0.5 }}>
           vs <TeamFlag name={opponent} size={22} style={{ verticalAlign: -2, margin: '0 3px', border: '1px solid rgba(8,6,13,0.12)' }} />
-          {opponent}
+          {teamNameEt(opponent)}
         </div>
         <div style={{ fontFamily: FONT_BODY, fontSize: '0.7rem', color: GRAY, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
           {ts && <>{formatDateShort(ts)} · {ev.timeTBD ? 'aeg selgub' : formatTime(ts)}</>}

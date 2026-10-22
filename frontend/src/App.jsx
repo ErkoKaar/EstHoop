@@ -9,6 +9,7 @@ import PlayersPage from './pages/PlayersPage'
 import PlayerPage from './pages/PlayerPage'
 import StatsPage from './pages/StatsPage'
 import KoondisPage from './pages/KoondisPage'
+import KoondiseAjaluguPage from './pages/KoondiseAjaluguPage'
 import PiletidPage from './pages/PiletidPage'
 import KlubiKorvpallPage from './pages/KlubiKorvpallPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -55,6 +56,7 @@ export function AppRoutes() {
           <Route path="/mangijad/:slug" element={<PlayerPage />} />
           <Route path="/statistika" element={<StatsPage />} />
           <Route path="/koondis" element={<KoondisPage />} />
+          <Route path="/koondis/ajalugu" element={<KoondiseAjaluguPage />} />
           <Route path="/piletid" element={<PiletidPage />} />
           <Route path="/klubikorvpall" element={<KlubiKorvpallPage />} />
           <Route path="/privaatsus" element={<PrivaatsusPage />} />

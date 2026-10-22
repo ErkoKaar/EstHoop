@@ -17,6 +17,7 @@ const FETCH_TIMEOUT_MS = 90_000
 const STATIC_ROUTES = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
   { path: '/koondis', changefreq: 'daily', priority: '0.9' },
+  { path: '/koondis/ajalugu', changefreq: 'weekly', priority: '0.7' },
   { path: '/mangijad', changefreq: 'weekly', priority: '0.9' },
   { path: '/statistika', changefreq: 'daily', priority: '0.8' },
   { path: '/klubikorvpall', changefreq: 'daily', priority: '0.7' },

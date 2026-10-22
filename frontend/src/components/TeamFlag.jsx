@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { teamNameEt } from '../utils/teamNames'
 
 // SofaScore riiginimi → ISO2 kood (flagcdn.com jaoks); Euroopa korvpalliriigid
 const FLAG_CODES = {
@@ -24,7 +25,7 @@ export default function TeamFlag({ name, size = 52, style }) {
     <img
       src={`https://flagcdn.com/w80/${code}.png`}
       srcSet={`https://flagcdn.com/w160/${code}.png 2x`}
-      alt={name}
+      alt={teamNameEt(name)}
       onError={() => setFailed(true)}
       style={{ width: size, height: 'auto', borderRadius: size > 30 ? 6 : 3, ...style }}
     />

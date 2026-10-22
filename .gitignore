@@ -4,3 +4,6 @@ KOONDIS-KVALIFIKATSIOON.md
 DATA-ALLIKAD.txt
 .DS_Store
 
+
+# Mängijate videote lähtefailid (~700 MB). Veebi lähevad pakituna: frontend/scripts/encode-videos.sh
+videod/

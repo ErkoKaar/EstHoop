@@ -21,7 +21,7 @@ const API = process.env.VITE_API_URL || 'https://esthoop-backend.onrender.com'
 const FETCH_TIMEOUT_MS = 90_000
 
 const STATIC_ROUTES = [
-  '/', '/koondis', '/mangijad', '/statistika',
+  '/', '/koondis', '/koondis/ajalugu', '/mangijad', '/statistika',
   '/klubikorvpall', '/piletid', '/privaatsus', '/tingimused',
 ]
 
@@ -123,13 +123,17 @@ async function fetchNationalTeam() {
 
 // Iga leht saab ainult need andmed, mida ta ise vajab. Kogu statistika igale
 // lehele paisutaks HTML-i mitmesaja kilobaidini ilma igasuguse kasuta.
-function preloadFor(route, players, statsBySlug, nationalTeam) {
+function preloadFor(route, players, statsBySlug, nationalTeam, records, clubHighlights) {
   const match = route.match(/^\/mangijad\/([^/]+)$/)
   if (match) {
     return { players, playerStats: statsBySlug[match[1]] ?? null }
   }
+  // Avalehe klubiplokk: plakatid ja mängijad (tänaste klubimängude nimede jaoks)
+  if (route === '/' && clubHighlights) return { clubHighlights, players }
   if (route === '/mangijad') return { players }
   if (route === '/koondis' && nationalTeam) return { nationalTeam }
+  // Mängijad on kaasas, et edetabelis saaks praegused koondislased profiilile linkida
+  if (route === '/koondis/ajalugu' && records) return { records, players }
 
   // Statistika leht vajab ainult kahte tuletatud kaarti, mitte tervet
   // statistikat. Terve statistika oleks ~140 KB, need kaardid on ~30 KB.
@@ -204,12 +208,26 @@ async function main() {
     console.warn('[prerender] HOIATUS: koondise andmeid ei saanud, /koondis jääb kliendipoolseks')
   }
 
+  const records = await getJson('/national-team/records').catch(() => null)
+  if (!Array.isArray(records?.games)) {
+    console.warn('[prerender] HOIATUS: rekordeid ei saanud, /koondis/ajalugu edetabelid jäävad kliendipoolseks')
+  }
+
+  const clubHighlights = await getJson('/club/highlights').catch(() => null)
+  if (!Array.isArray(clubHighlights)) {
+    console.warn('[prerender] HOIATUS: klubi parimaid sooritusi ei saanud, avalehe plakatid jäävad kliendipoolseks')
+  }
+
   let ok = 0
   const failed = []
 
   for (const route of routes) {
     try {
-      const data = preloadFor(route, players, statsBySlug, nationalTeam)
+      const data = preloadFor(
+        route, players, statsBySlug, nationalTeam,
+        Array.isArray(records?.games) ? records : null,
+        Array.isArray(clubHighlights) ? clubHighlights : null,
+      )
       const preload = preloadScript(data)
       const { head, body } = splitHeadTags(render(route, data))
       const html = template

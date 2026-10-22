@@ -36,9 +36,10 @@ const SOCIAL_LINKS = [
   },
 ]
 
-export default function SocialLinks() {
+// large: menüüpaneelis (telefonis) 44 px puutepind iga ikooni ümber
+export default function SocialLinks({ large = false }) {
   return (
-    <div className="flex items-center gap-5">
+    <div className={`flex items-center ${large ? 'gap-2' : 'gap-5'}`}>
       {SOCIAL_LINKS.map(({ label, href, render }) => (
         <a
           key={href}
@@ -47,7 +48,7 @@ export default function SocialLinks() {
           rel="noopener noreferrer"
           aria-label={label}
           title={label}
-          className="group flex items-center justify-center rounded text-white/75 hover:text-white transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2"
+          className={`${large ? 'min-h-11 min-w-11 ' : ''}group flex items-center justify-center rounded text-white/75 hover:text-white transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2`}
         >
           {render()}
         </a>
