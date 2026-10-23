@@ -40,15 +40,16 @@ export const CHAPTERS = [
       { year: 1940, score: [40, 38], opponent: 'Leedu', result: 'V',
         text: 'Viimane maavõistlus enne okupatsiooni, 9. märtsil Kadrioru tennishallis.' },
     ],
-    // photo: 1930.-40. aastate fotod: autor teadmata ja kaitse aegunud või Spordimuuseumi CC0
-    // (vt PHOTO_CREDITS). Pildita legend saab initsiaalid.
+    // photo: Spordimuuseumi fotod MuIS-i avaliku omandi märkega ja Niiler anonüümsest 1940. a
+    // ajalehefotost (vt PHOTO_CREDITS). MuIS-i "CC0" kehtib ainult metaandmetele, mitte piltidele.
+    // Pildita legend saab initsiaalid.
     legends: [
       { name: 'Heino Veskila', role: 'Ründaja', text: '17 maavõistlust, EM-i 1937 sümboolne viisik. Hukati 1941.',
-        photo: { src: '/ajalugu/heino-veskila.webp', width: 200, height: 249 } },
+        photo: { src: '/ajalugu/heino-veskila.webp', width: 320, height: 400 } },
       { name: 'Erich Altosaar', role: 'Kapten 1939', text: 'Olümpiamängude lipukandja. Suri 1941 vangilaagris.',
-        photo: { src: '/ajalugu/erich-altosaar.webp', width: 200, height: 249 } },
+        photo: { src: '/ajalugu/erich-altosaar.webp', width: 320, height: 400 } },
       { name: 'Robert Keres', role: 'Kapten 1936-1937', text: '14 maavõistlust, kapten Berliinis ja Riias.',
-        photo: { src: '/ajalugu/robert-keres.webp', width: 110, height: 137 } },
+        photo: { src: '/ajalugu/robert-keres.webp', width: 320, height: 400 } },
       { name: 'Herbert Niiler', role: 'Peatreener', text: 'Juhendas koondist kõigil tiitlivõistlustel, kirjutas esimese eestikeelse korvpalliõpiku.',
         photo: { src: '/ajalugu/herbert-niiler.webp', width: 320, height: 400 } },
     ],
@@ -68,7 +69,9 @@ export const CHAPTERS = [
       position: '55% 30%',
     },
     // m: [võistlus, medal, aasta]; medal 'kuld' | 'hõbe' | 'pronks'
-    // photo: Spordimuuseumi CC0 portreed (Soki oma 1988. aasta fotost), pildita mängija saab initsiaalid
+    // photo: Spordimuuseumi portreed MuIS-i avaliku omandi märkega. Lõssov, Lepmets, Krikun,
+    // Tammiste, Salumets, Enden ja Sokk on korvpall100.ee kuulsuste hallist: avatud litsentsi pole,
+    // aga Korvpalliliidu pilt on madala riskiga (vt AUTORIOIGUS-RISKID.md). Nõude korral eemalda.
     medalists: [
       { name: 'Ilmar Kullam', photo: '/ajalugu/medalistid/ilmar-kullam.webp', medals: [['OM', 'hõbe', 1952], ['EM', 'kuld', 1947], ['EM', 'kuld', 1951], ['EM', 'kuld', 1953]] },
       { name: 'Joann Lõssov', photo: '/ajalugu/medalistid/joann-lossov.webp', medals: [['OM', 'hõbe', 1952], ['EM', 'kuld', 1947], ['EM', 'kuld', 1951]] },
@@ -77,8 +80,8 @@ export const CHAPTERS = [
       { name: 'Jaak Lipso', photo: '/ajalugu/medalistid/jaak-lipso.webp', medals: [['OM', 'hõbe', 1964], ['OM', 'pronks', 1968], ['MM', 'kuld', 1967], ['EM', 'kuld', 1963], ['EM', 'kuld', 1965], ['EM', 'kuld', 1967]] },
       { name: 'Priit Tomson', photo: '/ajalugu/medalistid/priit-tomson.webp', medals: [['OM', 'pronks', 1968], ['MM', 'kuld', 1967], ['MM', 'kuld', 1974], ['EM', 'kuld', 1967], ['EM', 'kuld', 1969], ['EM', 'kuld', 1971]] },
       { name: 'Anatoli Krikun', photo: '/ajalugu/medalistid/anatoli-krikun.webp', medals: [['OM', 'pronks', 1968], ['MM', 'pronks', 1970], ['EM', 'kuld', 1967]] },
-      { name: 'Aleksei Tammiste', medals: [['EM', 'kuld', 1971]] },
-      { name: 'Jaak Salumets', medals: [['EM', 'pronks', 1973]] },
+      { name: 'Aleksei Tammiste', photo: '/ajalugu/medalistid/aleksei-tammiste.webp', medals: [['EM', 'kuld', 1971]] },
+      { name: 'Jaak Salumets', photo: '/ajalugu/medalistid/jaak-salumets.webp', medals: [['EM', 'pronks', 1973]] },
       { name: 'Heino Enden', photo: '/ajalugu/medalistid/heino-enden.webp', medals: [['MM', 'kuld', 1982], ['EM', 'pronks', 1983], ['EM', 'kuld', 1985], ['EM', 'hõbe', 1987]] },
       { name: 'Tiit Sokk', photo: '/ajalugu/medalistid/tiit-sokk.webp', medals: [['OM', 'kuld', 1988], ['MM', 'hõbe', 1986], ['MM', 'hõbe', 1990], ['EM', 'pronks', 1989]] },
     ],
@@ -86,11 +89,7 @@ export const CHAPTERS = [
       { year: 1949, title: 'Tartu ÜSK', result: 'V',
         text: 'Tartu ülikooli meeskond tuli NSV Liidu meistriks.' },
       { year: 1991, score: [85, 77], opponent: 'Spartak', result: 'V',
-        text: 'Tallinna Kalev alistas finaalis Leningradi Spartaki ja jäi NSV Liidu viimaseks meistriks.',
-        photo: {
-          src: '/ajalugu/kalev-1991.webp', width: 799, height: 531,
-          alt: 'Tallinna Kalevi meeskond Eesti lipuga pärast NSV Liidu meistritiitlit 1991',
-        } },
+        text: 'Tallinna Kalev alistas finaalis Leningradi Spartaki ja jäi NSV Liidu viimaseks meistriks.' },
     ],
   },
   {
@@ -111,12 +110,12 @@ export const CHAPTERS = [
       { year: 2024, score: [65, 59], opponent: 'Leedu', result: 'V',
         text: 'Esimene ametlik võit Leedu üle läbi aegade, Unibet Arenal.' },
     ],
+    // Pildita portree (src puudub) saab initsiaalid
     portraits: [
       { name: 'Aivar Kuusmaa', text: 'EM-i 1993 staar: 40 punkti Bosnia ja Hertsegoviina vastu, turniiril keskmiselt 19,9.',
-        src: '/ajalugu/aivar-kuusmaa.webp', width: 220, height: 275, year: 1991,
-        alt: 'Aivar Kuusmaa medaliga pärast NSV Liidu meistritiitlit 1991' },
+        src: '/ajalugu/aivar-kuusmaa.webp', width: 352, height: 440, alt: 'Aivar Kuusmaa Kalevi särgis karikaga' },
       { name: 'Gert Kullamäe', text: 'Ametlike mängude rekordiomanik: 82 mängu ja 909 punkti.',
-        src: '/ajalugu/gert-kullamae.webp', width: 352, height: 440, year: 2022 },
+        src: '/ajalugu/gert-kullamae.webp', width: 352, height: 440, alt: 'Gert Kullamäe korvpalliliiga tähtede mängus, 1995' },
       { name: 'Margus Metstak', text: 'Vanim koondislane, viimane mäng 41-aastasena.',
         src: '/ajalugu/margus-metstak-1999.webp', width: 902, height: 1200, year: 1999 },
       { name: 'Martin Müürsepp', text: 'Esimene eestlane NBA-s, 41 punkti Islandi vastu.',
@@ -179,26 +178,35 @@ export const HERO_PHOTO = {
   src: '/ajalugu/eurobasket-1937-leedu-eesti.webp', width: 706, height: 470,
 }
 
+// url: allika leht. licenseUrl: litsentsi tekst (CC BY ja BY-SA nõuavad viidet litsentsile).
+// note: muudatus, mis tuleb litsentsi järgi ära märkida.
+const CC_BY_SA_4 = 'https://creativecommons.org/licenses/by-sa/4.0/deed.et'
+const CC_BY_SA_3 = 'https://creativecommons.org/licenses/by-sa/3.0/deed.et'
+const NAGI_BY_SA = 'https://commons.wikimedia.org/wiki/Template:Nagi_Attribution_Share_Alike'
+const ESM = 'Eesti Spordi- ja Olümpiamuuseum'
+
 export const PHOTO_CREDITS = [
   { what: 'Leedu-Eesti, EM 1937', author: 'Autor teadmata', license: 'Avalik omand', url: 'https://commons.wikimedia.org/wiki/File:EuroBasket_1937._Lithuania_versus_Estonia.jpg' },
   { what: 'Korvpall Soomusrongirügemendis, 1930. aastad', author: 'Autor teadmata', license: 'Avalik omand', url: 'https://commons.wikimedia.org/wiki/File:Soomusrongir%C3%BCgemendi_korvpalli.jpg' },
   { what: 'EM 1939 avatseremoonia', author: 'Autor teadmata', license: 'Avalik omand', url: 'https://commons.wikimedia.org/wiki/File:EuroBasket_1939_opening_ceremony.jpg' },
-  { what: 'Heino Veskila, 1930. aastad', author: 'Autor teadmata', license: 'ESBL', url: 'https://www.esbl.ee/biograafia/Heino_Veskila' },
-  { what: 'Erich Altosaar, 1930. aastad', author: 'Autor teadmata, Eesti Spordi- ja Olümpiamuuseum', license: 'ESBL', url: 'https://www.esbl.ee/biograafia/Erich_Altosaar' },
-  { what: 'Robert Keres, Tartu Dünamo meeskond 1940. aastate algus', author: 'Eesti Spordi- ja Olümpiamuuseum', license: 'CC0', url: 'https://www.muis.ee/museaalView/28385' },
-  { what: 'Herbert Niiler, 1930. aastad', author: 'Autor teadmata', license: 'korvpall100.ee', url: 'https://korvpall100.ee/et/kuulsuste-hall' },
-  { what: 'Tiit Sokk, 1988', author: 'Jaan Künnap', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Tiit_Sokk,_Ol%C3%BCmpialaste_vastuv%C3%B5tt_Raekoja_platsil_88_(1).jpg' },
-  { what: 'Aivar Kuusmaa (nr 5), NSV Liidu meistritiitli tähistamine 1991', author: 'Gunnar Vaidla, Eesti Spordi- ja Olümpiamuuseum', license: 'CC0', url: 'https://www.muis.ee/museaalView/3846511' },
-  { what: 'Tallinna Kalev, NSV Liidu meister 1991', author: 'Eesti Spordi- ja Olümpiamuuseum', license: 'CC0', url: 'https://www.muis.ee/museaalView/1879510' },
-  { what: 'Gert Kullamäe, 2022', author: 'Minnekon', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Eesti-L%C3%A4ti_korvpalliliiga_v%C3%B5itjate_autasustamine_(hooaeg_2021-2022).jpg' },
-  { what: 'NSV Liidu koondise medalistide portreed (Kullam, Lõssov, Kruus, Lepmets, Lipso, Tomson, Krikun, Enden)', author: 'Eesti Spordi- ja Olümpiamuuseum, osa fotodest Gunnar Vaidla', license: 'CC0', url: 'https://www.muis.ee/museaalView/47416' },
-  { what: 'Margus Metstak, 1999', author: 'Jaan Künnap', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Margus_Metstak_korvpallur_99.jpg' },
-  { what: 'Martin Müürsepp, 2004', author: 'Stanislav Popov', license: 'CC BY-SA 3.0', url: 'https://commons.wikimedia.org/wiki/File:Martin_Muursepp.jpg' },
+  { what: 'Heino Veskila, Berliin 1936', author: `Autor teadmata, ${ESM}`, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/24966', note: 'kärbitud' },
+  { what: 'Erich Altosaar, 1930', author: `Aleksander Teppor, ${ESM}`, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/23874', note: 'kärbitud' },
+  { what: 'Robert Keres, Berliin 1938', author: `Autor teadmata, ${ESM}`, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/24944', note: 'kärbitud' },
+  { what: 'Herbert Niiler, Uus Eesti 19.02.1940', author: 'Autor teadmata', license: 'Avalik omand', url: 'https://dea.digar.ee/article/uuseesti/1940/02/19/15', note: 'kärbitud' },
+  { what: 'Tiit Sokk, 1988', author: 'Jaan Künnap', license: 'CC BY-SA 4.0', licenseUrl: CC_BY_SA_4, url: 'https://commons.wikimedia.org/wiki/File:Tiit_Sokk,_Ol%C3%BCmpialaste_vastuv%C3%B5tt_Raekoja_platsil_88_(1).jpg', note: 'medalistide portree sellest kärbitud' },
+  { what: 'Ilmar Kullam', author: ESM, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/47416', note: 'kärbitud' },
+  { what: 'Heino Kruus', author: ESM, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/47414', note: 'kärbitud' },
+  { what: 'Jaak Lipso', author: ESM, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/47462', note: 'kärbitud' },
+  { what: 'Priit Tomson', author: ESM, license: 'Avalik omand', url: 'https://www.muis.ee/museaalView/47578', note: 'kärbitud' },
+  { what: 'Lõssov, Lepmets, Krikun, Tammiste, Salumets, Enden, Sokk (portree) ja Kuusmaa', author: 'Eesti Korvpalliliit, korvpall100.ee', license: 'Õigused autoril', url: 'https://korvpall100.ee/et/kuulsuste-hall', note: 'kärbitud' },
+  { what: 'Gert Kullamäe, tähtede mäng 20.01.1995', author: `Gunnar Vaidla, ${ESM}, ESM F 462:62`, license: 'Muuseumi kogu, viitega', url: 'https://www.muis.ee/museaalView/1325677', note: 'kärbitud' },
+  { what: 'Margus Metstak, 1999', author: 'Jaan Künnap', license: 'CC BY-SA 4.0', licenseUrl: CC_BY_SA_4, url: 'https://commons.wikimedia.org/wiki/File:Margus_Metstak_korvpallur_99.jpg' },
+  { what: 'Martin Müürsepp, 2004', author: 'Stanislav Popov', license: 'CC BY-SA 3.0', licenseUrl: CC_BY_SA_3, url: 'https://commons.wikimedia.org/wiki/File:Martin_Muursepp.jpg' },
   { what: 'Valmo Kriisa, 2007', author: 'Mait Heidelberg', license: 'Autori nimega', url: 'https://commons.wikimedia.org/wiki/File:Valmo_Kriisa,_2007.jpg' },
-  { what: 'Janar Talts, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', url: 'https://commons.wikimedia.org/wiki/File:Janar_Talts,_Estonia-Latvia,_2006.jpg' },
-  { what: 'Kristjan Kangur, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', url: 'https://commons.wikimedia.org/wiki/File:Kristjan_Kangur,_Estonia-Latvia,_2006.jpg' },
-  { what: 'Gregor Arbet, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', url: 'https://commons.wikimedia.org/wiki/File:Gregor_Arbet,_Estonia-Latvia,_2006.jpg' },
-  { what: 'Eesti fännid, 2013', author: 'Jüri Kaljundi', license: 'Nagi BY SA', url: 'https://commons.wikimedia.org/wiki/File:Estonia_basketball_fans.jpeg' },
+  { what: 'Janar Talts, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', licenseUrl: NAGI_BY_SA, url: 'https://commons.wikimedia.org/wiki/File:Janar_Talts,_Estonia-Latvia,_2006.jpg' },
+  { what: 'Kristjan Kangur, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', licenseUrl: NAGI_BY_SA, url: 'https://commons.wikimedia.org/wiki/File:Kristjan_Kangur,_Estonia-Latvia,_2006.jpg' },
+  { what: 'Gregor Arbet, 2006', author: 'Jüri Kaljundi', license: 'Nagi BY SA', licenseUrl: NAGI_BY_SA, url: 'https://commons.wikimedia.org/wiki/File:Gregor_Arbet,_Estonia-Latvia,_2006.jpg' },
+  { what: 'Eesti fännid, 2013', author: 'Jüri Kaljundi', license: 'Nagi BY SA', licenseUrl: NAGI_BY_SA, url: 'https://commons.wikimedia.org/wiki/File:Estonia_basketball_fans.jpeg' },
   { what: 'Eesti-Serbia, EM 2025', author: 'Squad0273', license: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Estonia_vs_Serbia_Eurobasket_2025.jpg' },
 ]
 

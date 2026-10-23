@@ -113,6 +113,7 @@ const FlagIcon = p => <Icon {...p}><path d="M5 21V4" /><path d="M5 4.5h11l-2.2 3
 const PlayerIcon = p => <Icon {...p}><circle cx="12" cy="7.6" r="3.9" /><path d="M4.6 20.4a7.4 7.4 0 0 1 14.8 0" /></Icon>
 const ChartIcon = p => <Icon {...p}><path d="M4 20h16" /><path d="M7.5 20v-4.5" /><path d="M12 20V8" /><path d="M16.5 20v-8" /></Icon>
 const GlobeIcon = p => <Icon {...p}><circle cx="12" cy="12" r="8.6" /><path d="M3.4 12h17.2" /><ellipse cx="12" cy="12" rx="3.8" ry="8.6" /></Icon>
+const HistoryIcon = p => <Icon {...p}><path d="M3.6 12a8.4 8.4 0 1 0 2.5-6" /><path d="M3.6 4.2v4h4" /><path d="M12 7.6V12l3 1.9" /></Icon>
 const TicketIcon = p => <Icon {...p}><path d="M4 8.4a1.8 1.8 0 0 1 1.8-1.8h12.4A1.8 1.8 0 0 1 20 8.4v1.8a2 2 0 0 0 0 3.6v1.8a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 15.6v-1.8a2 2 0 0 0 0-3.6z" /><path d="M13.4 7.2v1.6M13.4 11.2v1.6M13.4 15.2v1.6" /></Icon>
 
 const PRIMARY = [
@@ -132,6 +133,7 @@ const PRIMARY = [
 
 const SECONDARY = [
   { to: '/statistika', label: 'Statistika', Icon: ChartIcon, text: 'Pingeread punktide, lauapallide ja söötude järgi' },
+  { to: '/koondis/ajalugu', label: 'Ajalugu', Icon: HistoryIcon, text: 'Koondise lugu 1924. aastast ja kõigi aegade rekordid' },
   { to: '/klubikorvpall', label: 'Klubikorvpall', Icon: GlobeIcon, text: 'Eestlaste mängud klubides üle maailma' },
   { to: '/piletid', label: 'Piletid', Icon: TicketIcon, text: 'Kodumängude piletid ja mängupäevad' },
 ]
@@ -244,10 +246,10 @@ function PrimaryCard({ to, label, text, Icon: CardIcon, reveal, delay }) {
 }
 
 // Mobiilis identne PrimaryCard'iga: oma raam, sama ikoonimõõt, sama kirjasuurus
-// ja nool. Lauaarvutis kaob raam ja lahter sulandub ühte ribasse eraldusjoontega.
+// ja nool. Tahvlis kahes veerus, laial ekraanil kaob raam ja lahter sulandub ühte ribasse eraldusjoontega.
 //
 // Kirjasuurus, värv ja reavahe on siin klassides, mitte inline-stiilis, sest
-// inline-stiil võidaks md:-klasse ja murdepunkt ei töötaks.
+// inline-stiil võidaks lg:-klasse ja murdepunkt ei töötaks.
 function SecondaryRow({ to, label, text, Icon: RowIcon }) {
   return (
     <Link
@@ -256,25 +258,25 @@ function SecondaryRow({ to, label, text, Icon: RowIcon }) {
                  transition-all duration-200 hover:-translate-y-0.5 hover:border-[#0072ce]
                  hover:shadow-md focus-visible:outline focus-visible:outline-2
                  focus-visible:outline-offset-2 focus-visible:outline-[#0072ce]
-                 md:flex-1 md:rounded-none md:border-0 md:p-6 md:shadow-none
-                 md:hover:translate-y-0 md:hover:bg-gray-50 md:hover:shadow-none"
+                 lg:flex-1 lg:rounded-none lg:border-0 lg:p-6 lg:shadow-none
+                 lg:hover:translate-y-0 lg:hover:bg-gray-50 lg:hover:shadow-none"
     >
-      <div className="mb-2 flex items-center gap-3 md:mb-1.5 md:gap-2.5">
-        <RowIcon className="h-7 w-7 shrink-0 md:h-5 md:w-5" style={{ color: BLUE }} />
+      <div className="mb-2 flex items-center gap-3 lg:mb-1.5 lg:gap-2.5">
+        <RowIcon className="h-7 w-7 shrink-0 lg:h-5 lg:w-5" style={{ color: BLUE }} />
         <h3
           style={{ fontFamily: FONT_HEADING, color: DARK, letterSpacing: 1 }}
           className="text-[1.85rem] leading-none transition-colors duration-200
-                     group-hover:text-[#0072ce] md:text-[1.25rem]"
+                     group-hover:text-[#0072ce] lg:text-[1.25rem]"
         >
           {label}
         </h3>
         {/* Nool ainult mobiilis, ühendatud ribal see lahtreid ainult segaks */}
-        <span className="ml-auto md:hidden" style={{ color: BLUE }}><Arrow /></span>
+        <span className="ml-auto lg:hidden" style={{ color: BLUE }}><Arrow /></span>
       </div>
       <p
         style={{ fontFamily: FONT_BODY, fontWeight: 500 }}
         className="text-[1.02rem] leading-[1.55] text-[#6b7280]
-                   md:text-[0.92rem] md:leading-[1.4] md:text-[#9ca3af]"
+                   lg:text-[0.92rem] lg:leading-[1.4] lg:text-[#9ca3af]"
       >
         {text}
       </p>
@@ -569,12 +571,13 @@ export default function HomePage() {
         </div>
 
         {/* Mobiilis eraldi kaardid nagu ülal, seepärast konteineril raami pole.
-            Lauaarvutis tuleb raam tagasi ja lahtrid sulanduvad üheks ribaks. */}
+            Neli lahtrit mahuvad ühte ritta alles lg-st, md-s on kaardid kahes veerus.
+            Laial ekraanil tuleb raam tagasi ja lahtrid sulanduvad üheks ribaks. */}
         <motion.div
           {...reveal(0.24)}
-          className="grid auto-rows-fr gap-4 md:flex md:gap-0 md:divide-x md:divide-gray-200
-                     md:overflow-hidden md:rounded-xl md:border md:border-gray-200
-                     md:bg-white md:shadow-sm"
+          className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:flex lg:gap-0 lg:divide-x lg:divide-gray-200
+                     lg:overflow-hidden lg:rounded-xl lg:border lg:border-gray-200
+                     lg:bg-white lg:shadow-sm"
         >
           {SECONDARY.map(s => <SecondaryRow key={s.to} {...s} />)}
         </motion.div>
@@ -604,6 +607,9 @@ export default function HomePage() {
               kogu teekonna leiad{' '}
               <Link to="/koondis" style={{ color: BLUE, fontWeight: 700 }} className="hover:underline">
                 koondise lehelt
+              </Link>.{' '}Mängud alates 1924. aastast ja kõigi aegade rekordid on{' '}
+              <Link to="/koondis/ajalugu" style={{ color: BLUE, fontWeight: 700 }} className="hover:underline">
+                ajaloo lehel
               </Link>.
             </p>
           </motion.section>

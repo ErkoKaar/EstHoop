@@ -416,10 +416,11 @@ function ChapterStart({ chapter, top }) {
 
       <div className="mt-16">
         <SubHeading>Teerajajad</SubHeading>
-        <ul role="list" className="m-0 grid grid-cols-1 gap-x-6 gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        {/* 2x2 ka laial ekraanil: neljas veerus jääks 112 px pildi kõrvale tekstile alla 140 px */}
+        <ul role="list" className="m-0 grid grid-cols-1 gap-x-10 gap-y-8 p-0 sm:grid-cols-2">
           {chapter.legends.map(l => (
-            <li key={l.name} className="grid grid-cols-[72px_minmax(0,1fr)] gap-x-4" style={{ borderTop: `3px solid ${BLUE}`, paddingTop: 14 }}>
-              <SmallPortrait name={l.name} src={l.photo?.src} width={72} height={90} />
+            <li key={l.name} className="grid grid-cols-[112px_minmax(0,1fr)] gap-x-5" style={{ borderTop: `3px solid ${BLUE}`, paddingTop: 14 }}>
+              <SmallPortrait name={l.name} src={l.photo?.src} width={112} height={140} />
               <div className="min-w-0">
                 <p style={{ fontFamily: FONT_HEADING, fontSize: '1.7rem', lineHeight: 1, color: DARK, margin: 0 }}>{l.name}</p>
                 <p style={{ fontFamily: FONT_BODY, fontSize: '0.95rem', fontWeight: 700, color: BLUE, margin: '4px 0 0' }}>{l.role}</p>
@@ -444,8 +445,8 @@ function ChapterSoviet({ chapter, top }) {
         <SubHeading>Medalid NSV Liidu koondisega</SubHeading>
         <ul role="list" className="m-0 grid grid-cols-1 gap-x-10 p-0 md:grid-cols-2">
           {chapter.medalists.map(p => (
-            <li key={p.name} className="grid grid-cols-[56px_minmax(0,1fr)] gap-x-4 py-4" style={{ borderTop: `1px solid ${LINE}` }}>
-              <SmallPortrait name={p.name} src={p.photo} width={56} height={70} />
+            <li key={p.name} className="grid grid-cols-[112px_minmax(0,1fr)] gap-x-5 py-4" style={{ borderTop: `1px solid ${LINE}` }}>
+              <SmallPortrait name={p.name} src={p.photo} width={112} height={140} />
               <div className="min-w-0">
                 <p style={{ fontFamily: FONT_HEADING, fontSize: '1.55rem', lineHeight: 1, color: DARK, margin: 0 }}>{p.name}</p>
                 <ul role="list" className="m-0 mt-2 flex flex-wrap gap-1.5 p-0">
@@ -549,16 +550,24 @@ function ChapterModern({ chapter, top }) {
           {chapter.portraits.map(p => (
             <li key={p.name}>
               <div className="aspect-[4/5] overflow-hidden rounded-2xl" style={{ background: BLUE }}>
-                <img
-                  src={p.src}
-                  alt={p.alt ?? `${p.name}, ${p.year}`}
-                  width={p.width}
-                  height={p.height}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover object-top"
-                  style={{ filter: `url(#${DUOTONE_ID})` }}
-                />
+                {p.src ? (
+                  <img
+                    src={p.src}
+                    alt={p.alt ?? `${p.name}, ${p.year}`}
+                    width={p.width}
+                    height={p.height}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover object-top"
+                    style={{ filter: `url(#${DUOTONE_ID})` }}
+                  />
+                ) : (
+                  <div aria-hidden="true" className="flex h-full w-full items-center justify-center">
+                    <span style={{ fontFamily: FONT_HEADING, fontSize: '3rem', color: '#fff', letterSpacing: '1px' }}>
+                      {p.name.split(' ').map(w => w[0]).join('')}
+                    </span>
+                  </div>
+                )}
               </div>
               <p style={{ fontFamily: FONT_HEADING, fontSize: '1.5rem', lineHeight: 1, color: DARK, margin: '10px 0 0' }}>{p.name}</p>
               <p style={{ fontFamily: FONT_BODY, fontSize: '0.98rem', fontWeight: 500, lineHeight: 1.4, color: BODY, margin: '4px 0 0' }}>{p.text}</p>
@@ -841,10 +850,17 @@ function Credits({ top }) {
             {PHOTO_CREDITS.map(c => (
               <li key={c.what}>
                 {c.what}: {c.author},{' '}
-                <a href={c.url} target="_blank" rel="noopener noreferrer" className={link} style={{ color: BLUE, fontWeight: 600 }}>{c.license}</a>
+                {c.licenseUrl
+                  ? <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer license" className={link} style={{ color: BLUE, fontWeight: 600 }}>{c.license}</a>
+                  : c.license}
+                {c.note && `, ${c.note}`}
+                {' ('}
+                <a href={c.url} target="_blank" rel="noopener noreferrer" className={link} style={{ color: BLUE, fontWeight: 600 }}>allikas</a>
+                {')'}
               </li>
             ))}
           </ul>
+          <p style={{ ...text, margin: '12px 0 0' }}>Fotod on lehel toonitud halliks või siniseks.</p>
         </div>
       </div>
     </Section>
