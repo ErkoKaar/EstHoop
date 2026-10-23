@@ -61,8 +61,13 @@ def get_player(slug: str, db: Session = Depends(get_db)):
 
 PERCENTILE_METRICS = ["PTS", "REB", "AST", "FG%", "3P%", "EFF"]
 # Väikese mänguajaga mängijad moonutaksid võrdlust
+PERCENTILE_MIN_GAMES = 5
 PERCENTILE_MIN_MINUTES = 10
 PERCENTILE_MIN_SAMPLE = 20
+# Meeskonnad leitakse viimaste vastaste ahelast (scrape_league_stats) ja
+# tippliigades täitub nimekiri alles mitme käivitusega. Mõne meeskonna
+# mängijatega võrdlus oleks kallutatud, seega seni protsentiile ei näidata.
+PERCENTILE_MIN_TEAMS = 8
 
 
 def _per_game(p: dict) -> dict:
@@ -83,8 +88,9 @@ def league_percentiles(db: Session, seasons: list | None, proballers_id: int | N
 
     Võrdlus käib viimase hooaja liigas (LeagueStatsCache, täidab
     23_refresh_league_stats.py). Valimis on mängijad, kellel on vähemalt
-    min(5, pool liiga suurimast mängude arvust) mängu ja 10 min mängu kohta.
-    Ilma suhtelise piirita oleks valim hooaja esimestel nädalatel tühi.
+    min(5, pool oma meeskonna mängudest) mängu ja 10 min mängu kohta. Hooaja
+    alguses on meeskonnad mänginud eri arvu mänge (eurosarjad, vabad voorud) ja
+    ühine piir jätaks vähem mänginud meeskondade mängijad välja.
     Kui mängija ise piiri ei ületa, protsentiile ei näidata.
     """
     if not proballers_id or not seasons:
@@ -103,7 +109,7 @@ def league_percentiles(db: Session, seasons: list | None, proballers_id: int | N
         cached = db.query(models.LeagueStatsCache).filter(
             models.LeagueStatsCache.key == f"{league_id}:{season}"
         ).first()
-        if not cached:
+        if not cached or cached.data.get("teams", 0) < PERCENTILE_MIN_TEAMS:
             continue
         me = next((p for p in cached.data["players"] if p["id"] == proballers_id), None)
         if me and (best is None or me["gp"] > best[2]["gp"]):
@@ -115,9 +121,9 @@ def league_percentiles(db: Session, seasons: list | None, proballers_id: int | N
     players = [p for p in league["players"] if p["gp"] > 0]
     if me["gp"] <= 0:
         return None
-    min_games = min(5, math.ceil(max(p["gp"] for p in players) / 2))
-
     def qualifies(p):
+        # teamGp puudub enne teamGp lisamist kraabitud ridadel
+        min_games = min(PERCENTILE_MIN_GAMES, math.ceil(p.get("teamGp", p["gp"]) / 2))
         return p["gp"] >= min_games and p["min"] / p["gp"] >= PERCENTILE_MIN_MINUTES
 
     if not qualifies(me):
@@ -146,7 +152,7 @@ def league_percentiles(db: Session, seasons: list | None, proballers_id: int | N
         "league": league["leagueName"].split(" - ", 1)[-1],
         "season": season_row.get("SEASON"),
         "sample": len(others),
-        "minGames": min_games,
+        "minGames": PERCENTILE_MIN_GAMES,
         "minMinutes": PERCENTILE_MIN_MINUTES,
         "metrics": metrics,
     }

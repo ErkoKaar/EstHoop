@@ -156,11 +156,12 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
     """Kraabib jooksva hooaja liiga mängijate kogusummad.
 
     Liiga meeskondade nimekiri on Cloudflare'i taga, seega leitakse meeskonnad
-    ahelana: alates eestlaste meeskondadest (seed_paths) võetakse igalt
-    meeskonnalehelt viimaste mängude vastased, kuni uusi ei tule. Edasi minnakse
-    ainult nende meeskondade kaudu, kelle lehel on selle liiga plokk, nii et
-    karika- ja eurosarjade vastased jäävad välja. Meeskond, kes pole ühegi
-    läbikäidud meeskonna viimaste vastaste seas, jääb valimist välja.
+    ahelana: alates eestlaste ja eelmistel käivitustel leitud meeskondadest
+    (seed_paths) võetakse igalt meeskonnalehelt viimaste mängude vastased, kuni
+    uusi ei tule. Edasi minnakse ainult nende meeskondade kaudu, kelle lehel on
+    selle liiga plokk, nii et karika- ja eurosarjade vastased jäävad välja.
+    Tippliigades, kus eurosarjade mänge on palju, täitub nimekiri mitme käivituse
+    jooksul (vt teamPaths).
 
     Meeskonnalehel on iga sarja (liiga, karikas, eelhooaeg) kohta eraldi plokk ja
     võetakse ainult selle liiga "Accumulated" plokk. Kogusummad, mitte keskmised,
@@ -179,7 +180,7 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
         raise ValueError(f"Liigal {league_slug} ({season}) pole ühtegi lähtemeeskonda")
 
     league_name = None
-    league_teams = 0
+    league_teams: list[str] = []
     players: dict[int, dict] = {}
     fetched = 0
     while queue:
@@ -194,7 +195,7 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
         block = soup.select_one(f".select-tab-accumulated-{league_id}")
         if not block:
             continue  # pole selle liiga meeskond või pole liigas veel mänginud
-        league_teams += 1
+        league_teams.append(path)
 
         for a in soup.select('a[href*="/basketball/team/"]'):
             other = team_path(a.get("href", ""))
@@ -216,6 +217,7 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
         if any(h not in index for h in needed):
             raise ValueError(f"{path}: ootamatud veerud {list(index)}")
 
+        team_rows = []
         for tr in block.select("tbody tr"):
             link = tr.select_one('a[href*="/basketball/player/"]')
             player_id = re.search(r"/basketball/player/(\d+)", link.get("href", "")) if link else None
@@ -224,7 +226,7 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
                 continue
             fgm, fga = _made_attempted(cells[index["FG"]])
             tpm, tpa = _made_attempted(cells[index["3P"]])
-            row = {
+            team_rows.append((int(player_id.group(1)), cells[0], {
                 "gp": int(_number(cells[index["GP"]])),
                 "min": _number(cells[index["MIN"]]),
                 "pts": _number(cells[index["PTS"]]),
@@ -232,13 +234,18 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
                 "ast": _number(cells[index["AST"]]),
                 "eff": _number(cells[index["EFF"]]),
                 "fgm": fgm, "fga": fga, "tpm": tpm, "tpa": tpa,
-            }
-            pid = int(player_id.group(1))
+            }))
+
+        # Meeskonna mängude arv. Hooaja alguses on meeskonnad mänginud eri arvu
+        # mänge ja main.py arvutab mängija mängude piiri tema meeskonna järgi.
+        team_gp = max((row["gp"] for _, _, row in team_rows), default=0)
+        for pid, name, row in team_rows:
+            row["teamGp"] = team_gp
             if pid in players:
                 for key, value in row.items():
                     players[pid][key] += value
             else:
-                players[pid] = {"id": pid, "name": cells[0], **row}
+                players[pid] = {"id": pid, "name": name, **row}
 
     if not players:
         raise ValueError(f"Liigas {league_slug} ({season}) ei leitud ühtegi mängija statistikat")
@@ -247,7 +254,10 @@ def scrape_league_stats(league_id: int, league_slug: str, season: int, seed_path
         "leagueId": league_id,
         "leagueName": league_name or league_slug,
         "season": season,
-        "teams": league_teams,
+        "teams": len(league_teams),
+        # Järgmine käivitus alustab ka neist, nii et liiga täitub käivitustega,
+        # kui viimaste mängude vastased vahetuvad.
+        "teamPaths": league_teams,
         "players": list(players.values()),
     }
 

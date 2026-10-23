@@ -249,7 +249,7 @@ function LeaguePercentiles({ data }) {
       </h3>
       <p className="text-gray-500 text-sm mb-5" style={{ fontFamily: FONT_BODY }}>
         Võrdluses {data.sample} {data.league} mängijat, kellel on vähemalt {data.minGames} mängu
-        ja {data.minMinutes} minutit mängu kohta.
+        (hooaja alguses pool oma meeskonna mängudest) ja {data.minMinutes} minutit mängu kohta.
       </p>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5 text-left" style={{ fontFamily: FONT_BODY }}>
         {data.metrics.map(m => (

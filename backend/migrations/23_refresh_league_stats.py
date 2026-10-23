@@ -45,15 +45,18 @@ print(f"Hooaeg {current}: {len(targets)} liigat\n")
 
 ok, fail = 0, 0
 for league_id, league_slug, season in targets:
-    seeds = sorted(leagues[(league_id, league_slug, season)])
+    key = f"{league_id}:{season}"
+    existing = db.query(models.LeagueStatsCache).filter(models.LeagueStatsCache.key == key).first()
+    # Eelmistel käivitustel leitud meeskonnad on samuti lähtepunktid, et liiga
+    # nimekiri kasvaks, kui viimaste mängude vastased vahetuvad.
+    known = existing.data.get("teamPaths", []) if existing else []
+    seeds = sorted(leagues[(league_id, league_slug, season)] | set(known))
     if not seeds:
         print(f"  ✗ {league_slug} — hooaja ridadel pole TEAM_URL-i, käivita enne 08_refresh_club_stats.py")
         fail += 1
         continue
     try:
         data = scrape_league_stats(league_id, league_slug, season, seeds)
-        key = f"{league_id}:{season}"
-        existing = db.query(models.LeagueStatsCache).filter(models.LeagueStatsCache.key == key).first()
         if existing:
             existing.data = data
         else:
