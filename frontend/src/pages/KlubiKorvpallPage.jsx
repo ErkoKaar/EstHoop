@@ -10,9 +10,13 @@ import NewsletterSignup from '../components/NewsletterSignup'
 import useIsMobile from '../hooks/useIsMobile'
 import useHydrated from '../hooks/useHydrated'
 import scheduleData from '../data/klubide_graafikud_2026-27.json'
-import { buildScheduleRows, upcomingRows, nextRowAfter, competitionLabel, HIDDEN_PLAYERS } from '../utils/clubSchedule'
+import { buildScheduleRows, upcomingRows, nextRowAfter, competitionLabel, domesticChecker, HIDDEN_PLAYERS } from '../utils/clubSchedule'
 
 const EASE = [0.22, 1, 0.36, 1]
+// Ekraanil liikumine (filtri aktiivne taust ühelt valikult teisele)
+const EASE_IN_OUT = [0.77, 0, 0.175, 1]
+
+const isDomestic = domesticChecker(scheduleData)
 
 const FONT_HEADING = "'Bebas Neue', cursive"
 const FONT_BODY = "'Rajdhani', sans-serif"
@@ -406,9 +410,50 @@ function UpcomingGameRow({ row }) {
   )
 }
 
+// ── Mängijate filter ──────────────────────────────────────────────────────────
+// Kehtib kõigile kolmele plokile (parimad sooritused, tulemused, ajakava), seega
+// eraldi juhtelement, mitte kolmas tabi. Valge plaat liigub valikult valikule.
+const SCOPES = [['koik', 'Kõik'], ['valismaal', 'Eestlased välismaal']]
+
+function ScopeFilter({ value, onChange, className = '' }) {
+  const reduce = useReducedMotion()
+  return (
+    <div className={className}>
+      <div role="group" aria-label="Mängijad" className="inline-flex p-1 rounded-full" style={{ background: '#e8eef5' }}>
+        {SCOPES.map(([key, text]) => {
+          const active = value === key
+          return (
+            <button
+              key={key}
+              type="button"
+              aria-pressed={active}
+              onClick={() => onChange(key)}
+              className="relative min-h-[44px] sm:min-h-[36px] px-4 rounded-full cursor-pointer transition-colors duration-200 ease-[ease] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
+              style={{ fontFamily: FONT_BODY, fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em', color: active ? DARK : '#4b5563' }}
+            >
+              {active && (
+                <motion.span
+                  layoutId="klubi-scope"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full bg-white"
+                  style={{ boxShadow: '0 1px 3px rgba(15,40,80,0.14)' }}
+                  transition={reduce ? { duration: 0 } : { duration: 0.25, ease: EASE_IN_OUT }}
+                />
+              )}
+              <span className="relative">{text}</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function KlubiKorvpallPage() {
   const [tab, setTab] = useState('tulemused')
+  const [scope, setScope] = useState('koik')
+  const abroadOnly = scope === 'valismaal'
   const [players, setPlayers] = useState([])
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
@@ -430,7 +475,10 @@ export default function KlubiKorvpallPage() {
     return () => clearInterval(id)
   }, [hydrated])
 
-  const scheduleRows = useMemo(() => buildScheduleRows(scheduleData, players), [players])
+  const scheduleRows = useMemo(() => {
+    const rows = buildScheduleRows(scheduleData, players)
+    return abroadOnly ? rows.filter(r => !r.players.some(p => isDomestic(p.name))) : rows
+  }, [players, abroadOnly])
   const upcoming = useMemo(() => (now ? upcomingRows(scheduleRows, now) : []), [scheduleRows, now])
   const nextAfterWindow = useMemo(() => (now ? nextRowAfter(scheduleRows, now) : null), [scheduleRows, now])
 
@@ -447,8 +495,10 @@ export default function KlubiKorvpallPage() {
     return () => { cancelled = true }
   }, [])
   const topPerformances = useMemo(
-    () => highlights.filter(h => !HIDDEN_PLAYERS.has(h.player?.slug)).slice(0, 3),
-    [highlights],
+    () => highlights
+      .filter(h => !HIDDEN_PLAYERS.has(h.player?.slug) && !(abroadOnly && isDomestic(h.player?.name)))
+      .slice(0, 3),
+    [highlights, abroadOnly],
   )
 
   useEffect(() => {
@@ -516,10 +566,12 @@ export default function KlubiKorvpallPage() {
       })
   }, [])
 
+  const visibleGames = abroadOnly ? games.filter(g => !isDomestic(g.player.name)) : games
+
   // Group by Tallinn date
   const grouped = []
   const groupMap = {}
-  for (const g of games) {
+  for (const g of visibleGames) {
     const ts = g.event.startTimestamp
     if (!ts) continue
     const key = tallinDate(ts)
@@ -575,8 +627,10 @@ export default function KlubiKorvpallPage() {
         <TopPerformances entries={topPerformances} loading={highlightsLoading} />
       )}
 
-      {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil */}
-      <div role="tablist" aria-label="Vaade" className="flex gap-6 mb-6 border-b border-gray-200 text-left">
+      {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil.
+          Töölaual on filter samal joonel paremal (alajoon jätkub selle all), mobiilis tabide all. */}
+      <div className="flex flex-wrap items-end gap-y-3 mb-6 text-left">
+      <div role="tablist" aria-label="Vaade" className="flex gap-6 w-full sm:w-auto sm:flex-1 border-b border-gray-200">
         {[['tulemused', 'Tulemused'], ['ajakava', 'Ajakava']].map(([key, text]) => {
           const active = tab === key
           return (
@@ -598,6 +652,8 @@ export default function KlubiKorvpallPage() {
             </button>
           )
         })}
+      </div>
+      <ScopeFilter value={scope} onChange={setScope} className="sm:pl-6 sm:pb-2 sm:border-b sm:border-gray-200" />
       </div>
 
       {tab === 'ajakava' && (
@@ -679,13 +735,15 @@ export default function KlubiKorvpallPage() {
       )}
 
       {/* No games */}
-      {!loading && !error && games.length === 0 && (
+      {!loading && !error && visibleGames.length === 0 && (
         <div className="text-center py-20 rounded-3xl" style={{ background: '#f8fafc' }}>
           <p style={{ fontFamily: FONT_HEADING, fontSize: '2rem', color: '#d1d5db', letterSpacing: '1px' }}>
             MÄNGE EI LEITUD
           </p>
           <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
-            Viimase kahe nädala jooksul mänge ei toimunud
+            {abroadOnly
+              ? 'Välismaa klubides pole viimase kahe nädala jooksul mänge toimunud'
+              : 'Viimase kahe nädala jooksul mänge ei toimunud'}
           </p>
         </div>
       )}

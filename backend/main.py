@@ -272,4 +272,6 @@ def get_national_team_records(db: Session = Depends(get_db)):
 def get_club_highlights(db: Session = Depends(get_db)):
     players = db.query(models.Player).all()
     stats = {row.slug: row.data for row in db.query(models.PlayerClubStats).all()}
-    return club_highlights.top_performances(players, stats, count=6)
+    # Varuga: klubikorvpalli lehe "Eestlased välismaal" filter võtab Eesti klubide
+    # mängijad välja ja top 3 peab ka siis täis tulema.
+    return club_highlights.top_performances(players, stats, count=12)

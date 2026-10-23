@@ -61,6 +61,18 @@ function nameKey(name) {
     .trim()
 }
 
+// Kas mängija on graafiku järgi Eesti klubis. Klubikorvpalli lehe filter
+// "Eestlased välismaal" näitab kõiki ülejäänuid, sama jaotus mis uudiskirja
+// domestic_players()-il (backend/send_newsletter.py).
+export function domesticChecker(data) {
+  const keys = new Set(
+    (data.clubs || [])
+      .filter(club => club.country === 'Eesti')
+      .flatMap(club => (club.players || []).map(nameKey)),
+  )
+  return name => keys.has(nameKey(name || ''))
+}
+
 // Sarja nimi sildiks: sulgudes täpsustus ("PLK (Orlen Basket Liga)") jääb ära.
 export function competitionLabel(name) {
   return (name || '').replace(/\s*\(.*$/, '').trim()
