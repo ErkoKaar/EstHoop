@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- Highlight-reeli intro-kaart (1280x720), sama mall nagu videod/ all olevatel reelidel.
+     build-reel.sh renderdab selle headless Chrome'iga pildiks:
+     reel-intro.html?name=Mikk%20Jurkatamm&photo=file:///.../foto.png&scale=1.4&x=300&y=0
+     scale/x/y: foto suurendus ja nihe pikslites, et mängija jääks paremale poolele
+     cutout=file:///.../portree.webp: läbipaistva taustaga portree paremale, foto jääb hägusaks taustaks -->
+<!-- Foto peab olema mängukaader areenitaustaga (mitte valge taustaga portree), nagu teistel introdel. -->
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: #070a14; }
+  .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* cutout: läbipaistva taustaga portree, siis on mängukaader ainult hägune tume taust */
+  .photo.backdrop { filter: blur(16px) brightness(0.5) saturate(0.85); }
+  .cutout {
+    position: absolute; right: 90px; bottom: 0; height: 540px;
+    filter: brightness(0.88) drop-shadow(0 0 40px rgba(0, 0, 0, 0.6));
+  }
+  /* Vasak pool tumeneb teksti alla, parem pool jääb fotole */
+  .shade {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, #070a14 0%, rgba(7, 10, 20, 0.94) 28%, rgba(7, 10, 20, 0.6) 46%, rgba(7, 10, 20, 0) 64%);
+  }
+  .text { position: absolute; font-family: 'Bebas Neue', sans-serif; line-height: 1; white-space: nowrap; }
+  /* logo_white.png (300x250) on läbipaistvate servadega, nähtav osa algab x=51 */
+  .logo { position: absolute; left: 56.5px; top: 49px; width: 85.3px; }
+  .brand { left: 155px; top: 68px; font-size: 43px; color: #fff; }
+  .label { left: 57px; top: 306px; font-size: 56px; color: #419fff; }
+  .name { left: 54px; top: 359px; font-size: 127px; letter-spacing: 0.4px; color: #fff; }
+  .bar { position: absolute; left: 57px; top: 500px; width: 204px; height: 5px; background: #0063b3; }
+</style>
+</head>
+<body>
+  <img class="photo" id="photo" alt="">
+  <img class="cutout" id="cutout" alt="" hidden>
+  <div class="shade"></div>
+  <img class="logo" src="../public/logo/logo_white.png" alt="">
+  <div class="text brand">ESTHOOP</div>
+  <div class="text label">HIGHLIGHTS</div>
+  <div class="text name" id="name"></div>
+  <div class="bar"></div>
+  <script>
+    const p = new URLSearchParams(location.search)
+    document.getElementById('name').textContent = (p.get('name') || '').toUpperCase()
+    const photo = document.getElementById('photo')
+    photo.src = p.get('photo') || ''
+    photo.style.transform = `translate(${p.get('x') || 0}px, ${p.get('y') || 0}px) scale(${p.get('scale') || 1})`
+    if (p.get('cutout')) {
+      photo.classList.add('backdrop')
+      const cutout = document.getElementById('cutout')
+      cutout.src = p.get('cutout')
+      cutout.hidden = false
+    }
+  </script>
+</body>
+</html>

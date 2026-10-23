@@ -1,66 +1,86 @@
-import { useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
-const BLUE = '#0072ce'
+const FONT_HEADING = "'Bebas Neue', cursive"
+const FONT_BODY = "'Rajdhani', sans-serif"
 
-function HighlightCard({ src, onDismiss }) {
-  const reduced = useReducedMotion()
-  const videoRef = useRef(null)
-
-  return (
-    <motion.div
-      initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="w-full"
-    >
-      <div className="relative rounded-md overflow-hidden bg-black shadow-xl ring-1 ring-[#0072ce]/50 w-full aspect-video">
-        <span className="absolute -top-1 -left-1 w-2.5 h-2.5" style={{ background: BLUE }} aria-hidden="true" />
-        <span className="absolute -top-1 -right-1 w-2.5 h-2.5" style={{ background: BLUE }} aria-hidden="true" />
-        <span className="absolute -bottom-1 -left-1 w-2.5 h-2.5" style={{ background: BLUE }} aria-hidden="true" />
-        <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5" style={{ background: BLUE }} aria-hidden="true" />
-
-        <button
-          onClick={onDismiss}
-          aria-label="Sulge video"
-          className="absolute top-1.5 right-1.5 z-10 w-6 h-6 rounded-full bg-black/60 text-white
-                     flex items-center justify-center hover:bg-black/80 transition-colors duration-150
-                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="w-3 h-3">
-            <path d="M6 6l12 12M18 6L6 18" />
-          </svg>
-        </button>
-
-        <video
-          ref={videoRef}
-          src={src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          disablePictureInPicture
-          disableRemotePlayback
-          controlsList="nodownload nofullscreen noremoteplayback"
-          onContextMenu={(e) => e.preventDefault()}
-          aria-label="Stefan Vaaksi hooaja highlightid"
-          className="w-full h-full block object-cover pointer-events-none"
-        />
-      </div>
-    </motion.div>
-  )
+function formatDuration(seconds) {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
 }
 
-// Katsetus: Stefan Vaaksi profiili juurde avaneb automaatselt lühike highlight-klipp.
-export default function HighlightReel({ src }) {
-  const [dismissed, setDismissed] = useState(false)
+// Mängija highlight-video. Enne klikki on ainult kaanepilt ja videost ei laeta
+// baitigi (video element tekib alles klikiga). Klikk on kasutaja žest, seega
+// brauser lubab video kohe heliga käivitada. Failid teeb scripts/encode-videos.sh.
+export default function HighlightReel({ slug, name, duration }) {
+  const [playing, setPlaying] = useState(false)
+  const videoRef = useRef(null)
+  const poster = `/videos/${slug}.webp`
+  const length = formatDuration(duration)
+
+  // Klaviatuuriga käivitanu saab kohe pausi panna ja kerida
+  useEffect(() => {
+    if (playing) videoRef.current?.focus()
+  }, [playing])
 
   return (
-    <AnimatePresence>
-      {!dismissed && (
-        <HighlightCard key="card" src={src} onDismiss={() => setDismissed(true)} />
+    <div
+      className="group relative isolate aspect-video w-full overflow-hidden rounded-xl bg-[#08060d] shadow-md
+                 has-[:focus-visible]:outline has-[:focus-visible]:outline-2
+                 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[#0072ce]"
+    >
+      {/* Kaanepilt jääb video alla, et video sisse hajuks pildi pealt, mitte tumedast kastist */}
+      <img
+        src={poster}
+        alt=""
+        width={960}
+        height={540}
+        decoding="async"
+        fetchPriority="low"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[250ms]
+                   ease-[cubic-bezier(0.23,1,0.32,1)] motion-safe:group-hover:scale-[1.03]"
+      />
+
+      {playing ? (
+        <video
+          ref={videoRef}
+          src={`/videos/${slug}.mp4`}
+          poster={poster}
+          controls
+          autoPlay
+          playsInline
+          controlsList="nodownload"
+          onEnded={() => setPlaying(false)}
+          aria-label={`Highlightid: ${name}`}
+          className="absolute inset-0 h-full w-full bg-[#08060d] object-contain outline-none
+                     transition-opacity duration-200 ease-out starting:opacity-0"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPlaying(true)}
+          aria-label={`Esita highlightid, ${length}`}
+          className="absolute inset-0 cursor-pointer focus-visible:outline-none"
+        >
+          <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" aria-hidden="true" />
+          <span className="absolute bottom-4 left-4 flex items-center gap-3 text-left" aria-hidden="true">
+            <span
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0072ce] text-white shadow-lg
+                         transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-active:scale-[0.94]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5 h-5 w-5">
+                <path d="M8 5.5v13l11-6.5z" />
+              </svg>
+            </span>
+            <span>
+              <span className="block text-2xl leading-none text-white" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+                Highlightid
+              </span>
+              <span className="block text-sm font-semibold text-white/80 tabular-nums" style={{ fontFamily: FONT_BODY }}>
+                {length}
+              </span>
+            </span>
+          </span>
+        </button>
       )}
-    </AnimatePresence>
+    </div>
   )
 }

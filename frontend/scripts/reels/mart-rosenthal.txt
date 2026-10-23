@@ -1,0 +1,14 @@
+# Märt Rosenthal. Vorm: build-reel.sh päises.
+# Tema korvid on leitud kommentaarist (whisper: "Rosenthal"/"Roosendal") ja Tartu skoori muutusest.
+# 2019. aastal kandis ta Tartus särki #1.
+name Märt Rosenthal
+photo 2xuFl18h3JI 33.0 1.1 0 0
+cutout players/mart-rosenthal.webp
+clip 2xuFl18h3JI 33.0 39.75     # KML play-off 2023 Kalev/Cramo-TÜ, "Rosenthali kolmene"
+clip 5YSkDb_nlfo 62.1 70.0      # TÜ-Jūrmala 2019, "Roosendal julgelt läheb" (16 -> 18)
+clip 5YSkDb_nlfo 155.9 160.8    # TÜ-Jūrmala 2019, "Jaa läheb Roosendal" (50 -> 52)
+clip 5YSkDb_nlfo 81.1 86.6      # TÜ-Jūrmala 2019, "Roosendal nüüd paneb" (20 -> 25)
+clip 5YSkDb_nlfo 208.5 216.1    # TÜ-Jūrmala 2019, Raadik söödab Rosenthalile (72 -> 76)
+clip 5YSkDb_nlfo 138.4 145.6    # TÜ-Jūrmala 2019, "Roosendal! ... läheb" (44 -> 50)
+clip 5YSkDb_nlfo 242.0 248.3    # TÜ-Jūrmala 2019, kolmene "Ja nüüd Roosendal" (76 -> 79)
+clip lL1jy42ztiY 53.0 60.0      # ENBL 01/2024 Tartu-Rabotnički, poolaja lõpusireeni korv (43:30 -> 45:30)

@@ -1,0 +1,17 @@
+# Mikk Jurkatamm. Vorm: build-reel.sh päises.
+# name <nimi intro kaardil>
+# photo <youtube id> <aeg s> <suurendus> <nihe x px> <nihe y px>   (intro foto, mängija paremale)
+# cutout <tee public/ all>   (valikuline: läbipaistva taustaga portree, photo jääb hägusaks taustaks)
+# clip <youtube id> <algus s> <lõpp s>   # kommentaar
+name Mikk Jurkatamm
+photo WZtDvS6NI5g 20.0 1.1 0 0
+cutout players/mikk-jurkatamm.webp
+clip 1TkCk3CTjyQ 9.0 16.45      # Ravenna-Forlì 2019/20, kolmene (13:13 -> 16:13)
+clip ePXvwF4jFgA 11.0 17.95     # Avellino @ Cremona 10/2025, läbimurre
+clip 1TkCk3CTjyQ 33.95 39.3     # Ravenna-Imola 2019/20, kolmene (45:24 -> 48:24)
+clip ePXvwF4jFgA 21.5 28.4      # Avellino @ Cremona, kolmene ülevalt
+clip 1TkCk3CTjyQ 16.6 21.85     # Ravenna-Piacenza 2019/20, kahene (14:17 -> 16:17)
+clip ePXvwF4jFgA 100.85 105.3   # Avellino @ Cremona, kolmene tiivalt
+clip 1TkCk3CTjyQ 21.95 28.3     # Ravenna-Imola 2019/20 (24:14 -> 27:14)
+clip 1TkCk3CTjyQ 51.7 58.5      # Ravenna-Imola 2019/20, kahene (76:49 -> 78:49)
+clip WZtDvS6NI5g 1.0 17.0      # Urania Milano-Avellino 03/2026, võiduvise 0:01 enne lõppu (100:98 -> 100:101)
