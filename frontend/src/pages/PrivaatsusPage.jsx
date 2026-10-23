@@ -2,7 +2,7 @@ import Seo from '../components/Seo'
 import LegalLayout, { Section, P, Ul } from '../components/LegalLayout'
 
 // TOIMETADA: kuupäev tuleb käsitsi uuendada, kui poliitika sisu muutub.
-const UPDATED = '18.08.2026'
+const UPDATED = '23.10.2026'
 
 export default function PrivaatsusPage() {
   return (
@@ -46,6 +46,14 @@ export default function PrivaatsusPage() {
             külastaja seadmesse jälgimisandmeid. Külastamisel tekivad siiski tavapärased
             serverilogid, mis sisaldavad IP-aadressi, päringu aega, päritud aadressi ja
             brauseri tüüpi.
+          </P>
+          <P><strong>YouTube'i videod.</strong> Mängijate lehtedel on YouTube'i videod. Enne
+            esitamise nupu vajutamist laaditakse YouTube'ist ainult kaanepilt. Pärast vajutamist
+            laeb YouTube (Google) oma mängija, mis töötleb sinu IP-aadressi ja võib sinu seadmesse
+            andmeid salvestada. Seda reguleerivad{' '}
+            <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="underline">YouTube'i kasutustingimused</a>{' '}
+            ja{' '}
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline">Google'i privaatsuspoliitika</a>.
           </P>
         </Section>
 

@@ -5,6 +5,8 @@ import Seo, { SITE_URL } from '../components/Seo'
 import { getPreloadedPlayer, getPreloadedPlayerStats } from '../preload'
 import Skeleton from '../components/Skeleton'
 import StatsTabToggle from '../components/StatsTabToggle'
+import YouTubeEmbed from '../components/YouTubeEmbed'
+import PLAYER_YOUTUBE from '../data/playerYoutube.json'
 import {
   LineChart, Line, RadarChart, Radar, PolarGrid,
   PolarAngleAxis, XAxis, YAxis, Tooltip, Legend,
@@ -529,6 +531,7 @@ export default function PlayerPage() {
   const clubGames = stats?.clubGames || []
   const age = computeAge(stats?.birthDate)
   const heightCm = stats?.heightCm
+  const youtube = PLAYER_YOUTUBE[player.slug]
 
   return (
     <div className="px-6 py-8 max-w-7xl mx-auto w-full min-w-0 text-center">
@@ -563,9 +566,9 @@ export default function PlayerPage() {
         Tagasi mängijate juurde
       </button>
 
-      {/* ① Hero */}
-      <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10 mb-8">
-        <div className="flex items-center gap-7 shrink-0">
+      {/* ① Hero. Video on kõrval alles lg-st, kitsamal ei mahu pikk nimi ja kaart reale. */}
+      <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10 mb-8">
+        <div className="flex items-center gap-7 min-w-0">
           <div className="w-36 h-36 rounded-full overflow-hidden shadow-md shrink-0">
             {extIndex < PHOTO_EXTENSIONS.length ? (
               <img
@@ -599,8 +602,14 @@ export default function PlayerPage() {
             </p>
           </div>
         </div>
-        {/* HighlightReel on kasutusest väljas: komponent on alles, video
-            assets-source/videos/ all, et see deploy'sse ei läheks. */}
+        {/* HighlightReel on kasutusest väljas (ülekandeklippide autoriõigus, vt AUTORIOIGUS-RISKID.md).
+            Komponent ja data/playerVideos.json on alles. Selle asemel YouTube'i manus. */}
+        {youtube && (
+          <div className="w-full max-w-lg lg:max-w-none lg:w-[26rem] lg:ml-auto shrink-0">
+            {/* key: teise mängija lehele liikudes algab kaart uuesti kaanepildist */}
+            <YouTubeEmbed key={player.slug} id={youtube.id} name={player.name} channel={youtube.channel} />
+          </div>
+        )}
       </div>
 
       {/* ② Tab toggle */}
