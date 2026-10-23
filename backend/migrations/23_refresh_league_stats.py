@@ -3,9 +3,10 @@ Scrapes season totals for every player in the leagues where an Estonian plays
 this season and saves them to LeagueStatsCache. main.py computes the league
 percentiles on the player profile from these rows.
 
-Leagues come from the LEAGUE_URL of the season rows in PlayerClubStats, so
-08_refresh_club_stats.py must have run first. A league is saved only when every
-team page came through, otherwise the previous version stays.
+Leagues and the Estonians' teams (the starting points for finding the other
+teams) come from LEAGUE_URL and TEAM_URL of the season rows in PlayerClubStats,
+so 08_refresh_club_stats.py must have run first. A league is saved only when
+every team page came through, otherwise the previous version stays.
 """
 import sys
 import os
@@ -15,18 +16,23 @@ import requests
 
 from database import Base, engine, SessionLocal
 import models
-from scraper import league_of_season, scrape_league_stats
+from scraper import league_of_season, scrape_league_stats, team_path
 
 Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
 
-leagues = set()
+# (liiga id, slug, hooaeg) -> eestlaste meeskonnad selles liigas
+leagues: dict[tuple[int, str, int], set[str]] = {}
 for row in db.query(models.PlayerClubStats).all():
     for season_row in (row.data or {}).get("seasons", []):
         league = league_of_season(season_row)
-        if league:
-            leagues.add(league)
+        if not league:
+            continue
+        teams = leagues.setdefault(league, set())
+        path = team_path(season_row.get("TEAM_URL"))
+        if path:
+            teams.add(path)
 
 if not leagues:
     print("Ühelgi mängijal pole hooaja ridadel LEAGUE_URL-i. Käivita enne 08_refresh_club_stats.py.")
@@ -39,8 +45,13 @@ print(f"Hooaeg {current}: {len(targets)} liigat\n")
 
 ok, fail = 0, 0
 for league_id, league_slug, season in targets:
+    seeds = sorted(leagues[(league_id, league_slug, season)])
+    if not seeds:
+        print(f"  ✗ {league_slug} — hooaja ridadel pole TEAM_URL-i, käivita enne 08_refresh_club_stats.py")
+        fail += 1
+        continue
     try:
-        data = scrape_league_stats(league_id, league_slug, season)
+        data = scrape_league_stats(league_id, league_slug, season, seeds)
         key = f"{league_id}:{season}"
         existing = db.query(models.LeagueStatsCache).filter(models.LeagueStatsCache.key == key).first()
         if existing:
