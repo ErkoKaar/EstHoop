@@ -22,7 +22,7 @@ const FETCH_TIMEOUT_MS = 90_000
 
 const STATIC_ROUTES = [
   '/', '/koondis', '/koondis/ajalugu', '/mangijad', '/statistika',
-  '/klubikorvpall', '/piletid', '/privaatsus', '/tingimused',
+  '/klubikorvpall', '/piletid', '/privaatsus', '/tingimused', '/uudiskiri',
 ]
 
 // React 19 tõstab <title>, <meta> ja <link> <head>-i ainult siis, kui ta renderdab

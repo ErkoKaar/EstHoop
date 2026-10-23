@@ -1,0 +1,42 @@
+name: Send newsletter
+
+# Nädalakiri "Eestlased välismaal" (backend/send_newsletter.py).
+# Ajastatud käivitus saadab kõigile tellijatele, käsitsi käivitus ainult testkirja.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Esmaspäeviti 06:00 UTC, pärast 02:00 klubistatistika värskendust
+  workflow_dispatch:
+    inputs:
+      test_to:
+        description: 'Testkirja saaja e-post'
+        required: true
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Send newsletter
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_SEGMENT_ID: ${{ secrets.RESEND_SEGMENT_ID }}
+          TEST_TO: ${{ github.event.inputs.test_to }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python backend/send_newsletter.py --test "$TEST_TO"
+          else
+            python backend/send_newsletter.py
+          fi

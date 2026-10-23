@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { useLoading } from '../contexts/LoadingContext'
 import Seo, { SITE_URL } from '../components/Seo'
 import TopPerformances from '../components/TopPerformances'
+import NewsletterSignup from '../components/NewsletterSignup'
 import useHydrated from '../hooks/useHydrated'
 import { getPreloadedClubHighlights, getPreloadedPlayers } from '../preload'
 import scheduleData from '../data/klubide_graafikud_2026-27.json'
@@ -544,6 +545,11 @@ export default function HomePage() {
 
       {/* ── Eestlased klubides ─────────────────────────────── */}
       <ClubSpotlight reveal={reveal} />
+
+      {/* ── Uudiskiri ─────────────────────────────────────── */}
+      <div className="mx-auto w-full max-w-[1120px] px-6 pt-14">
+        <NewsletterSignup />
+      </div>
 
       {/* ── Sisukord ──────────────────────────────────────── */}
       <div className="mx-auto w-full max-w-[1120px] px-6 pt-14 pb-4">

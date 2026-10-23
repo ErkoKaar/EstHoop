@@ -24,6 +24,7 @@ const STATIC_ROUTES = [
   { path: '/piletid', changefreq: 'daily', priority: '0.7' },
   { path: '/privaatsus', changefreq: 'yearly', priority: '0.3' },
   { path: '/tingimused', changefreq: 'yearly', priority: '0.3' },
+  { path: '/uudiskiri', changefreq: 'monthly', priority: '0.5' },
 ]
 
 function escapeXml(value) {

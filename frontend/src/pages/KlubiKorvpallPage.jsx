@@ -6,6 +6,7 @@ import Seo from '../components/Seo'
 import PlayerAvatar from '../components/PlayerAvatar'
 import Skeleton from '../components/Skeleton'
 import TopPerformances from '../components/TopPerformances'
+import NewsletterSignup from '../components/NewsletterSignup'
 import useIsMobile from '../hooks/useIsMobile'
 import useHydrated from '../hooks/useHydrated'
 import scheduleData from '../data/klubide_graafikud_2026-27.json'
@@ -737,6 +738,8 @@ export default function KlubiKorvpallPage() {
         )
       })}
       </>)}
+
+      <NewsletterSignup className="mt-12" />
     </div>
   )
 }

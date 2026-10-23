@@ -9,6 +9,7 @@ from database import Base, engine, SessionLocal
 import models
 import records
 import club_highlights
+import newsletter
 from scraper import scrape_player, scrape_fiba_national_team, split_games_by_type, league_of_season
 
 load_dotenv()
@@ -29,6 +30,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# /newsletter/subscribe ja /newsletter/confirm
+app.include_router(newsletter.router)
 
 
 def get_db():

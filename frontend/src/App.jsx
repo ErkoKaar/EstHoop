@@ -15,6 +15,7 @@ import KlubiKorvpallPage from './pages/KlubiKorvpallPage'
 import NotFoundPage from './pages/NotFoundPage'
 import PrivaatsusPage from './pages/PrivaatsusPage'
 import TingimusedPage from './pages/TingimusedPage'
+import UudiskiriPage from './pages/UudiskiriPage'
 import './App.css'
 
 function RouteChangeWatcher() {
@@ -61,6 +62,7 @@ export function AppRoutes() {
           <Route path="/klubikorvpall" element={<KlubiKorvpallPage />} />
           <Route path="/privaatsus" element={<PrivaatsusPage />} />
           <Route path="/tingimused" element={<TingimusedPage />} />
+          <Route path="/uudiskiri" element={<UudiskiriPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

@@ -55,6 +55,12 @@ export default function PrivaatsusPage() {
             ja{' '}
             <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline">Google'i privaatsuspoliitika</a>.
           </P>
+          <P><strong>Uudiskirja tellijate andmed.</strong> Kui tellid nädalakirja "Eestlased
+            välismaal", töötleme sinu e-posti aadressi, tellimuse kinnitamise ja võimaliku
+            loobumise aega ning kirjade kohaletoimetamise andmeid (näiteks kas kiri jõudis
+            kohale või tuli tagasi). Liitumisvormi kasutamisel teeb Cloudflare Turnstile
+            automaatse robotikontrolli, mis töötleb sinu IP-aadressi ja brauseri tehnilisi andmeid.
+          </P>
         </Section>
 
         <Section title="Õiguslik alus ja eesmärk">
@@ -68,6 +74,12 @@ export default function PrivaatsusPage() {
           <P>
             Serverilogisid töötleme samuti õigustatud huvi alusel: veebilehe töökindluse
             tagamiseks ja väärkasutuse tõkestamiseks.
+          </P>
+          <P>
+            Uudiskirja saadame sinu nõusoleku alusel (üldmääruse artikkel 6 lõige 1 punkt a),
+            mille annad tellimuse kinnituslingi kaudu. Nõusoleku saad igal ajal tagasi võtta iga
+            kirja lõpus oleva loobumislingiga. Liitumisvormi robotikontroll toimub õigustatud huvi
+            alusel: et keegi ei saaks võõraid aadresse massiliselt tellijaks lisada.
           </P>
         </Section>
 
@@ -93,6 +105,8 @@ export default function PrivaatsusPage() {
             <li>Vercel Inc. (USA): veebilehe esiotsa majutus ja serverilogid</li>
             <li>Render Services, Inc. (USA): rakendusliidese majutus ja serverilogid</li>
             <li>Neon Inc. (USA): andmebaasi majutus. Andmebaas ise asub Euroopa Liidus (Frankfurt)</li>
+            <li>Resend (USA): uudiskirja tellijate nimekiri ning kinnitus- ja uudiskirjade saatmine</li>
+            <li>Cloudflare, Inc. (USA): uudiskirja liitumisvormi robotikontroll (Turnstile)</li>
           </Ul>
           <P>
             Kui teenusepakkuja töötleb andmeid väljaspool Euroopa Majanduspiirkonda,
@@ -114,6 +128,12 @@ export default function PrivaatsusPage() {
             majutuspartnerid oma tavapärase tähtaja jooksul, mis on lühiajaline ja
             mõõdetav päevades kuni nädalates.
           </P>
+          <P>
+            Uudiskirja tellija e-posti aadressi säilitame tellimuse kehtimise ajal. Pärast
+            loobumist jääb aadress loobununa märgituks, et sulle enam kirju ei saadetaks.
+            Täielikult kustutame selle sinu soovil. Kinnitamata tellimusi ei salvestata, saadetud
+            kinnituskirja logi säilib Resendis kuni 30 päeva.
+          </P>
         </Section>
 
         <Section title="Sinu õigused">
@@ -123,7 +143,8 @@ export default function PrivaatsusPage() {
             <li>nõuda ebaõigete andmete parandamist</li>
             <li>nõuda andmete kustutamist</li>
             <li>nõuda töötlemise piiramist</li>
-            <li>esitada töötlemisele vastuväide, kuna töötleme andmeid õigustatud huvi alusel</li>
+            <li>esitada töötlemisele vastuväide, kui töötleme andmeid õigustatud huvi alusel</li>
+            <li>võtta uudiskirja saamiseks antud nõusolek igal ajal tagasi</li>
           </Ul>
           <P>
             Taotluse esitamiseks kirjuta aadressile{' '}
