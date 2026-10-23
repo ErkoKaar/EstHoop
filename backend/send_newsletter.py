@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from database import SessionLocal
 import models
 import newsletter
-from club_highlights import TALLINN, _game_timestamp, _number
+from club_highlights import TALLINN, _game_timestamp, _number, club_name
 
 SCHEDULE_DIR = Path(__file__).resolve().parent.parent / "frontend" / "src" / "data"
 SITE_URL = newsletter.SITE_URL
@@ -78,8 +78,7 @@ def week_games(players, stats_by_slug, start_ts: float, end_ts: float, skip_name
         if player.name in skip_names:
             continue
         data = stats_by_slug.get(player.slug) or {}
-        seasons = data.get("seasons") or []
-        club = (seasons[-1] or {}).get("TEAM") if seasons else None
+        club = club_name(data)
 
         for g in data.get("clubGames") or []:
             ts = _game_timestamp(g.get("DATE"))

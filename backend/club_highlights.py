@@ -30,14 +30,22 @@ def _game_timestamp(date_str):
         return None
 
 
+def club_name(data):
+    """Mängija praegune klubi: scraperi currentClub, vanematel ridadel põhiliiga viimane hooaeg."""
+    current = (data.get("currentClub") or {}).get("TEAM")
+    if current:
+        return current
+    seasons = data.get("seasons") or []
+    return (seasons[-1] or {}).get("TEAM") if seasons else None
+
+
 def top_performances(players, stats_by_slug, count=3, now=None, days=14):
     cutoff = (now or time.time()) - days * 86400
     best = {}
 
     for player in players:
         data = stats_by_slug.get(player.slug) or {}
-        seasons = data.get("seasons") or []
-        club = (seasons[-1] or {}).get("TEAM") if seasons else None
+        club = club_name(data)
 
         for g in data.get("clubGames") or []:
             ts = _game_timestamp(g.get("DATE"))

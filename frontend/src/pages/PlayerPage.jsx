@@ -29,13 +29,13 @@ const POSITION_LABELS = {
 }
 
 // Positsioon pole kõigil mängijatel täidetud — kirjeldus peab ka ilma töötama
-function playerDescription(player, lastSeason, natAvg) {
+function playerDescription(player, club, natAvg) {
   const role = POSITION_LABELS[player.position]
   const parts = [
     `${player.name} on Eesti korvpallikoondise${role ? ` ${role}` : ' mängija'}.`,
   ]
-  if (lastSeason?.TEAM) {
-    parts.push(`Klubi: ${lastSeason.TEAM}${lastSeason.LEAGUE ? ` (${lastSeason.LEAGUE})` : ''}.`)
+  if (club?.TEAM) {
+    parts.push(`Klubi: ${club.TEAM}${club.LEAGUE ? ` (${club.LEAGUE})` : ''}.`)
   }
   if (natAvg?.gp) {
     parts.push(`${natAvg.gp} mängu koondises.`)
@@ -44,7 +44,7 @@ function playerDescription(player, lastSeason, natAvg) {
   return parts.join(' ')
 }
 
-function playerJsonLd(player, { heightCm, lastSeason }) {
+function playerJsonLd(player, { heightCm, club }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -54,7 +54,7 @@ function playerJsonLd(player, { heightCm, lastSeason }) {
     nationality: { '@type': 'Country', name: 'Eesti' },
     memberOf: [
       { '@type': 'SportsTeam', name: 'Eesti korvpallikoondis', url: `${SITE_URL}/koondis` },
-      lastSeason?.TEAM ? { '@type': 'SportsTeam', name: lastSeason.TEAM } : undefined,
+      club?.TEAM ? { '@type': 'SportsTeam', name: club.TEAM } : undefined,
     ].filter(Boolean),
     height: heightCm
       ? { '@type': 'QuantitativeValue', value: heightCm, unitCode: 'CMT' }
@@ -525,6 +525,9 @@ export default function PlayerPage() {
 
   const initials = player.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
   const lastSeason = getLastSeason(stats?.seasons)
+  // Praegune klubi SEO jaoks: arvestab ka Euroopa sarju (scraper.py current_club).
+  // Päis ja kaardid jäävad lastSeason'i peale, sest kaardid on selle hooaja keskmised.
+  const currentClub = stats?.currentClub || lastSeason
   const natAvg = computeNatAvg(fibaStats)
   const isKoondis = tab === 'koondis'
   const nationalGames = stats?.nationalGames || []
@@ -543,11 +546,11 @@ export default function PlayerPage() {
       <Seo
         title={`${player.name} statistika ja profiil`}
         path={`/mangijad/${player.slug}`}
-        description={playerDescription(player, lastSeason, natAvg)}
+        description={playerDescription(player, currentClub, natAvg)}
         image={`${SITE_URL}/og/players/${player.slug}.jpg`}
         imageAlt={`${player.name}, Eesti korvpallikoondis`}
         ogType="profile"
-        jsonLd={playerJsonLd(player, { heightCm, lastSeason })}
+        jsonLd={playerJsonLd(player, { heightCm, club: currentClub })}
         breadcrumbs={[
           { name: 'Mängijad', path: '/mangijad' },
           { name: player.name },

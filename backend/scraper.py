@@ -98,14 +98,50 @@ def scrape_player(proballers_id: int, slug: str) -> dict:
     if height_match:
         height_cm = int(height_match.group(1)) * 100 + int(height_match.group(2))
 
+    seasons = parse_table(tables[1], with_league_links=True)
+
+    # Euroopa sarjade (EuroCup, BCL, ABA jt) tabel ankru järgi, sest tabelite arv
+    # ja järjekord sõltub mängijast. Puudub mängijal, kes pole Euroopas mänginud.
+    europe_anchor = soup.find(id="anchor-europe")
+    europe_table = europe_anchor.find_next("table") if europe_anchor else None
+    europe = parse_table(europe_table) if europe_table else []
+
     return {
         # Tühi TH (W/L veerg) nimetatakse RESULT-iks; duplikaatpäised saavad _1 suffiksi
-        "games":     parse_table(tables[0], empty_header_name="RESULT", with_game_url=True),
-        "seasons":   parse_table(tables[1], with_league_links=True),
-        "playoffs":  parse_table(tables[2]) if len(tables) > 2 else [],
-        "birthDate": birth_date,
-        "heightCm":  height_cm,
+        "games":       parse_table(tables[0], empty_header_name="RESULT", with_game_url=True),
+        "seasons":     seasons,
+        "playoffs":    parse_table(tables[2]) if len(tables) > 2 else [],
+        "currentClub": current_club(seasons, europe),
+        "birthDate":   birth_date,
+        "heightCm":    height_cm,
     }
+
+
+def _season_start(row: dict) -> int | None:
+    """'26-27' -> 26; muu (sh tühi) -> None."""
+    match = re.fullmatch(r"(\d{2})-\d{2}", (row.get("SEASON") or "").strip())
+    return int(match.group(1)) if match else None
+
+
+def current_club(seasons: list[dict], europe: list[dict]) -> dict | None:
+    """Uusima hooaja klubi põhiliiga ja Euroopa sarjade tabelist.
+
+    Ainult põhiliiga tabelist ei piisa: kui klubi mängib uuel hooajal seni ainult
+    Euroopa sarjas või ABA liigas, jääb põhiliiga viimaseks reaks eelmise hooaja
+    klubi (nt Kullamäe 2026: Lietkabelis, tegelikult Cluj). Sama hooaja korral
+    eelistame põhiliigat, tabelis viimane rida on hooaja sees hilisem klubi.
+    """
+    best = None
+    for row in [*europe, *seasons]:  # sama hooaja korral jääb peale põhiliiga rida
+        start = _season_start(row)
+        if start is None or not row.get("TEAM"):
+            continue
+        if best is None or start >= best[0]:
+            best = (start, row)
+    if not best:
+        return None
+    row = best[1]
+    return {"TEAM": row["TEAM"], "LEAGUE": row.get("LEAGUE"), "SEASON": row["SEASON"]}
 
 
 LEAGUE_URL_RE = re.compile(r"/basketball/league/(\d+)/([^/?#]+)")

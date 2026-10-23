@@ -546,7 +546,9 @@ export default function KlubiKorvpallPage() {
           const pbData = await fetch(`${API}/players/${player.slug}/stats`)
             .then(r => r.ok ? r.json() : null)
             .catch(() => null)
-          const clubName = pbData?.seasons?.at(-1)?.TEAM || null
+          // currentClub arvestab ka Euroopa sarju (scraper.py current_club), vanematel
+          // DB ridadel seda pole ja siis jääb põhiliiga viimane hooaeg
+          const clubName = pbData?.currentClub?.TEAM || pbData?.seasons?.at(-1)?.TEAM || null
           for (const g of pbData?.clubGames || []) {
             const startTimestamp = parseProballersDate(g.DATE)
             if (!startTimestamp || startTimestamp < cutoff) continue
