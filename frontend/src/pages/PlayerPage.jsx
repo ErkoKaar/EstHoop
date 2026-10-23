@@ -607,7 +607,7 @@ export default function PlayerPage() {
         {youtube && (
           <div className="w-full max-w-lg lg:max-w-none lg:w-[26rem] lg:ml-auto shrink-0">
             {/* key: teise mängija lehele liikudes algab kaart uuesti kaanepildist */}
-            <YouTubeEmbed key={player.slug} id={youtube.id} name={player.name} channel={youtube.channel} />
+            <YouTubeEmbed key={player.slug} id={youtube.id} slug={player.slug} name={player.name} channel={youtube.channel} />
           </div>
         )}
       </div>

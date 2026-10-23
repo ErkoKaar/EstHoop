@@ -48,7 +48,7 @@ export default function PrivaatsusPage() {
             brauseri tüüpi.
           </P>
           <P><strong>YouTube'i videod.</strong> Mängijate lehtedel on YouTube'i videod. Enne
-            esitamise nupu vajutamist laaditakse YouTube'ist ainult kaanepilt. Pärast vajutamist
+            esitamise nupu vajutamist ei laadita YouTube'ist midagi. Pärast vajutamist
             laeb YouTube (Google) oma mängija, mis töötleb sinu IP-aadressi ja võib sinu seadmesse
             andmeid salvestada. Seda reguleerivad{' '}
             <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="underline">YouTube'i kasutustingimused</a>{' '}
