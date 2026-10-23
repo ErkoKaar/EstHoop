@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
@@ -266,12 +266,11 @@ def get_national_team_records(db: Session = Depends(get_db)):
 
 # ── Klubikorvpall ─────────────────────────────────────────────────────────────
 
-# Kuus, mitte kolm: frontend peidab osa mängijaid (clubSchedule.js HIDDEN_PLAYERS)
-# ja näitab ülejäänutest kolme parimat
+# 12, mitte 3: frontend peidab osa mängijaid (clubSchedule.js HIDDEN_PLAYERS) ja
+# klubikorvpalli lehe "Eestlased välismaal" filter võtab Eesti klubide mängijad
+# välja, top 3 peab ka siis täis tulema. `days`: lehe perioodi filter (3, 7 või 14).
 @app.get("/club/highlights")
-def get_club_highlights(db: Session = Depends(get_db)):
+def get_club_highlights(days: int = Query(14, ge=1, le=14), db: Session = Depends(get_db)):
     players = db.query(models.Player).all()
     stats = {row.slug: row.data for row in db.query(models.PlayerClubStats).all()}
-    # Varuga: klubikorvpalli lehe "Eestlased välismaal" filter võtab Eesti klubide
-    # mängijad välja ja top 3 peab ka siis täis tulema.
-    return club_highlights.top_performances(players, stats, count=12)
+    return club_highlights.top_performances(players, stats, count=12, days=days)

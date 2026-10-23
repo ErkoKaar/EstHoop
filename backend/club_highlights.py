@@ -1,6 +1,6 @@
 """
-Klubikorvpalli parimad sooritused: viimase kahe nädala kõrgeim EFF, igalt mängijalt
-üks (parim) mäng. Järjestus: EFF, siis punktid, siis uuem mäng.
+Klubikorvpalli parimad sooritused: viimase `days` päeva (vaikimisi kahe nädala) kõrgeim
+EFF, igalt mängijalt üks (parim) mäng. Järjestus: EFF, siis punktid, siis uuem mäng.
 
 Varem arvutas sama klubikorvpalli leht brauseris ~40 mängija päringu pealt. Nüüd
 kasutavad seda klubikorvpalli leht ja avaleht (/club/highlights). Andmed tulevad
@@ -14,8 +14,6 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 TALLINN = ZoneInfo("Europe/Tallinn")
-WINDOW_SECONDS = 14 * 86400
-
 
 def _number(value):
     try:
@@ -32,8 +30,8 @@ def _game_timestamp(date_str):
         return None
 
 
-def top_performances(players, stats_by_slug, count=3, now=None):
-    cutoff = (now or time.time()) - WINDOW_SECONDS
+def top_performances(players, stats_by_slug, count=3, now=None, days=14):
+    cutoff = (now or time.time()) - days * 86400
     best = {}
 
     for player in players:

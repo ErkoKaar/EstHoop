@@ -410,17 +410,33 @@ function UpcomingGameRow({ row }) {
   )
 }
 
-// ── Mängijate filter ──────────────────────────────────────────────────────────
-// Kehtib kõigile kolmele plokile (parimad sooritused, tulemused, ajakava), seega
-// eraldi juhtelement, mitte kolmas tabi. Valge plaat liigub valikult valikule.
+// ── Filtrikast ────────────────────────────────────────────────────────────────
+// Tume plaat nagu kaartide tabloo: vaade, mängijad ja periood juhivad kõike, mis
+// kastist allpool on. Periood on tulemustes viimased, ajakavas järgmised N päeva.
+const VIEWS = [['tulemused', 'Tulemused'], ['ajakava', 'Ajakava']]
 const SCOPES = [['koik', 'Kõik'], ['valismaal', 'Eestlased välismaal']]
+const PERIODS = [[3, '3 päeva'], [7, 'Nädal'], [14, '2 nädalat']]
+// "viimase ... jooksul", "järgmise ... jooksul"
+const PERIOD_GENITIVE = { 3: 'kolme päeva', 7: 'nädala', 14: 'kahe nädala' }
 
-function ScopeFilter({ value, onChange, className = '' }) {
+function Segment({ id, label, options, value, onChange }) {
   const reduce = useReducedMotion()
   return (
-    <div className={className}>
-      <div role="group" aria-label="Mängijad" className="inline-flex p-1 rounded-full" style={{ background: '#e8eef5' }}>
-        {SCOPES.map(([key, text]) => {
+    <div className="min-w-0">
+      <span
+        id={`${id}-silt`}
+        className="block mb-1.5"
+        style={{ fontFamily: FONT_BODY, fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.04em', color: MUTED }}
+      >
+        {label}
+      </span>
+      <div
+        role="group"
+        aria-labelledby={`${id}-silt`}
+        className="flex w-full sm:inline-flex sm:w-auto p-1 rounded-full"
+        style={{ background: 'rgba(255,255,255,0.07)' }}
+      >
+        {options.map(([key, text]) => {
           const active = value === key
           return (
             <button
@@ -428,15 +444,18 @@ function ScopeFilter({ value, onChange, className = '' }) {
               type="button"
               aria-pressed={active}
               onClick={() => onChange(key)}
-              className="relative min-h-[44px] sm:min-h-[36px] px-4 rounded-full cursor-pointer transition-colors duration-200 ease-[ease] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2"
-              style={{ fontFamily: FONT_BODY, fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em', color: active ? DARK : '#4b5563' }}
+              className={`relative flex-auto min-h-[44px] sm:min-h-[36px] px-4 rounded-full cursor-pointer whitespace-nowrap
+                transition-colors duration-200 ease-[ease]
+                focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2
+                ${active ? 'text-white' : 'text-[#c3cad6] hover:text-white'}`}
+              style={{ fontFamily: FONT_BODY, fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.02em' }}
             >
               {active && (
                 <motion.span
-                  layoutId="klubi-scope"
+                  layoutId={`${id}-plaat`}
                   aria-hidden="true"
-                  className="absolute inset-0 rounded-full bg-white"
-                  style={{ boxShadow: '0 1px 3px rgba(15,40,80,0.14)' }}
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: BLUE }}
                   transition={reduce ? { duration: 0 } : { duration: 0.25, ease: EASE_IN_OUT }}
                 />
               )}
@@ -452,8 +471,10 @@ function ScopeFilter({ value, onChange, className = '' }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function KlubiKorvpallPage() {
   const [tab, setTab] = useState('tulemused')
-  const [scope, setScope] = useState('koik')
+  const [scope, setScope] = useState('valismaal')
+  const [period, setPeriod] = useState(7)
   const abroadOnly = scope === 'valismaal'
+  const periodText = PERIOD_GENITIVE[period]
   const [players, setPlayers] = useState([])
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
@@ -479,21 +500,29 @@ export default function KlubiKorvpallPage() {
     const rows = buildScheduleRows(scheduleData, players)
     return abroadOnly ? rows.filter(r => !r.players.some(p => isDomestic(p.name))) : rows
   }, [players, abroadOnly])
-  const upcoming = useMemo(() => (now ? upcomingRows(scheduleRows, now) : []), [scheduleRows, now])
-  const nextAfterWindow = useMemo(() => (now ? nextRowAfter(scheduleRows, now) : null), [scheduleRows, now])
+  const upcoming = useMemo(() => (now ? upcomingRows(scheduleRows, now, period) : []), [scheduleRows, now, period])
+  const nextAfterWindow = useMemo(() => (now ? nextRowAfter(scheduleRows, now, period) : null), [scheduleRows, now, period])
 
-  // Parimad sooritused tulevad ühe päringuga (sama mis avalehel), ei oota 40 mängija statistikat
+  // Parimad sooritused tulevad ühe päringuga (sama mis avalehel), ei oota 40 mängija statistikat.
+  // Perioodi vahetusel jääb eelmine nimekiri tuhmilt nähtavale, kuni uus kohale jõuab.
   const [highlights, setHighlights] = useState([])
   const [highlightsLoading, setHighlightsLoading] = useState(true)
+  const [highlightsPeriod, setHighlightsPeriod] = useState(null)
   useEffect(() => {
     let cancelled = false
-    fetch(`${API}/club/highlights`)
+    const done = list => {
+      if (cancelled) return
+      setHighlights(list)
+      setHighlightsPeriod(period)
+      setHighlightsLoading(false)
+    }
+    fetch(`${API}/club/highlights?days=${period}`)
       .then(r => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-      .then(list => { if (!cancelled) setHighlights(Array.isArray(list) ? list : []) })
-      .catch(() => { if (!cancelled) setHighlights([]) })
-      .finally(() => { if (!cancelled) setHighlightsLoading(false) })
+      .then(list => done(Array.isArray(list) ? list : []))
+      .catch(() => done([]))
     return () => { cancelled = true }
-  }, [])
+  }, [period])
+  const highlightsStale = !highlightsLoading && highlightsPeriod !== period
   const topPerformances = useMemo(
     () => highlights
       .filter(h => !HIDDEN_PLAYERS.has(h.player?.slug) && !(abroadOnly && isDomestic(h.player?.name)))
@@ -566,7 +595,11 @@ export default function KlubiKorvpallPage() {
       })
   }, [])
 
-  const visibleGames = abroadOnly ? games.filter(g => !isDomestic(g.player.name)) : games
+  // Laaditakse kaks nädalat, periood kärbib siin. `now` tuleb alles pärast mount'i
+  // (eelrenderdus ei tohi kella puutuda), mängud jõuavad niikuinii hiljem.
+  const periodStart = now ? now - period * 86400 : Infinity
+  const visibleGames = games.filter(g =>
+    g.event.startTimestamp >= periodStart && !(abroadOnly && isDomestic(g.player.name)))
 
   // Group by Tallinn date
   const grouped = []
@@ -623,38 +656,28 @@ export default function KlubiKorvpallPage() {
         </p>
       </div>
 
-      {(highlightsLoading || topPerformances.length > 0) && (
-        <TopPerformances entries={topPerformances} loading={highlightsLoading} />
-      )}
+      {/* Filtrikast: mobiilis kolm rida, töölaual grupid kõrvuti (kitsamal murduvad) */}
+      <div
+        role="group"
+        aria-label="Mängude filter"
+        className="mb-6 p-4 sm:p-5 rounded-2xl text-left flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-x-8"
+        style={{ background: DARK }}
+      >
+        <Segment id="vaade" label="Vaade" options={VIEWS} value={tab} onChange={setTab} />
+        <Segment id="mangijad" label="Mängijad" options={SCOPES} value={scope} onChange={setScope} />
+        <Segment id="periood" label="Periood" options={PERIODS} value={period} onChange={setPeriod} />
+      </div>
 
-      {/* Vaate valik: kaks pealkirjasõna, aktiivsel sinine alajoon nagu navigatsioonil.
-          Töölaual on filter samal joonel paremal (alajoon jätkub selle all), mobiilis tabide all. */}
-      <div className="flex flex-wrap items-end gap-y-3 mb-6 text-left">
-      <div role="tablist" aria-label="Vaade" className="flex gap-6 w-full sm:w-auto sm:flex-1 border-b border-gray-200">
-        {[['tulemused', 'Tulemused'], ['ajakava', 'Ajakava']].map(([key, text]) => {
-          const active = tab === key
-          return (
-            <button
-              key={key}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              onClick={() => setTab(key)}
-              className="relative pb-2 cursor-pointer transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0072ce] focus-visible:outline-offset-2 rounded-sm"
-              style={{ fontFamily: FONT_HEADING, fontSize: '1.6rem', letterSpacing: '1px', lineHeight: 1, color: active ? DARK : GRAY, background: 'none', border: 0, padding: '0 0 8px' }}
-            >
-              {text}
-              <span
-                aria-hidden="true"
-                className="absolute left-0 right-0 -bottom-px h-[3px] rounded-full transition-opacity duration-200"
-                style={{ background: BLUE, opacity: active ? 1 : 0 }}
-              />
-            </button>
-          )
-        })}
-      </div>
-      <ScopeFilter value={scope} onChange={setScope} className="sm:pl-6 sm:pb-2 sm:border-b sm:border-gray-200" />
-      </div>
+      {/* Ajakavas parimaid sooritusi ei näita: seal on jutt tulevastest mängudest */}
+      {tab === 'tulemused' && (highlightsLoading || topPerformances.length > 0) && (
+        <div aria-busy={highlightsStale} className="transition-opacity duration-200 ease-[ease]" style={{ opacity: highlightsStale ? 0.5 : 1 }}>
+          <TopPerformances
+            entries={topPerformances}
+            loading={highlightsLoading}
+            subtitle={`Viimase ${periodText} kõrgeim efektiivsus (EFF), igalt mängijalt parim mäng`}
+          />
+        </div>
+      )}
 
       {tab === 'ajakava' && (
         <>
@@ -677,7 +700,7 @@ export default function KlubiKorvpallPage() {
               </p>
               <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
                 {nextAfterWindow
-                  ? `Järgmise kahe nädala jooksul mänge ei ole. Järgmine mäng on ${formatDateHeader(nextAfterWindow.sortTimestamp)}: ${nextAfterWindow.club} vs ${nextAfterWindow.opponent}.`
+                  ? `Järgmise ${periodText} jooksul mänge ei ole. Järgmine mäng on ${formatDateHeader(nextAfterWindow.sortTimestamp)}: ${nextAfterWindow.club} vs ${nextAfterWindow.opponent}.`
                   : 'Ajakavas pole ühtki tulevast mängu.'}
               </p>
             </div>
@@ -742,8 +765,8 @@ export default function KlubiKorvpallPage() {
           </p>
           <p className="mt-3" style={{ fontFamily: FONT_BODY, fontSize: '1rem', color: '#9ca3af' }}>
             {abroadOnly
-              ? 'Välismaa klubides pole viimase kahe nädala jooksul mänge toimunud'
-              : 'Viimase kahe nädala jooksul mänge ei toimunud'}
+              ? `Välismaa klubides pole viimase ${periodText} jooksul mänge toimunud`
+              : `Viimase ${periodText} jooksul mänge ei toimunud`}
           </p>
         </div>
       )}
