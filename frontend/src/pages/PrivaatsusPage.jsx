@@ -42,10 +42,15 @@ export default function PrivaatsusPage() {
             füüsiliste isikute andmetega, seega kohaldub neile isikuandmete kaitse üldmäärus.
           </P>
           <P><strong>Veebilehe külastajate andmed.</strong> EstHoop ei nõua kontot ega
-            registreerimist, ei kasuta küpsiseid ega veebianalüütikat ja ei salvesta
-            külastaja seadmesse jälgimisandmeid. Külastamisel tekivad siiski tavapärased
-            serverilogid, mis sisaldavad IP-aadressi, päringu aega, päritud aadressi ja
-            brauseri tüüpi.
+            registreerimist, ei kasuta küpsiseid ja ei salvesta külastaja seadmesse
+            jälgimisandmeid. Külastamisel tekivad siiski tavapärased serverilogid, mis
+            sisaldavad IP-aadressi, päringu aega, päritud aadressi ja brauseri tüüpi.
+          </P>
+          <P><strong>Anonüümne külastusstatistika.</strong> Loeme külastusi Vercel Web
+            Analyticsi abil: lehevaatamised, viitav leht, riik ja seadme tüüp. See töötab ilma
+            küpsisteta ega salvesta sinu seadmesse midagi. IP-aadressi ei säilitata, sellest
+            luuakse ainult ühepäevane anonüümne räsi, mida ei saa tagasi sinuga siduda. Google
+            Analyticsit ega reklaamipiksleid meil ei ole.
           </P>
           <P><strong>YouTube'i videod.</strong> Mängijate lehtedel on YouTube'i videod. Enne
             esitamise nupu vajutamist ei laadita YouTube'ist midagi. Pärast vajutamist
@@ -76,6 +81,11 @@ export default function PrivaatsusPage() {
             tagamiseks ja väärkasutuse tõkestamiseks.
           </P>
           <P>
+            Anonüümset külastusstatistikat mõõdame samuti õigustatud huvi alusel: et näha, kust
+            külastajad tulevad ja milliseid lehti loetakse. Kuna selleks ei kasutata küpsiseid ega
+            tuvastata sind, ei küsi me selleks nõusolekut.
+          </P>
+          <P>
             Uudiskirja saadame sinu nõusoleku alusel (üldmääruse artikkel 6 lõige 1 punkt a),
             mille annad tellimuse kinnituslingi kaudu. Nõusoleku saad igal ajal tagasi võtta iga
             kirja lõpus oleva loobumislingiga. Liitumisvormi robotikontroll toimub õigustatud huvi
@@ -102,7 +112,7 @@ export default function PrivaatsusPage() {
             järgmistele teenusepakkujatele, kes tegutsevad meie volitatud töötlejatena:
           </P>
           <Ul>
-            <li>Vercel Inc. (USA): veebilehe esiotsa majutus ja serverilogid</li>
+            <li>Vercel Inc. (USA): veebilehe esiotsa majutus, serverilogid ja anonüümne külastusstatistika (Vercel Web Analytics)</li>
             <li>Render Services, Inc. (USA): rakendusliidese majutus ja serverilogid</li>
             <li>Neon Inc. (USA): andmebaasi majutus. Andmebaas ise asub Euroopa Liidus (Frankfurt)</li>
             <li>Resend (USA): uudiskirja tellijate nimekiri ning kinnitus- ja uudiskirjade saatmine</li>
