@@ -643,8 +643,8 @@ export default function KlubiKorvpallPage() {
         path="/klubikorvpall"
         breadcrumbs={[{ name: 'Klubikorvpall' }]}
         description={
-          'Eesti koondislaste mängud klubides üle maailma. Tulemused ja statistika ' +
-          'päevade kaupa, kes kus ja kui hästi mängis.'
+          'Eesti korvpallurite mängud klubides üle maailma: tulemused, statistika ja ' +
+          'eelseisvad mängud. Vaata kõiki või ainult välismaal mängivaid eestlasi.'
         }
       />
 

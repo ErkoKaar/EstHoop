@@ -399,9 +399,8 @@ export default function HomePage() {
       <Seo
         path="/"
         description={
-          'EstHoop koondab Eesti korvpallikoondise mängud, mängijate profiilid ja statistika ' +
-          'ühte kohta. Vaata rahvuskoondise tulemusi, alagrupi seisu, koondislaste pingeridu ' +
-          'ja Eesti mängijate käekäiku klubides.'
+          'EstHoop koondab Eesti korvpallikoondise mängud, mängijate profiilid ja statistika. ' +
+          'Koondise tulemused, alagrupi seis ja eestlaste mängud klubides.'
         }
         image={`${SITE_URL}/hero.jpg`}
         imageWidth={2400}

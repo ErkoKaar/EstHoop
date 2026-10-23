@@ -28,6 +28,8 @@ const POSITION_LABELS = {
   C: 'keskmängija',
 }
 
+const DESCRIPTION_MAX = 155
+
 // Positsioon pole kõigil mängijatel täidetud — kirjeldus peab ka ilma töötama
 function playerDescription(player, club, natAvg) {
   const role = POSITION_LABELS[player.position]
@@ -40,8 +42,11 @@ function playerDescription(player, club, natAvg) {
   if (natAvg?.gp) {
     parts.push(`${natAvg.gp} mängu koondises.`)
   }
-  parts.push('Vaata statistikat koondises ja klubis, hooaegade kaupa.')
-  return parts.join(' ')
+  // Google lõikab ~155 märgi juures: pikk lõpulause ainult siis, kui mahub
+  const text = parts.join(' ')
+  const closing = ['Vaata statistikat koondises ja klubis, hooaegade kaupa.', 'Statistika hooaegade kaupa.']
+    .find(c => text.length + 1 + c.length <= DESCRIPTION_MAX)
+  return closing ? `${text} ${closing}` : text
 }
 
 function playerJsonLd(player, { heightCm, club }) {
@@ -130,9 +135,9 @@ function CareerChart({ seasons }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-      <h3 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Karjääritrend
-      </h3>
+      </h2>
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
           <XAxis dataKey="season" tick={{ fontSize: 11, fontFamily: FONT_BODY }} interval="preserveStartEnd" />
@@ -177,9 +182,9 @@ function ProfileChart({ season }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-      <h3 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Hooaja profiil ({season.SEASON})
-      </h3>
+      </h2>
       <ResponsiveContainer width="100%" height={220}>
         <RadarChart data={data}>
           <PolarGrid stroke="#e5e7eb" />
@@ -199,9 +204,9 @@ function SeasonsTable({ seasons }) {
 
   return (
     <div>
-      <h3 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Hooaja keskmised
-      </h3>
+      </h2>
       <div className="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
         <table className="w-full text-sm" style={{ fontFamily: FONT_BODY }}>
           <thead>
@@ -244,9 +249,9 @@ const PERCENTILE_LABELS = {
 function LeaguePercentiles({ data }) {
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-      <h3 className="text-lg text-[#08060d] mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-lg text-[#08060d] mb-1" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Võrdlus liiga mängijatega ({data.season})
-      </h3>
+      </h2>
       <p className="text-gray-500 text-sm mb-5" style={{ fontFamily: FONT_BODY }}>
         Võrdluses {data.sample} {data.league} mängijat, kellel on vähemalt {data.minGames} mängu
         (hooaja alguses pool oma meeskonna mängudest) ja {data.minMinutes} minutit mängu kohta.
@@ -305,9 +310,9 @@ function GamesTable({ games }) {
   if (!games?.length) return null
   return (
     <div>
-      <h3 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Viimased mängud
-      </h3>
+      </h2>
       <div className="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
         <table className="w-full text-sm" style={{ fontFamily: FONT_BODY }}>
           <thead>
@@ -373,9 +378,9 @@ function NationalTeamChart({ data }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-      <h3 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Koondise trend
-      </h3>
+      </h2>
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
           <XAxis dataKey="label" tick={{ fontSize: 11, fontFamily: FONT_BODY }} />
@@ -418,9 +423,9 @@ function NationalProfileChart({ entry }) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-      <h3 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-lg text-[#08060d] mb-4" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Profiil ({entry.year})
-      </h3>
+      </h2>
       <ResponsiveContainer width="100%" height={220}>
         <RadarChart data={data}>
           <PolarGrid stroke="#e5e7eb" />
@@ -447,9 +452,9 @@ function NationalTeamTable({ data }) {
 
   return (
     <div>
-      <h3 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
+      <h2 className="text-xl text-[#08060d] mb-3" style={{ fontFamily: FONT_HEADING, letterSpacing: '1px' }}>
         Võistluste keskmised
-      </h3>
+      </h2>
       <div className="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
         <table className="w-full text-sm" style={{ fontFamily: FONT_BODY }}>
           <thead>

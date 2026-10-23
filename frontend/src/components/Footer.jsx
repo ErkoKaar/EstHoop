@@ -16,6 +16,9 @@ const SOURCES = [
   { label: 'ProBallers', href: 'https://www.proballers.com' },
 ]
 
+// Menüü lingid + uudiskiri, mida menüüs pole (muidu ei lingiks /uudiskiri lehele miski)
+const PAGE_LINKS = [...NAV_LINKS, { label: 'Uudiskiri', href: '/uudiskiri' }]
+
 // Alumise riba kolmas veerg, Severuni andmete järel
 const LEGAL = [
   { to: '/privaatsus', label: 'Privaatsuspoliitika' },
@@ -93,7 +96,7 @@ export default function Footer() {
             <nav aria-label="Footeri navigatsioon">
               <h2 style={columnTitle}>Leht</h2>
               <ul className="flex flex-col gap-2.5">
-                {NAV_LINKS.map(({ label, href }) => (
+                {PAGE_LINKS.map(({ label, href }) => (
                   <li key={href}>
                     <Link
                       to={href}
